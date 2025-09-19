@@ -1,0 +1,81 @@
+/* Extra Small Devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .gfam-breadcrumb a, .gfam-breadcrumb nav {
+        font-size: 12px;
+        line-height: normal;
+      }
+  }
+  @media (max-width: 1199.98px) {
+    .modal-dialog.modal-fullscreen-sm-down {
+      height: 100%;
+      margin: 0;
+      max-width: 100%;
+    }
+  
+    .modal-content {
+      height: 100%;
+      border-radius: 12px 12px 0 0;
+    }
+  
+    .modal-body {
+      overflow-y: auto;
+    }
+    .gfam-btn-fixed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1055; 
+        background: #fff;
+        padding: 12px 16px;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .modal-body {
+        padding-bottom: 80px !important; 
+      }
+      .gfam-search-input{
+        width: 86%;
+      }
+      .dropdown-menu{
+        z-index: 2;
+        opacity: 1;
+        display: block;
+        left: auto !important;
+        background: transparent;
+        padding: 0 !important;
+      }
+      .dropdown-item{
+        margin: 10px 0;
+        font-size: 16px;
+      }
+      .gfam-why-choose-section h2{
+        font-size: 25px;
+        line-height: normal;
+      }
+  }
+  
+  /* Small Devices (portrait tablets and large phones, 576px and up) */
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    /* Your CSS for large phones / small tablets */
+  }
+  
+  /* Medium Devices (landscape tablets, 768px and up) */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    /* Your CSS for tablets */
+  }
+  
+  /* Large Devices (laptops/desktops, 992px and up) */
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    /* Your CSS for small laptops */
+  }
+  
+  /* Extra Large Devices (large desktops, 1200px and up) */
+  @media (min-width: 1200px) and (max-width: 1399.98px) {
+    /* Your CSS for desktops */
+  }
+  
+  /* Extra Extra Large Devices (very large screens, 1400px and up) */
+  @media (min-width: 1400px) {
+    /* Your CSS for ultra-wide monitors */
+  }
+  

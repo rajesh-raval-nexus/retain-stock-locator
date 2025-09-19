@@ -1,0 +1,26 @@
+{
+    "key": "ui_options_page_68ca9cbad5ad0",
+    "title": "Retain Stock Locator",
+    "active": true,
+    "menu_order": 0,
+    "page_title": "Retain Stock Locator",
+    "menu_slug": "retain-stock-locator",
+    "parent_slug": "none",
+    "advanced_configuration": 1,
+    "icon_url": "",
+    "menu_title": "",
+    "position": "",
+    "redirect": 0,
+    "description": "",
+    "menu_icon": {
+        "type": "dashicons",
+        "value": "dashicons-store"
+    },
+    "update_button": "Update",
+    "updated_message": "Options Updated",
+    "capability": "edit_posts",
+    "data_storage": "options",
+    "post_id": "",
+    "autoload": 0,
+    "modified": 1758108990
+}
