@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function rsl_register_shortcodes() {        
     add_shortcode( 'retain_stock_locator', 'rsl_render_stock_locator' );
+    add_shortcode( 'retain_stock_locator_detail', 'rsl_render_stock_locator_detail' );
     add_shortcode( 'rsl_category_options', 'rsl_category_filters_shortcode' );
     add_shortcode( 'rsl_make_model_options', 'rsl_make_model_filters_shortcode' );    
     add_shortcode( 'rsl_year_options', 'rsl_year_filters_shortcode' );    
@@ -17,6 +18,12 @@ function rsl_register_shortcodes() {
 function rsl_render_stock_locator( $atts ) {
     ob_start();    
     include RSL_PLUGIN_DIR . 'templates/shop.php';
+    return ob_get_clean();
+}
+
+function rsl_render_stock_locator_detail( $atts ) {
+    ob_start();    
+    include RSL_PLUGIN_DIR . 'templates/shop-detail.php';
     return ob_get_clean();
 }
 
@@ -64,6 +71,7 @@ function rsl_get_make_model_filters_cached( $cache_ttl = 300 ) {
  */
 function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
     global $xmlPath;
+    $data = array();
 
     $cache_key = "rsl_{$attribute_name}_filters_v1";
     $cached = get_transient( $cache_key );

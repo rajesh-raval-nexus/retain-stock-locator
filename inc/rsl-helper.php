@@ -24,11 +24,11 @@ function rsl_parse_listings( $xmlPath ) {
             'subtype'      => (string)$listing->subtype,
             'make'         => (string)$listing->make,
             'model'        => (string)$listing->model,
-            'year'         => getAttributeValue($listing, 'Year'),
-            'status'       => getAttributeValue($listing, 'Status'),
-            'listing_type' => getAttributeValue($listing, 'Listing Type'),
-            'price'        => getAttributeValue($listing, 'Price'),
-            'hours'        => getAttributeValue($listing, 'Hours'),
+            'year'         => rsl_get_attribute_value($listing, 'Year'),
+            'status'       => rsl_get_attribute_value($listing, 'Status'),
+            'listing_type' => rsl_get_attribute_value($listing, 'Listing Type'),
+            'price'        => rsl_get_attribute_value($listing, 'Price'),
+            'hours'        => rsl_get_attribute_value($listing, 'Hours'),
             'images'       => $images,
         ];
         $listings[] = $entry;

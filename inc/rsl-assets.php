@@ -106,6 +106,57 @@ function rsl_assets_enqueue_frontend() {
         );
     }
 
+    // lightgallery
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lightgallery.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lightgallery-min',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lightgallery.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lg-thumbnail.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lg-thumbnail',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lg-thumbnail.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lg-zoom.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lg-zoom',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lg-zoom.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+
+     // litepicker
+    if ( ! rsl_assets_is_script_loaded_by_src( 'bundle.js' ) ) {
+        wp_enqueue_script(
+            'rsl-bundle',
+            RSL_PLUGIN_URL . 'assets/vendor/litepicker/bundle.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'timepicki.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-timepicki',
+            RSL_PLUGIN_URL . 'assets/vendor/timepicki/timepicki.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+
+
+
     // Custom JS
     wp_enqueue_script(
         'rsl-main',

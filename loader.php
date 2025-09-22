@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $xmlPath;
+$xmlPath = '';
 
 // Always load required files
 require_once __DIR__ . '/inc/rsl-assets.php';
@@ -19,6 +20,7 @@ rsl_register_shortcodes();
 
 // Check XML path only after plugins_loaded
 add_action( 'plugins_loaded', function() {
+    global $xmlPath;
 
     $xmlPath = get_field( 'xml_file_url', 'option' );
 

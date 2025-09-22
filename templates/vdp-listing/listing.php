@@ -64,7 +64,12 @@
                                 <div class="gfam-price mb-0">$45,000</div>
                             </div>
                         </div>
-                        <button class="gfam-btn">See Details</button>
+                        <!-- <button class="gfam-btn">
+                            See Details
+                        </button> -->
+                        <a class="gfam-btn" href="<?php echo site_url('/listing-detail/?stock_number=' . $stock_number); ?>">
+                            See Details
+                        </a>
                     </div>
                 </div>
             </div>       
