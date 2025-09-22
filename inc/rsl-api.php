@@ -1,25 +1,12 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Global variable to store the helper instance.
-global $rsl_helper;
-$rsl_helper = null;
-
 /**
  * Initialize RSL API.
  *
  * @param string $xmlPath Path to XML file.
  */
 function rsl_api_init( $xmlPath ) {
-    global $rsl_helper;
-
-    // Load helper instance.
-    if ( ! function_exists( 'rsl_helper_init' ) ) {
-        require_once plugin_dir_path( __FILE__ ) . 'functions-rsl_helper.php';
-    }
-
-    $rsl_helper = rsl_helper_init( $xmlPath );
-
     // Register REST routes.
     add_action( 'rest_api_init', 'rsl_api_register_routes' );
 }
@@ -55,10 +42,31 @@ function rsl_api_register_routes() {
         ],
         'permission_callback' => '__return_true',
     ] );
-
+    
+    // Endpoint to get category filter sidebar options 
     register_rest_route( 'rsl/v1', '/category-filters', [
         'methods'  => 'GET',
         'callback' => 'rsl_api_get_category_filters',
+        'permission_callback' => '__return_true',
+    ] );
+
+    // Endpoint to get make and model sidebar options 
+    register_rest_route( 'rsl/v1', '/make_model-filters', [
+        'methods'  => 'GET',
+        'callback' => 'rsl_api_get_make_model_filters',
+        'permission_callback' => '__return_true',
+    ] );
+
+    register_rest_route( 'rsl/v1', '/attribute-data', [
+        'methods'  => 'GET',
+        'callback' => 'rsl_api_get_attributes',
+        'args'     => [
+            'attribute_name' => [
+                'description' => 'The attribute name to filter by (e.g. Year)',
+                'type'        => 'string',   // should be string
+                'required'    => true,
+            ],
+        ],
         'permission_callback' => '__return_true',
     ] );
 }
@@ -110,5 +118,26 @@ function rsl_api_get_listings( $request ) {
  * @return WP_REST_Response
  */
 function rsl_api_get_category_filters() {
-    return rest_ensure_response( rsl_helper_get_category_filters() );
+    global $xmlPath;
+    return rest_ensure_response( rsl_get_category_filters($xmlPath) );
+}
+
+/**
+ * REST: Get Make and Model filters.
+ *
+ * @return WP_REST_Response
+ */
+function rsl_api_get_make_model_filters() {
+    global $xmlPath;
+    return rest_ensure_response( rsl_get_make_model_filters($xmlPath) );
+}
+
+/**
+ * REST: Get Year filters.
+ *
+ * @return WP_REST_Response
+ */
+function rsl_api_get_attributes( $request ) {  
+    $attr_name = $request->get_param( 'attribute_name' ) ?: '';  
+    return rest_ensure_response( rsl_get_attribute_value($attr_name) );
 }

@@ -5,7 +5,16 @@ function rsl_parse_listings( $xmlPath ) {
     $dealer = simplexml_load_file( $xmlPath );
     $listings = [];
 
-    foreach ( $dealer->listing as $listing ) {
+    foreach ( $dealer->listing as $listing ) {    
+        
+        // Collect all image URLs
+        $images = [];
+        if ( isset( $listing->Images->Image ) ) {
+            foreach ( $listing->Images->Image as $img ) {
+                $images[] = (string) $img['url']; // attribute url=""
+            }
+        }        
+        
         $entry = [
             'dealer_id'    => (string)$dealer['id'],
             'dealer_name'  => (string)$dealer->name,
@@ -15,11 +24,12 @@ function rsl_parse_listings( $xmlPath ) {
             'subtype'      => (string)$listing->subtype,
             'make'         => (string)$listing->make,
             'model'        => (string)$listing->model,
-            'year'         => rsl_get_attribute_value( $listing, 'Year' ),
-            'status'       => rsl_get_attribute_value( $listing, 'Status' ),
-            'listing_type' => rsl_get_attribute_value( $listing, 'Listing Type' ),
-            'price'        => rsl_get_attribute_value( $listing, 'Price' ),
-            'hours'        => rsl_get_attribute_value( $listing, 'Hours' ),
+            'year'         => getAttributeValue($listing, 'Year'),
+            'status'       => getAttributeValue($listing, 'Status'),
+            'listing_type' => getAttributeValue($listing, 'Listing Type'),
+            'price'        => getAttributeValue($listing, 'Price'),
+            'hours'        => getAttributeValue($listing, 'Hours'),
+            'images'       => $images,
         ];
         $listings[] = $entry;
     }
@@ -27,9 +37,10 @@ function rsl_parse_listings( $xmlPath ) {
     return $listings;
 }
 
-function rsl_get_attribute_value( $listing, $attrName ) {
-    foreach ( $listing->attributes->attribute as $attr ) {
-        if ( (string)$attr['name'] === $attrName ) {
+function rsl_get_attribute_value( $listing, $attrName ) {    
+
+    foreach ($listing->attributes->attribute as $attr) {
+        if ((string)$attr['name'] === $attrName) {
             return (string)$attr;
         }
     }
@@ -82,28 +93,101 @@ function rsl_sort( $listings, $sortKey ) {
     return $listings;
 }
 
-function rsl_get_category_filters( $xmlPath ) {
+function rsl_get_category_filters() {
+    global $xmlPath;
+    
     $allListings = rsl_parse_listings( $xmlPath );
     $typeTree = [];
 
-    foreach ($allListings as $item) {
-        $type = trim($item['type']);
+    foreach ( $allListings as $item ) {
+        $type    = trim($item['type']);
         $subtype = trim($item['subtype']);
-        if (!$type) continue;
+        if ( ! $type ) continue;
 
-        if (!isset($typeTree[$type])) {
-            $typeTree[$type] = [];
+        // Ensure type array exists
+        if ( ! isset($typeTree[$type]) ) {
+            $typeTree[$type] = [
+                'count'    => 0,
+                'subtypes' => []
+            ];
         }
 
-        if ($subtype && !in_array($subtype, $typeTree[$type])) {
-            $typeTree[$type][] = $subtype;
+        // Increment type count
+        $typeTree[$type]['count']++;
+
+        // Add / increment subtype count
+        if ( $subtype ) {
+            if ( ! isset($typeTree[$type]['subtypes'][$subtype]) ) {
+                $typeTree[$type]['subtypes'][$subtype] = 0;
+            }
+            $typeTree[$type]['subtypes'][$subtype]++;
         }
     }
 
+    // Sort types alphabetically
     ksort($typeTree);
-    foreach ($typeTree as &$subtypes) {
-        sort($subtypes);
+
+    // Sort subtypes alphabetically inside each type
+    foreach ( $typeTree as &$data ) {
+        ksort($data['subtypes']);
     }
 
     return $typeTree;
+}
+
+
+function rsl_get_make_model_filters() {
+    global $xmlPath;
+    $allListings = rsl_parse_listings( $xmlPath );
+    $makeModelTree = [];
+
+    foreach ( $allListings as $item ) {
+        $make  = trim($item['make']);
+        $model = trim($item['model']);
+        if ( ! $make ) continue;
+
+        // Ensure make entry exists
+        if ( ! isset( $makeModelTree[$make] ) ) {
+            $makeModelTree[$make] = [
+                'count'  => 0,
+                'models' => []
+            ];
+        }
+
+        // Increment make count
+        $makeModelTree[$make]['count']++;
+
+        // Add/increment model count
+        if ( $model ) {
+            if ( ! isset( $makeModelTree[$make]['models'][$model] ) ) {
+                $makeModelTree[$make]['models'][$model] = 0;
+            }
+            $makeModelTree[$make]['models'][$model]++;
+        }
+    }
+
+    // Sort alphabetically
+    ksort( $makeModelTree );
+    foreach ( $makeModelTree as &$data ) {
+        ksort( $data['models'] );
+    }
+
+    return $makeModelTree;
+}
+
+function rsl_build_product_name( $item ) {
+    $parts = [];
+
+    if ( !empty($item['year']) ) {
+        $parts[] = trim($item['year']);
+    }
+    if ( !empty($item['make']) ) {
+        $parts[] = trim($item['make']);
+    }
+    if ( !empty($item['model']) ) {
+        $parts[] = trim($item['model']);
+    }
+
+    // Join with single spaces
+    return implode(' ', $parts);
 }

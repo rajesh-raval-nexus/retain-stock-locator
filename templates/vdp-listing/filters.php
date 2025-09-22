@@ -92,81 +92,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
                                     </div>
                                 </div>
 
-                                <!-- Nested Accordion for Categories -->
-                                <div class="accordion p-3" id="categoryAccordion">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
-                                                    <label class="form-check-label" for="inlineCheckbox1">Farm Trailers (25)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse1" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                                        <label class="form-check-label" for="inlineCheckbox2">Material Handling Trailers (19)</label>
-                                                    </div>
-                                                </div>
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" />
-                                                        <label class="form-check-label" for="inlineCheckbox3">Other (6)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4" />
-                                                    <label class="form-check-label" for="inlineCheckbox4">Harvest Equipment (22)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse2" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5" />
-                                                        <label class="form-check-label" for="inlineCheckbox5">Silage Wagons (22)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6" />
-                                                    <label class="form-check-label" for="inlineCheckbox6">Harvesters (18)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse3" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox7" value="option7" />
-                                                        <label class="form-check-label" for="inlineCheckbox7">Forage (10)</label>
-                                                    </div>
-                                                </div>
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox8" value="option8" />
-                                                        <label class="form-check-label" for="inlineCheckbox8">Pull-Type(8)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Nested Accordion for Categories -->                               
                                 <?php echo do_shortcode('[rsl_category_options]');?>
                                 <!-- Show All -->
                                 <div class="px-3 mb-2">
@@ -197,81 +123,9 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
                                     </div>
                                 </div>
 
-                                <!-- Nested Accordion for Categories -->
-                                <div class="accordion p-3" id="categoryAccordion">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox9" value="option9" />
-                                                    <label class="form-check-label" for="inlineCheckbox9">Farm Trailers (25)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse4" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox10" value="option10" />
-                                                        <label class="form-check-label" for="inlineCheckbox10">Material Handling Trailers (19)</label>
-                                                    </div>
-                                                </div>
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox11" value="option11" />
-                                                        <label class="form-check-label" for="inlineCheckbox11">Other (6)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox12" value="option12" />
-                                                    <label class="form-check-label" for="inlineCheckbox12">Harvest Equipment (22)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse5" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox13" value="option13" />
-                                                        <label class="form-check-label" for="inlineCheckbox13">Silage Wagons (22)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox14" value="option14" />
-                                                    <label class="form-check-label" for="inlineCheckbox14">Harvesters (18)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse6" class="accordion-collapse collapse">
-                                            <div class="accordion-body gfam-filter-content-item">
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox15" value="option15" />
-                                                        <label class="form-check-label" for="inlineCheckbox15">Forage (10)</label>
-                                                    </div>
-                                                </div>
-                                                <div class="gfam-checkbox-item">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox16" value="option16" />
-                                                        <label class="form-check-label" for="inlineCheckbox16">Pull-Type(8)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- Nested Accordion for make and model -->                                
+
+                                <?php echo do_shortcode('[rsl_make_model_options]');?>
 
                                 <!-- Show All -->
                                 <div class="px-3 mb-2">
@@ -322,38 +176,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
                         <div id="mainCollapse4" class="accordion-collapse collapse" data-bs-parent="#mainAccordion4">
                             <div class="accordion-body p-0">
                                 <!-- Nested Accordion for Categories -->
-                                <div class="accordion px-3 pb-3" id="categoryAccordion">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox9" value="option9" />
-                                                    <label class="form-check-label" for="inlineCheckbox9">Any</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox12" value="option12" />
-                                                    <label class="form-check-label" for="inlineCheckbox12">2025 (00)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
-                                                <div class="form-check form-check-inline gap-3">
-                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox14" value="option14" />
-                                                    <label class="form-check-label" for="inlineCheckbox14">2024 (00)</label>
-                                                </div>
-                                            </button>
-                                        </h2>
-                                    </div>
-                                </div>
+                                <?php echo do_shortcode('[rsl_year_options]');?>
                             </div>
                         </div>
                     </div>
