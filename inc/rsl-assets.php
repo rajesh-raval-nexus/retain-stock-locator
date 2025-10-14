@@ -12,15 +12,13 @@ function rsl_assets_init() {
  * Enqueue frontend styles and scripts.
  */
 function rsl_assets_enqueue_frontend() {
-    // Load Font Awesome from CDN (check if already loaded by filename)
-    if ( ! rsl_assets_is_style_loaded_by_src( 'font-awesome' ) ) {
-        wp_enqueue_style(
-            'rsl-font-awesome',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-            [],
-            '6.4.0'
-        );
-    }
+    // Load Font Awesome from CDN (check if already loaded by filename)    
+    wp_enqueue_style(
+        'rsl-font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+        [],
+        '6.4.0'
+    );    
 
     // Bootstrap CSS
     if ( ! rsl_assets_is_style_loaded_by_src( 'bootstrap.min.css' ) ) {
@@ -154,10 +152,17 @@ function rsl_assets_enqueue_frontend() {
             true
         );
     }
-
-
-
-    // Custom JS
+    // Jquery validate
+    if ( ! rsl_assets_is_script_loaded_by_src( 'jquery-validate.js' ) ) {
+        wp_enqueue_script(
+            'rsl-jquery-validate',
+            RSL_PLUGIN_URL . 'assets/vendor/jquery-validate/jquery-validate.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    // Main JS
     wp_enqueue_script(
         'rsl-main',
         RSL_PLUGIN_URL . 'assets/js/main.js',
@@ -166,6 +171,29 @@ function rsl_assets_enqueue_frontend() {
         true
     );
 
+    // Ajax Functions JS
+    if ( ! rsl_assets_is_script_loaded_by_src( 'ajax-functions' ) ) {
+        wp_enqueue_script(
+            'rsl-ajax-functions',
+            RSL_PLUGIN_URL . 'assets/js/ajax-functions.js',
+            [ 'jquery' ],
+            filemtime( RSL_PLUGIN_DIR . 'assets/js/main.js' ),
+            true
+        );
+
+        // Pass admin-ajax URL + other variables to JS
+        wp_localize_script(
+            'rsl-ajax-functions',
+            'rsl_ajax_obj',
+            [
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'nonce'    => wp_create_nonce( 'rsl_ajax_nonce' ),
+                'vdp_per_page' => get_field('vdp_per_page', 'option')
+            ]
+        );
+    }
+
+    // Custom JS
     wp_enqueue_script(
         'rsl-custom',
         RSL_PLUGIN_URL . 'assets/js/custom.js',

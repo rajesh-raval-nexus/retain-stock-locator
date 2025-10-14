@@ -5,7 +5,7 @@ function rsl_parse_listings( $xmlPath ) {
     $dealer = simplexml_load_file( $xmlPath );
     $listings = [];
 
-    foreach ( $dealer->listing as $listing ) {    
+    foreach ( $dealer->listing as $listing ) {        
         
         // Collect all image URLs
         $images = [];
@@ -20,6 +20,7 @@ function rsl_parse_listings( $xmlPath ) {
             'dealer_name'  => (string)$dealer->name,
             'stock_number' => (string)$listing->stock_number,
             'industry'     => (string)$listing->industry,
+            'item_specification' => (string)$listing->model_specific,
             'type'         => (string)$listing->type,
             'subtype'      => (string)$listing->subtype,
             'make'         => (string)$listing->make,
@@ -27,7 +28,7 @@ function rsl_parse_listings( $xmlPath ) {
             'year'         => rsl_get_attribute_value($listing, 'Year'),
             'status'       => rsl_get_attribute_value($listing, 'Status'),
             'listing_type' => rsl_get_attribute_value($listing, 'Listing Type'),
-            'price'        => rsl_get_attribute_value($listing, 'Price'),
+            'price'        => rsl_get_attribute_value($listing, 'Retail Price'),
             'hours'        => rsl_get_attribute_value($listing, 'Hours'),
             'images'       => $images,
         ];
@@ -47,29 +48,126 @@ function rsl_get_attribute_value( $listing, $attrName ) {
     return null;
 }
 
-function rsl_apply_filters( $listings, $filters ) {
-    if ( isset($filters['make']) ) {
-        $listings = array_filter($listings, function($l) use ($filters) {
-            return stripos($l['make'], $filters['make']) !== false;
-        });
-    }
-    if ( isset($filters['model']) ) {
-        $listings = array_filter($listings, function($l) use ($filters) {
-            return stripos($l['model'], $filters['model']) !== false;
-        });
-    }
-    if ( isset($filters['type']) ) {
-        $listings = array_filter($listings, function($l) use ($filters) {
-            return $l['type'] === $filters['type'];
-        });
-    }
-    // Extend with other filters...
+// function rsl_apply_filters( $listings, $filters ) {    
 
-    return $listings;
+//     $hasCategory     = !empty($filters['categories']);
+//     $hasMakeModel    = !empty($filters['makeModel']);    
+//     $hasYearSelected = ( ( isset($filters['year_from']) && !empty($filters['year_from']) ) || ( isset($filters['year_to']) && !empty($filters['year_to'])));    
+
+//     $listings = array_filter($listings, function($l) use ($filters, $hasCategory, $hasMakeModel) {
+
+//         // Category/Subtype
+//         $matchCategory = true;
+//         if ( $hasCategory ) {
+//             $matchCategory = in_array($l['type'], $filters['categories']) || in_array($l['subtype'], $filters['categories']);
+//         }
+
+//         // Make/Model
+//         $matchMakeModel = true;
+//         if ( $hasMakeModel ) {
+//             $matchMakeModel = in_array($l['make'], $filters['makeModel']) || in_array($l['model'], $filters['makeModel']);
+//         }
+//         // // Year range
+//         $matchYear = true;
+//         if ( $hasYearSelected ) {
+//             $year = intval($l['year']);
+//             if ( isset($filters['year_from']) && $filters['year_from'] !== '' && $year < intval($filters['year_from']) ) {
+//                 $matchYear = false;
+//             }
+//             if ( isset($filters['year_to']) && $filters['year_to'] !== '' && $year > intval($filters['year_to']) ) {
+//                 $matchYear = false;
+//             }
+//         }
+
+//         // Logic: if both category and make/model exist = AND, else = OR
+//         if ( $hasCategory && $hasMakeModel ) {
+//             return $matchCategory && $matchMakeModel;
+//         } else if( $hasCategory ) {
+//             return $matchCategory;
+//         }else if( $hasMakeModel ){
+//             return $matchMakeModel;
+//         }
+//     });
+
+//     return $listings;
+// }
+
+function rsl_apply_filters( $listings, $filters ) {
+
+    return array_filter($listings, function($l) use ($filters) {
+
+        $matches = []; // store all matching results here
+
+        // --- Category/Subtype ---
+        if ( !empty($filters['categories']) ) {
+            $matches[] = in_array($l['type'], $filters['categories']) || in_array($l['subtype'], $filters['categories']);
+        }
+
+        // --- Make/Model ---
+        if ( !empty($filters['makeModel']) ) {
+            $matches[] = in_array($l['make'], $filters['makeModel']) || in_array($l['model'], $filters['makeModel']);
+        }
+
+        // --- Listing Type i.e New, Used ---
+        if ( !empty($filters['Type']) ) {
+            $matches[] = in_array($l['listing_type'], $filters['Type']);
+        }
+
+        // --- Price Range ---
+        if ( !empty($filters['price_from']) || !empty($filters['price_to']) ) {
+            $price = intval($l['price']);
+            $match = true;
+            if ( !empty($filters['price_from']) && $price < intval($filters['price_from']) ) $match = false;
+            if ( !empty($filters['price_to']) && $price > intval($filters['price_to']) ) $match = false;
+            $matches[] = $match;
+        }
+
+        // --- Year Range ---
+        if ( !empty($filters['year_from']) || !empty($filters['year_to']) ) {
+            $year = intval($l['year']);
+            $match = true;
+            if ( !empty($filters['year_from']) && $year < intval($filters['year_from']) ) $match = false;
+            if ( !empty($filters['year_to']) && $year > intval($filters['year_to']) ) $match = false;
+            $matches[] = $match;
+        }
+        
+        // --- Hours Range ---
+        if ( !empty($filters['hours_from']) || !empty($filters['hours_to']) ) {
+            $year = intval($l['hours']);
+            $match = true;
+            if ( !empty($filters['hours_from']) && $year < intval($filters['hours_from']) ) $match = false;
+            if ( !empty($filters['hours_to']) && $year > intval($filters['hours_to']) ) $match = false;
+            $matches[] = $match;
+        }
+
+        // If no filters applied → keep all listings
+        if (empty($matches)) {
+            return true;
+        }
+
+        // --- Combine Logic ---
+        // Default: all filters must match (AND logic)
+        // Optional: if you want OR logic, you can easily switch below.
+        $andLogic = true;
+
+        if ($andLogic) {
+            return !in_array(false, $matches, true); // all must be true
+        } else {
+            return in_array(true, $matches, true); // any can be true
+        }
+    });
 }
 
 function rsl_load_more( $listings, $offset = 0, $limit = 10 ) {
     return array_slice($listings, $offset, $limit);
+}
+
+/**
+ * Get max number of pages.
+ */
+function rsl_get_max_pages( $stock_data, $per_page = 10 ) {
+    if ( $per_page < 1 ) $per_page = 10; // fallback
+    return (int) ceil( count($stock_data) / $per_page );
 }
 
 function rsl_search( $listings, $query ) {

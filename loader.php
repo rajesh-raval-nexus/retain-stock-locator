@@ -11,6 +11,7 @@ require_once __DIR__ . '/inc/rsl-assets.php';
 require_once __DIR__ . '/inc/rsl-scf.php';
 require_once __DIR__ . '/inc/rsl-shortcodes.php';
 require_once __DIR__ . '/inc/rsl-helper.php';
+require_once __DIR__ . '/inc/rsl-ajax-functions.php';
 
 // Always safe to register these
 rsl_assets_init();

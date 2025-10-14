@@ -40,6 +40,29 @@
             "placeholder": "Enter Full URL Of Your XML File",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_68d26f6ef5d6b",
+            "label": "VDP Per Page",
+            "name": "vdp_per_page",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -60,5 +83,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1758109343
+    "modified": 1758621572
 }

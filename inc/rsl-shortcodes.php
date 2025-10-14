@@ -10,6 +10,9 @@ function rsl_register_shortcodes() {
     add_shortcode( 'rsl_category_options', 'rsl_category_filters_shortcode' );
     add_shortcode( 'rsl_make_model_options', 'rsl_make_model_filters_shortcode' );    
     add_shortcode( 'rsl_year_options', 'rsl_year_filters_shortcode' );    
+    add_shortcode( 'rsl_type_options', 'rsl_type_filters_shortcode' );   
+    add_shortcode( 'rsl_price_options', 'rsl_price_filters_shortcode' );   
+    add_shortcode( 'rsl_hours_options', 'rsl_hours_filters_shortcode' );   
 }
 
 /**
@@ -38,7 +41,7 @@ function rsl_get_category_filters_cached( $cache_ttl = 300 ) {
         return $cached;
     }
 
-    $data = rsl_get_category_filters(); // ✅ Direct call
+    $data = rsl_get_category_filters(); // Direct call
 
     if ( ! empty( $data ) && is_array( $data ) ) {
         set_transient( $cache_key, $data, (int) $cache_ttl );
@@ -67,9 +70,9 @@ function rsl_get_make_model_filters_cached( $cache_ttl = 300 ) {
 }
 
 /**
- * Get XML attribute filters directly (with caching).
+ * Get XML attribute type filters directly (with caching).
  */
-function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
+function rsl_get_xml_type_filters_cached( $attribute_name, $cache_ttl = 300 ) {
     global $xmlPath;
     $data = array();
 
@@ -79,6 +82,69 @@ function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
     if ( false !== $cached ) {
         return $cached;
     }
+    
+    $allListings = rsl_parse_listings( $xmlPath );
+
+    foreach ( $allListings as $listing ) { 
+      if(isset($listing[$attribute_name]) && !empty($listing[$attribute_name]) ){
+        $data[] = $listing[$attribute_name];
+      }               
+    }
+
+    $formatted_data = array_count_values($data);
+
+    if ( ! empty( $formatted_data ) && is_array( $formatted_data ) ) {
+        set_transient( $cache_key, $formatted_data, (int) $cache_ttl );
+    }
+
+    return $formatted_data ?: [];
+}
+
+/**
+ * Get XML attribute price filters directly (with caching).
+ */
+function rsl_get_xml_price_filters_cached( $attribute_name, $cache_ttl = 300 ) {
+    global $xmlPath;
+    $prices = array();
+
+    $cache_key = "rsl_{$attribute_name}_filters_v1";
+    $cached = get_transient( $cache_key );
+
+    if ( false !== $cached ) {
+        return $cached;
+    }
+    
+    $allListings = rsl_parse_listings( $xmlPath );
+
+    foreach ( $allListings as $listing ) {                
+      if(isset($listing[$attribute_name]) && !empty($listing[$attribute_name]) ){
+        $prices[] = $listing[$attribute_name];
+      }
+    }    
+
+    // Remove duplicates
+    $unique_prices = array_unique($prices);
+
+    if ( ! empty( $unique_prices ) && is_array( $unique_prices ) ) {
+        set_transient( $cache_key, $unique_prices, (int) $cache_ttl );
+    }
+
+    return $unique_prices ?: [];
+}
+
+/**
+ * Get XML attribute filters directly (with caching).
+ */
+function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
+    global $xmlPath;
+    $data = array();
+
+    $cache_key = "rsl_{$attribute_name}_filters_v1";
+    $cached = get_transient( $cache_key );
+
+    // if ( false !== $cached ) {
+    //     return $cached;
+    // }
     
     $allListings = rsl_parse_listings( $xmlPath );
 
@@ -103,11 +169,47 @@ function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
 }
 
 /**
+ * Get XML Hours filters directly (with caching).
+ */
+function rsl_get_xml_hours_filters_cached( $attribute_name, $cache_ttl = 300 ) {
+    global $xmlPath;
+    $data = array();
+
+    $cache_key = "rsl_{$attribute_name}_filters_v1";
+    $cached = get_transient( $cache_key );
+
+    if ( false !== $cached ) {
+        return $cached;
+    }
+    
+    $allListings = rsl_parse_listings( $xmlPath );
+
+    foreach ( $allListings as $listing ) {                
+        $data[] = $listing[$attribute_name];
+    }
+
+    $data = array_unique(
+        array_filter(
+            array_map('trim', $data),
+            function($val) {
+                return $val !== '' && $val !== null;
+            }
+        )
+    );      
+
+    if ( ! empty( $data ) && is_array( $data ) ) {
+        set_transient( $cache_key, $data, (int) $cache_ttl );
+    }
+
+    return $data ?: [];
+}
+
+/**
  * Shortcode: [rsl_category_options]
  */
 function rsl_category_filters_shortcode( $atts = array() ) {    
     $filters = rsl_get_category_filters_cached( 300 );
-    return rsl_build_category_accordion_html( $filters );
+    return rsl_build_category_modal_html( $filters );
 }
 
 /**
@@ -115,7 +217,23 @@ function rsl_category_filters_shortcode( $atts = array() ) {
  */
 function rsl_make_model_filters_shortcode( $atts = array() ) {           
     $filters = rsl_get_make_model_filters_cached( 300 );
-    return rsl_build_make_model_accordion_html( $filters );
+    return rsl_build_make_model_modal_html( $filters );
+}
+
+/**
+ * Shortcode: [rsl_type_options]
+ */
+function rsl_type_filters_shortcode( $atts = array() ) {        
+    $filters = rsl_get_xml_type_filters_cached( 'listing_type', 300 );
+    return rsl_build_type_filter_modal_html( $filters );
+}
+
+/**
+ * Shortcode: [rsl_price_options]
+ */
+function rsl_price_filters_shortcode( $atts = array() ) {        
+    $filters = rsl_get_xml_price_filters_cached( 'price', 300 );
+    return rsl_build_price_filter_modal_html( $filters );
 }
 
 /**
@@ -123,208 +241,934 @@ function rsl_make_model_filters_shortcode( $atts = array() ) {
  */
 function rsl_year_filters_shortcode( $atts = array() ) {        
     $filters = rsl_get_xml_year_filters_cached( 'year', 300 );
-    return rsl_build_year_filter_html( $filters );
+    return rsl_build_year_filter_modal_html( $filters );
 }
 
 /**
- * Build accordion markup from make and model filters array with counts.
+ * Shortcode: [rsl_hours_options]
  */
-function rsl_build_make_model_accordion_html( $filters, $accordion_id = 'makeModelAccordion' ) {
-    if ( empty( $filters ) || ! is_array( $filters ) ) {
-        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Make Or Model Available.', 'retain-stock-locator' ) . '</div>';
-    }
-
-    ob_start(); ?>
-    <div class="accordion p-3" id="<?php echo esc_attr( $accordion_id ); ?>">
-        <?php
-        $i = 0;
-        foreach ( $filters as $make => $data ) :
-            $i++;
-            $collapse_id         = $accordion_id . '_collapse_' . $i;
-            $parent_checkbox_id  = $accordion_id . '_parent_' . $i;
-            $make_count          = isset( $data['count'] ) ? (int) $data['count'] : 0;
-            $models              = isset( $data['models'] ) ? $data['models'] : [];
-            ?>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>"
-                            aria-expanded="false">
-                        <div class="form-check form-check-inline gap-3">
-                            <input class="form-check-input rsl-filter-parent"
-                                type="checkbox"
-                                id="<?php echo esc_attr( $parent_checkbox_id ); ?>"
-                                value="<?php echo esc_attr( $make ); ?>"
-                                data-filter-type="parent">
-                            <label class="form-check-label"
-                                for="<?php echo esc_attr( $parent_checkbox_id ); ?>">
-                                <?php echo esc_html( $make ); ?>
-                                <span class="text-muted">(<?php echo $make_count; ?>)</span>
-                            </label>
-                        </div>
-                    </button>
-                </h2>
-                <div id="<?php echo esc_attr( $collapse_id ); ?>"
-                    class="accordion-collapse collapse">
-                    <div class="accordion-body gfam-filter-content-item">
-                        <?php if ( is_array( $models ) && count( $models ) ) :
-                            $j = 0;
-                            foreach ( $models as $model => $count ) :
-                                $j++;
-                                $sub_id = $accordion_id . '_sub_' . $i . '_' . $j;
-                                ?>
-                                <div class="gfam-checkbox-item">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input rsl-filter-sub"
-                                            type="checkbox"
-                                            id="<?php echo esc_attr( $sub_id ); ?>"
-                                            value="<?php echo esc_attr( $model ); ?>"
-                                            data-parent="<?php echo esc_attr( $make ); ?>">
-                                        <label class="form-check-label"
-                                            for="<?php echo esc_attr( $sub_id ); ?>">
-                                            <?php echo esc_html( $model ); ?>
-                                            <span class="text-muted">(<?php echo (int) $count; ?>)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            <?php endforeach;
-                        else : ?>
-                            <div class="text-muted">
-                                <?php esc_html_e( 'No Model Available', 'retain-stock-locator' ); ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <?php
-    return ob_get_clean();
+function rsl_hours_filters_shortcode( $atts = array() ) {        
+    $filters = rsl_get_xml_hours_filters_cached( 'hours', 300 );
+    return rsl_build_hours_filter_modal_html( $filters );
 }
 
 /**
- * Build accordion markup from year filters array.
+ * Build modal category HTML from category filters array (with counts and subtypes).
  */
-function rsl_build_year_filter_html( $filters, $accordion_id = 'yearAccordion' ) {
-    
-    if ( empty( $filters ) || ! is_array( $filters ) ) {
-        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Year Available.', 'retain-stock-locator' ) . '</div>';
-    }
-    
-    ob_start(); ?>
-    <div class="accordion p-3" id="<?php echo esc_attr( $accordion_id ); ?>">
-        <?php
-        $i = 0;
-        foreach ( $filters as $parent => $subtypes ) :
-            $i++;
-            $collapse_id         = $accordion_id . '_collapse_' . $i;
-            $parent_checkbox_id  = $accordion_id . '_parent_' . $i;
-            ?>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>"
-                            aria-expanded="false">
-                        <div class="form-check form-check-inline gap-3">
-                            <input class="form-check-input rsl-filter-parent"
-                                type="checkbox"
-                                id="<?php echo esc_attr( $parent_checkbox_id ); ?>"
-                                value="<?php echo esc_attr( $parent ); ?>"
-                                data-filter-type="parent">
-                            <label class="form-check-label"
-                                for="<?php echo esc_attr( $parent_checkbox_id ); ?>">
-                                <?php echo esc_html( $subtypes ); ?>
-                            </label>
-                        </div>
-                    </button>
-                </h2>                
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <?php
-    return ob_get_clean();
-}
-
-/**
- * Build accordion markup from category filters array (with counts).
- */
-function rsl_build_category_accordion_html( $filters, $accordion_id = 'categoryAccordion' ) {
-    
+function rsl_build_category_modal_html( $filters ) {
     if ( empty( $filters ) || ! is_array( $filters ) ) {
         return '<div class="rsl-no-filters p-3">' . esc_html__( 'No categories available.', 'retain-stock-locator' ) . '</div>';
     }
 
     ob_start(); ?>
-    <div class="accordion p-3" id="<?php echo esc_attr( $accordion_id ); ?>">
-        <?php
-        $i = 0;
-        foreach ( $filters as $parent => $data ) :
-            $i++;
-            $collapse_id         = $accordion_id . '_collapse_' . $i;
-            $parent_checkbox_id  = $accordion_id . '_parent_' . $i;
 
-            $parent_count = isset( $data['count'] ) ? intval( $data['count'] ) : 0;
-            $subtypes     = isset( $data['subtypes'] ) ? $data['subtypes'] : [];
-            ?>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>"
-                            aria-expanded="false">
+    <!-- Category Modal -->
+    <div class="modal fade sidebar-modal" id="popupCategoryDesktop" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Main Category Body -->
+          <div class="modal-body category-body active">
+            <div class="modal-header border-0">
+              <h5 class="modal-title"><?php esc_html_e( 'Categories', 'retain-stock-locator' ); ?></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="gfam-filter-content-item">
+              <?php
+              $i = 0;
+              foreach ( $filters as $parent => $data ) :
+                  $i++;
+                  $parent_checkbox_id = 'category_' . $i;
+                  $parent_count       = isset( $data['count'] ) ? intval( $data['count'] ) : 0;
+                  ?>
+                  <div class="accordion-item category-link" data-target="#subcategory<?php echo esc_attr( $i ); ?>">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse">
                         <div class="form-check form-check-inline gap-3">
-                            <input class="form-check-input rsl-filter-parent"
-                                type="checkbox"
-                                id="<?php echo esc_attr( $parent_checkbox_id ); ?>"
-                                value="<?php echo esc_attr( $parent ); ?>"
-                                data-filter-type="parent">
-                            <label class="form-check-label"
-                                for="<?php echo esc_attr( $parent_checkbox_id ); ?>">
-                                <?php echo esc_html( $parent ); ?>
-                                (<?php echo $parent_count; ?>)
-                            </label>
+                          <input class="form-check-input rsl-filter-parent category-filter" type="checkbox" name="category[]" id="<?php echo esc_attr( $parent_checkbox_id ); ?>" value="<?php echo esc_attr( $parent ); ?>" />
+                          <label class="form-check-label" for="<?php echo esc_attr( $parent_checkbox_id ); ?>">
+                            <?php echo esc_html( $parent ); ?> (<?php echo $parent_count; ?>)
+                          </label>
+                          <div class="category-popup-link">
+                          <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z" fill="black"></path>
+                          </svg>
+                          </div>
                         </div>
-                    </button>
-                </h2>
-                <div id="<?php echo esc_attr( $collapse_id ); ?>"
-                    class="accordion-collapse collapse">
-                    <div class="accordion-body gfam-filter-content-item">
-                        <?php if ( is_array( $subtypes ) && count( $subtypes ) ) :
-                            $j = 0;
-                            foreach ( $subtypes as $sub => $subCount ) :
-                                $j++;
-                                $sub_id = $accordion_id . '_sub_' . $i . '_' . $j;
-                                ?>
-                                <div class="gfam-checkbox-item">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input rsl-filter-sub"
-                                            type="checkbox"
-                                            id="<?php echo esc_attr( $sub_id ); ?>"
-                                            value="<?php echo esc_attr( $sub ); ?>"
-                                            data-parent="<?php echo esc_attr( $parent ); ?>">
-                                        <label class="form-check-label"
-                                            for="<?php echo esc_attr( $sub_id ); ?>">
-                                            <?php echo esc_html( $sub ); ?>
-                                            (<?php echo intval($subCount); ?>)
-                                        </label>
-                                    </div>
+                        
+                      </button>
+                    </h2>
+                  </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+          <?php
+          // Subcategory Bodies
+          $i = 0;
+          foreach ( $filters as $parent => $data ) :
+              $i++;
+              $subtypes = isset( $data['subtypes'] ) ? $data['subtypes'] : [];
+              ?>
+              <div class="modal-body subcategory-body" id="subcategory<?php echo esc_attr( $i ); ?>">
+                <div class="modal-header border-0">
+                  <button class="btn btn-link p-0 me-2 back-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M8.4 12.9L13.6 6.37L15.6 7.36L11.35 12L15.59 15.87L14.61 17.63L8.4 12.9Z" fill="#272727"/>
+                    </svg>
+                    <span class="d-none d-xl-inline"><?php esc_html_e( 'Categories', 'retain-stock-locator' ); ?></span>
+                  </button>
+                  <h5 class="modal-title"><?php esc_html_e( 'Subcategory', 'retain-stock-locator' ); ?></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="gfam-filter-content-item">
+                  <?php
+                  if ( is_array( $subtypes ) && count( $subtypes ) ) :
+                      $j = 0;
+                      foreach ( $subtypes as $sub => $subCount ) :
+                          $j++;
+                          $sub_id = 'sub' . $i . '-' . $j;
+                          ?>
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                                <div class="form-check form-check-inline gap-3">
+                                  <input class="form-check-input rsl-filter-sub category-filters" name="category[]" type="checkbox" id="<?php echo esc_attr( $sub_id ); ?>" value="<?php echo esc_attr( $sub ); ?>" data-parent="<?php echo esc_attr( $parent ); ?>" />
+                                  <label class="form-check-label" for="<?php echo esc_attr( $sub_id ); ?>">
+                                    <?php echo esc_html( $sub ); ?> (<?php echo intval( $subCount ); ?>)
+                                  </label>
+                                </div>                                
+                              </button>
+                            </h2>
+                          </div>
+                      <?php endforeach;
+                  else : ?>
+                      <div class="text-muted"><?php esc_html_e( 'No subtypes', 'retain-stock-locator' ); ?></div>
+                  <?php endif; ?>
+                </div>
+              </div>
+          <?php endforeach; ?>
+
+          <div class="modal-footer">
+            <div class="gfam-btn-fixed row w-100 align-items-center">
+              <div class="col-6 px-1">
+                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+              </div>
+              <div class="col-6 text-end px-1">
+                <button class="gfam-btn w-auto rsl-apply-filter" data-search="category-filter-search" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Build modal HTML for Make & Model filters.
+ */
+function rsl_build_make_model_modal_html( $filters ) {
+    if ( empty( $filters ) || ! is_array( $filters ) ) {
+        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Make Or Model Available.', 'retain-stock-locator' ) . '</div>';
+    }
+
+    ob_start(); ?>
+
+    <!-- Make Modal -->
+    <div class="modal fade sidebar-modal" id="popupMakeDesktop" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Main Make Body -->
+          <div class="modal-body category-body active">
+            <div class="modal-header border-0">
+              <h5 class="modal-title"><?php esc_html_e( 'Make', 'retain-stock-locator' ); ?></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Make Search -->
+            <div class="input-group gfam-search-section">
+              <input type="text" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Make', 'retain-stock-locator' ); ?>" aria-label="Search Make" />
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+              </div>
+            </div>
+
+            <div class="gfam-filter-content-item">
+              <?php
+              $i = 0;
+              foreach ( $filters as $make => $data ) :
+                  $i++;
+                  $make_checkbox_id = 'make_' . $i;
+                  $make_count       = isset( $data['count'] ) ? intval( $data['count'] ) : 0;
+                  ?>
+                  <div class="accordion-item category-link" data-target="#submake<?php echo esc_attr( $i ); ?>">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                        <div class="form-check form-check-inline gap-3">
+                          <input class="form-check-input rsl-filter-parent" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $make_checkbox_id ); ?>" value="<?php echo esc_attr( $make ); ?>" />
+                          <label class="form-check-label" for="<?php echo esc_attr( $make_checkbox_id ); ?>">
+                            <?php echo esc_html( $make ); ?> (<?php echo $make_count; ?>)
+                          </label>
+                          <div class="category-popup-link">
+                          <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z" fill="black"></path>
+                          </svg>
+                          </div>
+                        </div>
+                        
+                      </button>
+                    </h2>
+                  </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+          <?php
+          // Model Subcategory Bodies
+          $i = 0;
+          foreach ( $filters as $make => $data ) :
+              $i++;
+              $models = isset( $data['models'] ) ? $data['models'] : [];
+              ?>
+              <div class="modal-body subcategory-body" id="submake<?php echo esc_attr( $i ); ?>">
+                <div class="modal-header border-0">
+                  <button class="btn btn-link p-0 me-2 back-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M8.4 12.9L13.6 6.37L15.6 7.36L11.35 12L15.59 15.87L14.61 17.63L8.4 12.9Z" fill="#272727"/>
+                    </svg>
+                    <span class="d-none d-xl-inline"><?php esc_html_e( 'Makes', 'retain-stock-locator' ); ?></span>
+                  </button>
+                  <h5 class="modal-title"><?php esc_html_e( 'Models', 'retain-stock-locator' ); ?></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Model Search -->
+                <div class="input-group gfam-search-section">
+                  <input type="text" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Model', 'retain-stock-locator' ); ?>" aria-label="Search Model" />
+                  <div class="input-group-append">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                  </div>
+                </div>
+
+                <div class="gfam-filter-content-item">
+                  <?php
+                  if ( is_array( $models ) && count( $models ) ) :
+                      $j = 0;
+                      foreach ( $models as $model => $count ) :
+                          $j++;
+                          $model_id = 'sub' . $i . '-' . $j;
+                          ?>
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                                <div class="form-check form-check-inline gap-3">
+                                  <input class="form-check-input rsl-filter-sub" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $model_id ); ?>" value="<?php echo esc_attr( $model ); ?>" data-parent="<?php echo esc_attr( $make ); ?>" />
+                                  <label class="form-check-label" for="<?php echo esc_attr( $model_id ); ?>">
+                                    <?php echo esc_html( $model ); ?> (<?php echo intval( $count ); ?>)
+                                  </label>
                                 </div>
-                            <?php endforeach;
-                        else : ?>
-                            <div class="text-muted">
-                                <?php esc_html_e( 'No subtypes', 'retain-stock-locator' ); ?>
+                              </button>
+                            </h2>
+                          </div>
+                      <?php endforeach;
+                  else : ?>
+                      <div class="text-muted"><?php esc_html_e( 'No Model Available', 'retain-stock-locator' ); ?></div>
+                  <?php endif; ?>
+                </div>
+              </div>
+          <?php endforeach; ?>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <div class="gfam-btn-fixed row w-100 align-items-center">
+              <div class="col-6 px-1">
+                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+              </div>
+              <div class="col-6 text-end px-1">
+                <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Build modal HTML for Type filters (e.g., New, Used, Demo).
+ *
+ * @param array  $filters Array of types with counts. Example: [ 'New' => 22, 'Used' => 18 ]
+ * @param string $modal_id Optional custom modal ID.
+ *
+ * @return string Modal HTML.
+ */
+function rsl_build_type_filter_modal_html( $filters, $modal_id = 'popupTypeDesktop' ) {
+    if ( empty( $filters ) || ! is_array( $filters ) ) {
+        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Type Available.', 'retain-stock-locator' ) . '</div>';
+    }
+
+    ob_start(); ?>
+
+    <div class="modal fade sidebar-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Type Filter Body -->
+          <div class="modal-body category-body active">
+            <div class="modal-header border-0">
+              <h5 class="modal-title"><?php esc_html_e( 'Type', 'retain-stock-locator' ); ?></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="gfam-filter-content-item">
+              <?php
+              $i = 0;                          
+              foreach ( $filters as $type => $count ) :
+                  $i++;
+                  $checkbox_id = sanitize_title( $type ) . '_' . $i;
+                  ?>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                        <div class="form-check form-check-inline gap-3">
+                          <input class="form-check-input rsl-filter-parent" name="type[]"
+                                 type="checkbox"
+                                 id="<?php echo esc_attr( $checkbox_id ); ?>"
+                                 value="<?php echo esc_attr( $type ); ?>"
+                                 data-filter-type="type">
+                          <label class="form-check-label" for="<?php echo esc_attr( $checkbox_id ); ?>">
+                            <?php echo esc_html( $type ); ?> (<?php echo intval( $count ); ?>)
+                          </label>
+                        </div>
+                      </button>
+                    </h2>
+                  </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <div class="gfam-btn-fixed row w-100 align-items-center">
+              <div class="col-6 px-1">
+                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+              </div>
+              <div class="col-6 text-end px-1">
+                <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <?php
+    return ob_get_clean();
+}
+
+function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesktop' ) {
+
+    if ( empty( $prices ) || ! is_array( $prices ) ) {
+        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Price Available.', 'retain-stock-locator' ) . '</div>';
+    }
+
+    // Sort ascending
+    sort( $prices );
+
+    $min_price = min( $prices );
+    $max_price = max( $prices );
+
+    // Format prices for display
+    $formatted_prices = array_map( function( $price ) {
+        return '$'.number_format( $price );
+    }, $prices );
+
+    ob_start(); ?>
+
+    <!-- Price Range Modal -->
+    <div class="modal fade sidebar-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <form id="priceRangeForm">
+            <!-- Modal Header -->
+            <div class="modal-header border-0">
+              <h5 class="modal-title"><?php esc_html_e( 'Price Range', 'retain-stock-locator' ); ?></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body with Tabs -->
+            <div class="modal-body category-body active">
+
+              <!-- Tabs -->
+              <ul class="nav nav-tabs mb-3" id="priceRangeTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link price-tabs active" id="select-tab" data-bs-toggle="tab" data-bs-target="#selectRange"
+                    type="button" role="tab">
+                    <?php esc_html_e( 'Select Range', 'retain-stock-locator' ); ?>
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link price-tabs" id="enter-tab" data-bs-toggle="tab" data-bs-target="#enterRange" type="button"
+                    role="tab">
+                    <?php esc_html_e( 'Enter Range', 'retain-stock-locator' ); ?>
+                  </button>
+                </li>
+              </ul>
+
+              <!-- Tab Content -->
+              <div class="tab-content" id="priceRangeTabsContent">
+
+                <!-- Select Range Tab -->
+                <div class="tab-pane fade show active" id="selectRange" role="tabpanel">
+                  <div class="mb-4">
+                    <label for="priceFromSelect" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                    <select class="form-select price-from-cls" name="price-from" id="priceFromSelect">
+                      <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                      <?php foreach ( $prices as $i => $price ): ?>
+                        <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label for="priceToSelect" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                    <select class="form-select price-to-cls" name="price-to" id="priceToSelect">
+                      <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                      <?php foreach ( $prices as $i => $price ): ?>
+                        <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Enter Range Tab -->
+                <div class="tab-pane fade" id="enterRange" role="tabpanel">
+                  <div class="mb-4">
+                    <label for="priceFromInput" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                    <input type="number" class="form-control price-from-cls" name="priceFromInput" id="priceFromInput" placeholder=""
+                          min="<?php echo esc_attr( $min_price ); ?>" max="<?php echo esc_attr( $max_price ); ?>" />
+                  </div>
+                  <div class="mb-4">
+                    <label for="priceToInput" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                    <input type="number" class="form-control price-to-cls" name="priceToInput" id="priceToInput" placeholder=""
+                          min="<?php echo esc_attr( $min_price ); ?>" max="<?php echo esc_attr( $max_price ); ?>" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <div class="gfam-btn-fixed row w-100 align-items-center">
+                <div class="col-6 px-1">
+                  <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                </div>
+                <div class="col-6 text-end px-1">
+                  <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal">
+                    <?php esc_html_e( 'Search', 'retain-stock-locator' ); ?>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Build Year Filter Modal HTML
+ *
+ * @param array  $years      Array of years (values only).
+ * @param string $modal_id   Modal ID.
+ *
+ * @return string
+ */
+function rsl_build_year_filter_modal_html( $years, $modal_id = 'popupYearDesktop' ) {
+
+    if ( empty( $years ) || ! is_array( $years ) ) {
+        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Year Available.', 'retain-stock-locator' ) . '</div>';
+    }
+
+    // Remove duplicates, sort numerically ascending
+    sort( $years, SORT_NUMERIC );
+
+    $min_year = min( $years );
+    $max_year = max( $years );
+
+    ob_start(); ?>
+    <div class="modal fade sidebar-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+        <form id="yearRangeForm">
+                <!-- Modal Header -->
+                <div class="modal-header border-0">
+                    <h5 class="modal-title"><?php esc_html_e( 'Year', 'retain-stock-locator' ); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body with Tabs -->
+                <div class="modal-body category-body active">
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-3" id="yearRangeTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rsl-year-tabs active" id="select-tab" data-bs-toggle="tab" data-bs-target="#selectyear" type="button" role="tab">
+                                <?php esc_html_e( 'Select Year', 'retain-stock-locator' ); ?>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rsl-year-tabs" id="enter-tab" data-bs-toggle="tab" data-bs-target="#enteryear" type="button" role="tab">
+                                <?php esc_html_e( 'Enter Year', 'retain-stock-locator' ); ?>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="yearRangeTabsContent">
+
+                        <!-- Select Range Tab -->
+                        <div class="tab-pane fade show active" id="selectyear" role="tabpanel">
+                            <div class="mb-4">
+                                <label for="yearFromSelect" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                                <select class="form-select rsl-year-from" id="yearFromSelect" name="year-from" data-filter-type="year_from">
+                                    <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                                    <?php foreach ( $years as $year ) : ?>
+                                        <option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                        <?php endif; ?>
+                            <div class="mb-4">
+                                <label for="yearToSelect" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                                <select class="form-select rsl-year-to" id="yearToSelect" name="year-to" data-filter-type="year_to">
+                                    <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                                    <?php foreach ( $years as $year ) : ?>
+                                        <option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Enter Range Tab -->
+                        <div class="tab-pane fade" id="enteryear" role="tabpanel">
+                            <div class="mb-4">
+                                <label for="yearFromInput" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                                <input type="number" class="form-control rsl-year-from" name="yearFromInput" id="yearFromInput" placeholder="" data-filter-type="year_from" min="<?php echo esc_attr( $min_year ); ?>" max="<?php echo esc_attr( $max_year ); ?>" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="yearToInput" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                                <input type="number" class="form-control rsl-year-to" name="yearToInput" id="yearToInput" placeholder="" data-filter-type="year_to" min="<?php echo esc_attr( $min_year ); ?>" max="<?php echo esc_attr( $max_year ); ?>" />
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <div class="gfam-btn-fixed row w-100 align-items-center">
+                        <div class="col-6 px-1">
+                            <a href="#" class="clear-btn rsl-clear-year"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                        </div>
+                        <div class="col-6 text-end px-1">
+                            <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal" ><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
+                        </div>
+                    </div>
+                </div>
+        </form>
             </div>
-        <?php endforeach; ?>
+        </div>
     </div>
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Build Hours Filter Modal HTML
+ *
+ * @param array  $hours      Array of hours (values only).
+ * @param string $modal_id   Modal ID.
+ *
+ * @return string
+ */
+function rsl_build_hours_filter_modal_html( $hours, $modal_id = 'popupHourDesktop' ) {
+
+    if ( empty( $hours ) || ! is_array( $hours ) ) {
+        return '<div class="rsl-no-filters p-3">' . esc_html__( 'No Hours Available.', 'retain-stock-locator' ) . '</div>';
+    }
+
+    // Sort hours numerically (smallest to largest)
+    sort( $hours, SORT_NUMERIC );
+
+    // Get min and max for input range validation
+    $min_hour = min( $hours );
+    $max_hour = max( $hours );
+
+    ob_start(); ?>
+    <div class="modal fade sidebar-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+          <form id="hourRangeForm">
+                <!-- Modal Header -->
+                <div class="modal-header border-0">
+                    <h5 class="modal-title"><?php esc_html_e( 'Hours', 'retain-stock-locator' ); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body with Tabs -->
+                <div class="modal-body category-body active">
+
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs mb-3" id="hourRangeTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rsl-hours-tabs active" id="select-tab" data-bs-toggle="tab" data-bs-target="#selecthour" type="button" role="tab">
+                                <?php esc_html_e( 'Select Hours', 'retain-stock-locator' ); ?>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rsl-hours-tabs" id="enter-tab" data-bs-toggle="tab" data-bs-target="#enterhour" type="button" role="tab">
+                                <?php esc_html_e( 'Enter Hours', 'retain-stock-locator' ); ?>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="hourRangeTabsContent">
+
+                        <!-- Select Range Tab -->
+                        <div class="tab-pane fade show active" id="selecthour" role="tabpanel">
+                            <div class="mb-4">
+                                <label for="hourFromSelect" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                                <select class="form-select rsl-hours-from" name="hour-from" id="hourFromSelect" data-filter-type="hour_from">
+                                    <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                                    <?php foreach ( $hours as $hour ) : ?>
+                                        <option value="<?php echo esc_attr( $hour ); ?>"><?php echo esc_html( $hour ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="hourToSelect" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                                <select class="form-select rsl-hours-to" name="hour-to" id="hourToSelect" data-filter-type="hour_to">
+                                    <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
+                                    <?php foreach ( $hours as $hour ) : ?>
+                                        <option value="<?php echo esc_attr( $hour ); ?>"><?php echo esc_html( $hour ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Enter Range Tab -->
+                        <div class="tab-pane fade" id="enterhour" role="tabpanel">
+                            <div class="mb-4">
+                                <label for="hourFromInput" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
+                                <input type="number" class="form-control rsl-hours-from" name="hourFromInput" id="hourFromInput" placeholder="" data-filter-type="hour_from" min="<?php echo esc_attr( $min_hour ); ?>" max="<?php echo esc_attr( $max_hour ); ?>" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="hourToInput" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
+                                <input type="number" class="form-control rsl-hours-to" name="hourToInput" id="hourToInput" placeholder="" data-filter-type="hour_to" min="<?php echo esc_attr( $min_hour ); ?>" max="<?php echo esc_attr( $max_hour ); ?>" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <div class="gfam-btn-fixed row w-100 align-items-center">
+                        <div class="col-6 px-1">
+                            <a href="#" class="clear-btn rsl-clear-hour"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                        </div>
+                        <div class="col-6 text-end px-1">
+                            <button class="gfam-btn w-auto rsl-apply-filter"  data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
+                        </div>
+                    </div>
+                </div>
+          </form>
+            </div>
+        </div>
+    </div>
+    <script>
+ jQuery(document).ready(function ($) {
+  // min price modal
+  var minPrice = <?php echo (int)$min_price; ?>;
+  var maxPrice = <?php echo (int)$max_price; ?>;
+
+  // Custom method for From <= To
+  $.validator.addMethod("lessThanOrEqualTo", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true; // skip if empty
+    return Number(value) <= Number(target);
+  }, "'From' must be less than or equal to 'To'.");
+
+  // Custom method for To >= From
+  $.validator.addMethod("greaterThanOrEqualTo", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true; // skip if empty
+    return Number(value) >= Number(target);
+  }, "'To' must be greater than or equal to 'From'.");
+
+  $("#priceRangeForm").validate({
+    ignore: [], // validate hidden fields (tabs)
+    rules: {
+      // Enter Range tab (number inputs)
+      priceFromInput: {
+        required: true,
+        number: true,
+        min: minPrice,
+        max: maxPrice,
+        lessThanOrEqualTo: "#priceToInput"
+      },
+      priceToInput: {
+        required: true,
+        number: true,
+        min: minPrice,
+        max: maxPrice,
+        greaterThanOrEqualTo: "#priceFromInput"
+      },
+      // Select Range tab
+      "price-from": {
+        required: true,
+        lessThanOrEqualTo: "#priceToSelect"
+      },
+      "price-to": {
+        required: true,
+        greaterThanOrEqualTo: "#priceFromSelect"
+      }
+    },
+    messages: {
+      priceFromInput: {
+        required: "Please enter a minimum price",
+        number: "Enter a valid number",
+        min: "Value must be at least " + minPrice,
+        max: "Value must not exceed " + maxPrice,
+        lessThanOrEqualTo: "'From' must be less than or equal to 'To'"
+      },
+      priceToInput: {
+        required: "Please enter a maximum price",
+        number: "Enter a valid number",
+        min: "Value must be at least " + minPrice,
+        max: "Value must not exceed " + maxPrice,
+        greaterThanOrEqualTo: "'To' must be greater than or equal to 'From'"
+      },
+      "price-from": {
+        required: "Please select a minimum price",
+        lessThanOrEqualTo: "'From' must be less than or equal to 'To'"
+      },
+      "price-to": {
+        required: "Please select a maximum price",
+        greaterThanOrEqualTo: "'To' must be greater than or equal to 'From'"
+      }
+    },
+    errorElement: "div",
+    errorClass: "invalid-feedback",
+    highlight: function(element) {
+      $(element).addClass("is-invalid");
+    },
+    unhighlight: function(element) {
+      $(element).removeClass("is-invalid");
+    },
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    submitHandler: function(form) {
+      // ✅ No need to preventDefault here
+      console.log("Form is valid and submitHandler triggered!");
+      // You can do AJAX here
+      // Example: form.submit(); // uncomment to submit normally
+    }
+
+    
+  });
+    // -----------------------------
+  // Year Modal Validation
+  // -----------------------------
+  var minYear = <?php echo (int)$min_year; ?>;
+  var maxYear = <?php echo (int)$max_year; ?>;
+
+  // Custom methods for From <= To
+  $.validator.addMethod("lessThanOrEqualToYear", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true;
+    return Number(value) <= Number(target);
+  }, "'From' must be less than or equal to 'To'.");
+
+  $.validator.addMethod("greaterThanOrEqualToYear", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true;
+    return Number(value) >= Number(target);
+  }, "'To' must be greater than or equal to 'From'.");
+
+  $("#yearRangeForm").validate({
+    ignore: [],
+    rules: {
+      // Enter Year tab
+      yearFromInput: {
+        required: true,
+        number: true,
+        min: minYear,
+        max: maxYear,
+        lessThanOrEqualToYear: "#yearToInput"
+      },
+      yearToInput: {
+        required: true,
+        number: true,
+        min: minYear,
+        max: maxYear,
+        greaterThanOrEqualToYear: "#yearFromInput"
+      },
+      // Select Year tab
+      "year-from": {
+        required: true,
+        lessThanOrEqualToYear: "#yearToSelect"
+      },
+      "year-to": {
+        required: true,
+        greaterThanOrEqualToYear: "#yearFromSelect"
+      }
+    },
+    messages: {
+      yearFromInput: {
+        required: "Please enter a start year",
+        number: "Enter a valid year",
+        min: "Year must be at least " + minYear,
+        max: "Year must not exceed " + maxYear,
+        lessThanOrEqualToYear: "'From' must be less than or equal to 'To'"
+      },
+      yearToInput: {
+        required: "Please enter an end year",
+        number: "Enter a valid year",
+        min: "Year must be at least " + minYear,
+        max: "Year must not exceed " + maxYear,
+        greaterThanOrEqualToYear: "'To' must be greater than or equal to 'From'"
+      },
+      "year-from": {
+        required: "Please select a start year",
+        lessThanOrEqualToYear: "'From' must be less than or equal to 'To'"
+      },
+      "year-to": {
+        required: "Please select an end year",
+        greaterThanOrEqualToYear: "'To' must be greater than or equal to 'From'"
+      }
+    },
+    errorElement: "div",
+    errorClass: "invalid-feedback",
+    highlight: function(element) {
+      $(element).addClass("is-invalid");
+    },
+    unhighlight: function(element) {
+      $(element).removeClass("is-invalid");
+    },
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    submitHandler: function(form) {
+      console.log("Year form valid!");
+      // form.submit(); // uncomment if you want normal submission
+    }
+  });
+
+  // -----------------------------
+  // Hour Modal Validation
+  // -----------------------------
+  var minHour = <?php echo (int)$min_hour; ?>;
+  var maxHour = <?php echo (int)$max_hour; ?>;
+
+  $.validator.addMethod("lessThanOrEqualToHour", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true;
+    return Number(value) <= Number(target);
+  }, "'From' must be less than or equal to 'To'.");
+
+  $.validator.addMethod("greaterThanOrEqualToHour", function(value, element, param) {
+    var target = $(param).val();
+    if (!value || !target) return true;
+    return Number(value) >= Number(target);
+  }, "'To' must be greater than or equal to 'From'.");
+
+  $("#hourRangeForm").validate({
+    ignore: [],
+    rules: {
+      // Enter Hour tab
+      hourFromInput: {
+        required: true,
+        number: true,
+        min: minHour,
+        max: maxHour,
+        lessThanOrEqualToHour: "#hourToInput"
+      },
+      hourToInput: {
+        required: true,
+        number: true,
+        min: minHour,
+        max: maxHour,
+        greaterThanOrEqualToHour: "#hourFromInput"
+      },
+      // Select Hour tab
+      "hour-from": {
+        required: true,
+        lessThanOrEqualToHour: "#hourToSelect"
+      },
+      "hour-to": {
+        required: true,
+        greaterThanOrEqualToHour: "#hourFromSelect"
+      }
+    },
+    messages: {
+      hourFromInput: {
+        required: "Please enter start hour",
+        number: "Enter a valid hour",
+        min: "Hour must be at least " + minHour,
+        max: "Hour must not exceed " + maxHour,
+        lessThanOrEqualToHour: "'From' must be less than or equal to 'To'"
+      },
+      hourToInput: {
+        required: "Please enter end hour",
+        number: "Enter a valid hour",
+        min: "Hour must be at least " + minHour,
+        max: "Hour must not exceed " + maxHour,
+        greaterThanOrEqualToHour: "'To' must be greater than or equal to 'From'"
+      },
+      "hour-from": {
+        required: "Please select start hour",
+        lessThanOrEqualToHour: "'From' must be less than or equal to 'To'"
+      },
+      "hour-to": {
+        required: "Please select end hour",
+        greaterThanOrEqualToHour: "'To' must be greater than or equal to 'From'"
+      }
+    },
+    errorElement: "div",
+    errorClass: "invalid-feedback",
+    highlight: function(element) {
+      $(element).addClass("is-invalid");
+    },
+    unhighlight: function(element) {
+      $(element).removeClass("is-invalid");
+    },
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    submitHandler: function(form) {
+      console.log("Hour form valid!");
+      // form.submit(); // uncomment if you want normal submission
+    }
+  });
+});
+
+</script>
     <?php
     return ob_get_clean();
 }
