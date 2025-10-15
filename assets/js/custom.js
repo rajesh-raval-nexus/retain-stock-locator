@@ -1,23 +1,5 @@
 jQuery(document).ready(function ($) {
-  $(".gfam-carousel").owlCarousel({
-    loop: true,
-    margin: 0,
-    nav: true,
-    dots: false,
-    autoplay: true,
-    autoplayTimeout: 4000,
-    autoplayHoverPause: true,
-    items: 1,
-    navText: [
-      '<i class="fas fa-chevron-left"></i>',
-      '<i class="fas fa-chevron-right"></i>',
-    ],
-    responsive: {
-      0: { items: 1 },
-      600: { items: 1 },
-      1000: { items: 1 },
-    },
-  });
+  reinitCarousel();  
 
   $(".dropdown-menu .dropdown-item").on("click", function (e) {
     e.preventDefault();
@@ -118,21 +100,41 @@ jQuery(document).ready(function ($) {
       }
     });
   }
+  
+  reinitSeeMoreLess();
+  // Filter wrapper logic    
 
-  // Filter wrapper logic
-  $(".gfam-filter-wrapper").each(function () {
-    const $wrapper = $(this);
+  // jQuery(window).on('load', function() {
+  //   $('#loader').fadeOut(500);
+  // });
+  
+});
+
+function reinitSeeMoreLess(){
+  jQuery(".gfam-filter-wrapper").each(function () {
+    const $wrapper = jQuery(this);
     const $tags = $wrapper.find(".gfam-filter-tags");
-
-    const $toggleBtn = $('<button class="gfam-show-toggle">Show More</button>');
-    $wrapper.append($toggleBtn);
+    
+    if($tags.find(".gfam-filter-tag").length !== 0){
+      $wrapper.css({
+          transition: "all 0.4s ease",
+          overflow: "hidden",
+          height: 'auto',
+        });
+    }
+            
+    let $toggleBtn = $wrapper.find(".gfam-show-toggle");
+    if ($toggleBtn.length === 0) {
+      $toggleBtn = jQuery('<button class="gfam-show-toggle">Show More</button>');
+      $wrapper.append($toggleBtn);
+    }
 
     // Expand/Collapse functionality
-    $toggleBtn.on("click", function () {
-      if ($tags.hasClass("expanded")) {
+    $toggleBtn.on("click", function () {      
+      if ($tags.hasClass("expanded")) {                
         $tags.css("max-height", "5.5em").removeClass("expanded");
         $toggleBtn.text("Show More");
-      } else {
+      } else {                
         $tags.css("max-height", $tags[0].scrollHeight + "px").addClass("expanded");
         $toggleBtn.text("Show Less");
       }
@@ -147,7 +149,7 @@ jQuery(document).ready(function ($) {
 
     // Handle tag remove
     $tags.on("click", ".gfam-clear-tag", function () {
-      const $tagItem = $(this).closest(".gfam-filter-tag");
+      const $tagItem = jQuery(this).closest(".gfam-filter-tag");
       $tagItem.remove();
 
       if ($tags[0].scrollHeight <= maxHeight + 1) {
@@ -159,12 +161,30 @@ jQuery(document).ready(function ($) {
           transition: "all 0.4s ease",
           overflow: "hidden",
           height: 0,
-          padding: 0,
-          margin: 0,
         });
       }
     });
   });
+}
 
-  
-});
+function reinitCarousel(){
+    jQuery(".gfam-carousel").owlCarousel({
+      loop: true,
+      margin: 0,
+      nav: true,
+      dots: false,
+      autoplay: true,
+      autoplayTimeout: 4000,
+      autoplayHoverPause: true,
+      items: 1,
+      navText: [
+        '<i class="fas fa-chevron-left"></i>',
+        '<i class="fas fa-chevron-right"></i>',
+      ],
+      responsive: {
+        0: { items: 1 },
+        600: { items: 1 },
+        1000: { items: 1 },
+      },
+    });
+  }

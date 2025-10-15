@@ -12,6 +12,55 @@ function rsl_assets_init() {
  * Enqueue frontend styles and scripts.
  */
 function rsl_assets_enqueue_frontend() {
+
+    /*cstm css and js*/
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lightgallery.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lightgallery-min',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lightgallery.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lg-thumbnail.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lg-thumbnail',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lg-thumbnail.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'lg-zoom.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-lg-zoom',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lg-zoom.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    if ( ! rsl_assets_is_script_loaded_by_src( 'bundle.js' ) ) {
+        wp_enqueue_script(
+            'rsl-bundle',
+            RSL_PLUGIN_URL . 'assets/vendor/litepicker/bundle.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }  
+    if ( ! rsl_assets_is_script_loaded_by_src( 'timepicki.min.js' ) ) {
+        wp_enqueue_script(
+            'rsl-timepicki',
+            RSL_PLUGIN_URL . 'assets/vendor/timepicki/timepicki.min.js',
+            [ 'jquery' ],
+            null,
+            true
+        );
+    }
+    /* END cstm css and js*/ 
+
     // Load Font Awesome from CDN (check if already loaded by filename)    
     wp_enqueue_style(
         'rsl-font-awesome',
@@ -49,6 +98,35 @@ function rsl_assets_enqueue_frontend() {
             '2.3.4'
         );
     }
+
+
+    /*cstm css and js*/ 
+    if ( ! rsl_assets_is_style_loaded_by_src( 'lightgallery-bundle.min.css' ) ) {
+        wp_enqueue_style(
+            'lightgallery-bundle',
+            RSL_PLUGIN_URL . 'assets/vendor/lightgallery/lightgallery-bundle.min.css',
+            [],
+            '5.3.0'
+        );
+    }
+    if ( ! rsl_assets_is_style_loaded_by_src( 'litepicker.css' ) ) {
+        wp_enqueue_style(
+            'litepicker',
+            RSL_PLUGIN_URL . 'assets/vendor/litepicker/litepicker.css',
+            [],
+            '1.1.0'
+        );
+    }
+
+    if ( ! rsl_assets_is_style_loaded_by_src( 'timepicki.min.css' ) ) {
+        wp_enqueue_style(
+            'timepicki',
+            RSL_PLUGIN_URL . 'assets/vendor/timepicki/timepicki.min.css',
+            [],
+            '5.1.0'
+        );
+    }
+    /* END cstm css and js*/ 
 
     // Custom CSS
     wp_enqueue_style(
@@ -171,13 +249,22 @@ function rsl_assets_enqueue_frontend() {
         true
     );
 
+    // Custom JS
+    wp_enqueue_script(
+        'rsl-custom',
+        RSL_PLUGIN_URL . 'assets/js/custom.js',
+        [ 'jquery', 'rsl-main', 'rsl-owl-carousel' ],
+        filemtime( RSL_PLUGIN_DIR . 'assets/js/custom.js' ),
+        true
+    );
+
     // Ajax Functions JS
     if ( ! rsl_assets_is_script_loaded_by_src( 'ajax-functions' ) ) {
         wp_enqueue_script(
             'rsl-ajax-functions',
             RSL_PLUGIN_URL . 'assets/js/ajax-functions.js',
-            [ 'jquery' ],
-            filemtime( RSL_PLUGIN_DIR . 'assets/js/main.js' ),
+            [ 'jquery', 'rsl-custom' ],
+            filemtime( RSL_PLUGIN_DIR . 'assets/js/ajax-functions.js' ),
             true
         );
 
@@ -191,16 +278,14 @@ function rsl_assets_enqueue_frontend() {
                 'vdp_per_page' => get_field('vdp_per_page', 'option')
             ]
         );
-    }
+    }    
 
-    // Custom JS
-    wp_enqueue_script(
-        'rsl-custom',
-        RSL_PLUGIN_URL . 'assets/js/custom.js',
-        [ 'jquery', 'rsl-main', 'rsl-owl-carousel' ],
-        filemtime( RSL_PLUGIN_DIR . 'assets/js/custom.js' ),
-        true
-    );
+    wp_enqueue_script('gfam-ajax', RSL_PLUGIN_URL . '/assets/js/cstm.js', ['jquery'], null, true);
+    wp_localize_script('gfam-ajax', 'gfam_ajax_obj', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('gfam_form_nonce')
+    ]);
+    
 }
 
 /**

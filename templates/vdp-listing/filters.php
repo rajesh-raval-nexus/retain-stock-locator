@@ -75,13 +75,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
               <!-- Selected Filters -->
               <div class="gfam-filter-wrapper">
                 <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-category-options-list">
-                  <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+                  
                 </div>
               </div>
             </li>
@@ -99,14 +93,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
               </div>
               <!-- Selected Filters -->
               <div class="gfam-filter-wrapper">
-                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3">
-                  <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-make-options-list">                  
 
                 </div>
               </div>
@@ -125,14 +112,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
               </div>
               <!-- Selected Filters -->
               <div class="gfam-filter-wrapper">
-                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3">
-                  <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-                  <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-type-options-list">                  
 
                 </div>
               </div>
@@ -297,14 +277,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
           </div>
           <!-- Selected Filters -->
           <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3">
-              <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-category-options-list">              
 
             </div>
           </div>              
@@ -323,14 +296,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
           </div>
           <!-- Selected Filters -->
           <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3">
-              <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-make-options-list">              
 
             </div>
           </div>
@@ -349,14 +315,7 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
           </div>
           <!-- Selected Filters -->
           <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3">
-              <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 4 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 5 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 6 <span class="gfam-clear-tag">×</span></span>
-              <span class="gfam-filter-tag">Filter 7 <span class="gfam-clear-tag">×</span></span>
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-type-options-list">              
 
             </div>
           </div>
@@ -397,7 +356,11 @@ include RSL_PLUGIN_DIR .'templates/vdp-listing/breadcrumb.php';
   </div>
 
   <!-- Main Content -->
-  <div class="gfam-content col-xl-8">
+  <div class="gfam-content col-xl-8 position-relative">
+    <!-- Loader -->
+    <div id="loader" style="display:none;">
+      <div class="loader-circle"></div>
+    </div>
     <!-- <div class="gfam-applied-filters my-3">
     <strong class="me-2">Applied filters:</strong>
 

@@ -109,8 +109,8 @@ function rsl_apply_filters( $listings, $filters ) {
         }
 
         // --- Listing Type i.e New, Used ---
-        if ( !empty($filters['Type']) ) {
-            $matches[] = in_array($l['listing_type'], $filters['Type']);
+        if ( !empty($filters['type']) ) {
+            $matches[] = in_array($l['listing_type'], $filters['type']);
         }
 
         // --- Price Range ---

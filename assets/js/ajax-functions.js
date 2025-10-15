@@ -19,6 +19,9 @@ jQuery(document).ready(function($) {
             url: rsl_ajax_obj.ajax_url,
             type: 'POST',
             dataType: 'json',
+            beforeSend: function( xhr ) {
+                $('#loader').fadeIn(500);
+            },
             data: {
                 action: 'rsl_get_stock_list',
                 security: rsl_ajax_obj.nonce,
@@ -32,7 +35,8 @@ jQuery(document).ready(function($) {
                         $('.gfam-product-grid').append(response.data.html);
                     } else {
                         $('.gfam-product-grid').html(response.data.html);
-                    }                    
+                    }
+                    reinitCarousel();
 
                     if ($btn) {
                         $btn.text('Load More...').prop('disabled', false);
@@ -40,12 +44,16 @@ jQuery(document).ready(function($) {
 
                         if (page >= response.data.max_pages) {
                             $btn.addClass('d-none');
+                        }else{
+                            $btn.removeClass('d-none');
                         }
                     }else{                    
                         let $loadmore_button = $('.load-more-stocks-btn');
                         if ($loadmore_button.length) {
                             if (response.data.has_more === false) {
                                 $loadmore_button.addClass('d-none');
+                            }else{
+                                $loadmore_button.removeClass('d-none');
                             }
                             $loadmore_button.attr({
                                 'next-page': response.data.next_page,
@@ -58,9 +66,10 @@ jQuery(document).ready(function($) {
                 } else {
                     if ($btn) $btn.addClass('d-none');
                 }
+                $('#loader').fadeOut(500);
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
+                $('#loader').fadeOut(500);
                 if ($btn) $btn.text('Error').prop('disabled', true);
             }
         });
@@ -129,7 +138,7 @@ jQuery(document).ready(function($) {
         let filters = {
             categories: selectedCategories,        
             makeModel: selectedMakeModel,
-            Type: selectedType,
+            type: selectedType,
             price_from: selectedPriceFrom || '', // empty if "Any" selected
             price_to: selectedPriceTo   || '',
             year_from: selectedYearFrom || '', // empty if "Any" selected
@@ -147,8 +156,10 @@ jQuery(document).ready(function($) {
     $('.rsl-apply-filter').on('click', function(e) {
         e.preventDefault();
         
-        show_selected_val_on_sidebar(this);
+        // remove focus temporarily
+        $(this).blur();
         var filters = get_selected_filters();        
+        show_selected_val_on_sidebar(filters);
 
         rsl_fetch_listings({
             page: 1,
@@ -158,11 +169,86 @@ jQuery(document).ready(function($) {
         });
     });
 
-    function show_selected_val_on_sidebar(search_btn){        
-        var clicked_search_filter_id = jQuery(search_btn).data('search');
+    function show_selected_val_on_sidebar(filters) {        
+        // clear each list
+        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();
 
-        if(clicked_search_filter_id == 'category-filter-search'){
-            
+        // small helper to append tag in a specific container
+        function addTag(containerSelector, label, key, value) {
+            const tag = $(`
+                <span class="gfam-filter-tag" data-key="${key}" data-value="${value}">
+                    ${label} <span class="gfam-clear-tag">×</span>
+                </span>
+            `);
+            $(containerSelector).append(tag);
         }
+
+        // --- Category ---
+        if (filters.categories.length) {
+            filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
+        }
+
+        // --- Make / Model ---
+        if (filters.makeModel.length) {
+            filters.makeModel.forEach(val => addTag('.selected-make-options-list', val, 'make-model', val));
+        }
+
+        // --- Type ---
+        if (filters.type.length) {
+            filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
+        }
+
+        // --- Price ---
+        if (filters.price_from || filters.price_to) {
+            let label = `${filters.price_from || 'Any'} - ${filters.price_to || 'Any'}`;
+            addTag('.selected-price-options-list', 'Price: ' + label, 'price', label);
+        }
+
+        // --- Year ---
+        if (filters.year_from || filters.year_to) {
+            let label = `${filters.year_from || 'Any'} - ${filters.year_to || 'Any'}`;
+            addTag('.selected-year-options-list', 'Year: ' + label, 'year', label);
+        }
+
+        // --- Hours ---
+        if (filters.hours_from || filters.hours_to) {
+            let label = `${filters.hours_from || 'Any'} - ${filters.hours_to || 'Any'}`;
+            addTag('.selected-hours-options-list', 'Hours: ' + label, 'hours', label);
+        }
+        
+        reinitSeeMoreLess();        
     }
+
+    $(document).on('click', '.gfam-clear-tag', function() {
+        const tag = $(this).closest('.gfam-filter-tag');
+        const key = tag.data('key');
+        const value = tag.data('value');
+
+        // Uncheck or reset corresponding filter
+        if (key === 'category') {
+            $(`input[name="category[]"][value="${value}"]`).prop('checked', false);
+        } else if (key === 'make-model') {
+            $(`input[name="make-model[]"][value="${value}"]`).prop('checked', false);
+        } else if (key === 'type') {
+            $(`input[name="type[]"][value="${value}"]`).prop('checked', false);
+        } else if (key === 'price') {
+            $('.rsl-price-from, .rsl-price-to').val('');
+        } else if (key === 'year') {
+            $('.rsl-year-from, .rsl-year-to').val('');
+        } else if (key === 'hours') {
+            $('.rsl-hours-from, .rsl-hours-to').val('');
+        }
+
+        // Remove tag
+        tag.remove();
+
+        // Re-fetch updated listings
+        const filters = get_selected_filters();
+        rsl_fetch_listings({
+            page: 1,
+            per_page: rsl_ajax_obj.vdp_per_page,
+            append: false,
+            filters: filters
+        });
+    });
 });
