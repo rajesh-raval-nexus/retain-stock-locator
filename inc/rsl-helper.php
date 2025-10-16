@@ -26,6 +26,7 @@ function rsl_parse_listings( $xmlPath ) {
             'make'         => (string)$listing->make,
             'model'        => (string)$listing->model,
             'year'         => rsl_get_attribute_value($listing, 'Year'),
+            'description'  => rsl_get_attribute_value($listing, 'Description'),
             'status'       => rsl_get_attribute_value($listing, 'Status'),
             'listing_type' => rsl_get_attribute_value($listing, 'Listing Type'),
             'price'        => rsl_get_attribute_value($listing, 'Retail Price'),

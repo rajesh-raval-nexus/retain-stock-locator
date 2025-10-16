@@ -48,7 +48,7 @@ add_action('wp_ajax_nopriv_gfam_detail_form_submit', 'handle_gfam_detail_form_su
 function handle_gfam_detail_form_submit() {
     check_ajax_referer('gfam_form_nonce', 'security');
 
-    // Sanitize and validate
+    // Sanitize inputs
     $first_name = sanitize_text_field($_POST['first_name'] ?? '');
     $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
     $email      = sanitize_email($_POST['email'] ?? '');
@@ -56,7 +56,46 @@ function handle_gfam_detail_form_submit() {
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
     $make       = sanitize_text_field($_POST['make'] ?? '');
 
-    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($post_code) || empty($make)) {
+    if (empty($first_name) || empty($last_name) || empty($email)) {
+        wp_send_json_error('Please fill all required fields.');
+    }
+
+    ob_start();
+
+    // These variables will be available inside your template
+    include RSL_PLUGIN_DIR . 'templates/email-templates/video-walkthrough.php';
+
+    $message = ob_get_clean();
+
+    // Send Email
+    $to = get_option('admin_email');
+    $subject = 'New Video Walkthrough Request - GFAM';
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+
+    if (wp_mail($to, $subject, $message, $headers)) {
+        wp_send_json_success('Thank you! Your request has been sent successfully.');
+    } else {
+        wp_send_json_error('Failed to send email. Please try again.');
+    }
+
+    wp_die();
+}
+
+add_action('wp_ajax_ask_question_form_submit', 'handle_ask_question_form_submit');
+add_action('wp_ajax_nopriv_ask_question_form_submit', 'handle_ask_question_form_submit');
+
+function handle_ask_question_form_submit() {
+    check_ajax_referer('gfam_form_nonce', 'security');
+
+    // Sanitize and validate
+    $first_name = sanitize_text_field($_POST['first_name'] ?? '');
+    $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
+    $email      = sanitize_email($_POST['email'] ?? '');
+    $phone      = sanitize_text_field($_POST['phone'] ?? '');
+    $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
+   
+
+    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($post_code) ) {
         wp_send_json_error('Please fill all required fields.');
     }
 
@@ -68,7 +107,7 @@ function handle_gfam_detail_form_submit() {
         <strong>Email:</strong> {$email}<br>
         <strong>Phone:</strong> {$phone}<br>
         <strong>Post Code:</strong> {$post_code}<br>
-        <strong>Make:</strong> {$make}<br>
+        
     ";
     $headers = ['Content-Type: text/html; charset=UTF-8'];
 
