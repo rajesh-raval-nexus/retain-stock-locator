@@ -5,23 +5,16 @@ $stock_number = isset($_GET['stock_number']) ? sanitize_text_field($_GET['stock_
 
 if ($stock_number) {
 
-$xml = simplexml_load_file($xmlPath);
-foreach ($xml->listing as $listing) {
-    if ((string)$listing->stock_number == $stock_number) {
+$allListingsData = rsl_parse_listings($xmlPath);
 
-      function getAttrValue($listing, $name)
-      {
-        foreach ($listing->attributes->attribute as $attr) {
-          if ((string)$attr['name'] === $name) {
-            return (string)$attr;
-          }
-        }
-        return '';
-      }
+foreach ($allListingsData as $listing) {
 
-      $getPrice = getAttrValue($listing, 'Price');
-      $imagesCount = count($listing->Images->Image);  ?>
-
+  if ($listing['stock_number'] === $stock_number) { ?>
+      <?php 
+        // echo "<pre>";
+        // print_r($listing);
+        // echo "</pre>";
+      ?>
       <!-- Header -->
       <div class="gfam-detail-header">
         <div class="container">
@@ -39,7 +32,7 @@ foreach ($xml->listing as $listing) {
                 <span> > </span>
                 <a href="#"><?php esc_html_e('Stock Locator', 'retain-stock-locator'); ?></a>
                 <span> > </span>
-                <span class="active"><?php echo $listing->model_specific; ?></span>
+                <span class="active"><?php echo $listing['item_specification']; ?></span>
               </nav>
 
             </div>
@@ -57,11 +50,15 @@ foreach ($xml->listing as $listing) {
       <!-- Main Title -->
       <div class="gfam-detail-main-title">
         <div class="container">
-          <h1 class="gfam-detail-title"><?php echo $listing->model_specific; ?></h1>
+          <h1 class="gfam-detail-title">
+            <?php  if ( isset($listing['item_specification']) ) {
+                  echo esc_html( $listing['item_specification'] );
+              } ?>
+          </h1>
           <div class="gfam-detail-price-section d-xl-none d-flex">
-            <?php if ($getPrice) { ?>
+            <?php if (! empty($listing['price'])) { ?>  
               <div class="gfam-detail-price-label mb-0"><?php esc_html_e('Price', 'retain-stock-locator'); ?></div>
-              <div class="gfam-detail-price"><?php echo '$' . $getPrice; ?></div>
+              <div class="gfam-detail-price"><?php echo '$' . esc_html( $listing['price'] ); ?></div>
             <?php } ?>
             <div class="gfam-detail-price-estimate">Est. $556/week*</div>
           </div>
@@ -88,14 +85,17 @@ foreach ($xml->listing as $listing) {
                       fill="white" />
                   </svg>
                   <!-- <span>35</span> -->
-                  <span><?php echo $imagesCount; ?></span>
+                  <span><?php if ( isset($listing['images']) && is_array($listing['images']) ) {
+                      $image_count = count($listing['images']);
+                      echo $image_count;
+                  } ?></span>
                 </div>
 
                 <?php 
                   $images = [];
-                  if ( isset( $listing->Images->Image ) ) {
-                      foreach ( $listing->Images->Image as $img ) {
-                          $images[] = (string) $img['url'];
+                  if ( isset( $listing['images'] ) && is_array( $listing['images'] ) ) {
+                      foreach ( $listing['images'] as $img ) {
+                          $images[] = (string) $img; // just cast the string
                       }
                   }
 
@@ -170,15 +170,12 @@ foreach ($xml->listing as $listing) {
                           </div>
                           <div class="gfam-detail-feature-content">
                             <h5><?php esc_html_e('Availability', 'retain-stock-locator'); ?></h5>
-                            <p><?php if (getAttrValue($listing, 'Status') === 'Available for sale') {
-                                  echo "In Stock";
-                                } else {
-                                  echo "Out of Stock";
-                                } ?></p>
+                            <p><?php echo esc_html( $listing['status'] ); ?></p>
                           </div>
                         </div>
                       </div>
 
+                      <?php //if (! empty($listing['year'])) : ?>
                       <div class="col-lg-3 col-md-6 col-3">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
@@ -201,13 +198,14 @@ foreach ($xml->listing as $listing) {
                             </svg>
                           </div>
                           <div class="gfam-detail-feature-content">
-                            <h5>Year</h5>
-                            <p>2024</p>
-                            <p><?php //echo getAttrValue($listing, 'Year'); 
-                                ?></p>
+                            <h5><?php echo __( 'Year', 'retain-stock-locator' ); ?></h5>
+                            <p><?php if($listing['year']){
+                              echo esc_html( $listing['year'] );
+                            }else{ echo " - "; }  ?></p>
                           </div>
                         </div>
                       </div>
+                       <?php //endif; ?>
 
                       <div class="col-lg-3 col-md-6 col-3">
                         <div class="gfam-detail-feature-item">
@@ -228,7 +226,9 @@ foreach ($xml->listing as $listing) {
                           </div>
                           <div class="gfam-detail-feature-content">
                             <h5><?php esc_html_e('Odometer', 'retain-stock-locator'); ?></h5>
-                            <p>2,700 Kms</p>
+                            <?php if (! empty($listing['hours'])) : ?>
+                              <p><?php echo number_format($listing['hours'], 0, '.', ','); ?> Kms</p>
+                            <?php endif; ?>
                           </div>
                         </div>
                       </div>
@@ -245,8 +245,7 @@ foreach ($xml->listing as $listing) {
                           </div>
                           <div class="gfam-detail-feature-content">
                             <h5><?php esc_html_e('Body Type', 'retain-stock-locator'); ?></h5>
-                            <!-- <p>SUV</p> -->
-                            <p><?php echo $listing->type; ?></p>
+                            <p><?php echo esc_html( $listing['type'] ); ?></p>
                           </div>
                         </div>
                       </div>
@@ -265,7 +264,7 @@ foreach ($xml->listing as $listing) {
                     </h2>
 
                     <div class="gfam-detail-comments-content">
-                      <p><?php echo getAttrValue($listing, 'Description'); ?></p>
+                      <p><?php echo esc_html( $listing['description'] ); ?></p>
                     </div>
                   </div>
                 </div>
@@ -279,97 +278,76 @@ foreach ($xml->listing as $listing) {
                       <?php esc_html_e('Vehicle', 'retain-stock-locator'); ?>
                       <span><?php esc_html_e('Details', 'retain-stock-locator'); ?></span>
                     </h2>
-                    <?php $allListings = rsl_parse_listings($xmlPath); 
-                      // echo "<pre>";
-                      // print_r($allListings);
-                      // echo "<pre>";
-                    ?>
                     <div class="gfam-detail-details-table">
-
-                      <?php if (! empty($listing->make)) : ?>
+                            
+                      <?php if (! empty($listing['make'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Make', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing->make); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['make']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if (! empty($listing->model)) : ?>
+                      <?php if (! empty($listing['model'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Model', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing->model); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['model']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($year = getAttrValue($listing, 'Year')) : ?>
+                      <?php if (! empty($listing['year'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Year', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($year); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['year']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($condition = getAttrValue($listing, 'Item Condition')) : ?>
+                      <?php if (! empty($listing['listing_type'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Condition', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($condition); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['listing_type']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($price = getAttrValue($listing, 'Price')) : ?>
+                      <?php if (! empty($listing['price'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Price', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($price); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['price']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($finance = getAttrValue($listing, 'Finance')) : ?>
-                        <div class="gfam-detail-detail-row">
-                          <div class="gfam-detail-detail-label"><?php esc_html_e('Finance', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($finance); ?></div>
-                        </div>
-                      <?php endif; ?>
-
-                      <?php if ($odometer = getAttrValue($listing, 'hours')) : ?>
+                      <?php if (! empty($listing['hours'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Odometer/Hours', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($odometer); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['hours']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($stock = getAttrValue($listing, 'Stock/Ref #')) : ?>
+                      <?php if (! empty($listing['status'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Stock', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($stock); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['status']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($body = getAttrValue($listing, 'Body')) : ?>
+                      <?php if (! empty($listing['type'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Body', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($body); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['type']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($availability = getAttrValue($listing, 'Availability')) : ?>
+                       <?php if (! empty($listing['status'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Availability', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($availability); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['status']); ?></div>
                         </div>
                       <?php endif; ?>
 
-                      <?php if ($location = getAttrValue($listing, 'Location')) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Location', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($location); ?></div>
+                          <div class="gfam-detail-detail-value"><?php esc_html_e( 'Australia', 'retain-stock-locator' ); ?></div>
                         </div>
-                      <?php endif; ?>
-
-                      <?php if ($repayments = getAttrValue($listing, 'Repayments')) : ?>
-                        <div class="gfam-detail-detail-row">
-                          <div class="gfam-detail-detail-label"><?php esc_html_e('Repayments', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($repayments); ?></div>
-                        </div>
-                      <?php endif; ?>
-
+                      
                     </div>
 
                   </div>
@@ -386,45 +364,44 @@ foreach ($xml->listing as $listing) {
                       <div class="col-lg-9 my-auto">
                         <div class="custom-select-wrapper">
                           <div class="custom-select">
-                            <span class="selected d-block">Select a question</span>
+                            <span class="selected d-block"><?php esc_html_e( 'Select a question', 'retain-stock-locator' ); ?></span>
                             <div class="custom-arrow">
                               <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878" />
                               </svg>
                             </div>
                             <ul class="options">
-                              <li data-value="q1">Do you have any similar cars available?</li>
-                              <li data-value="q2">How do I book a test drive?</li>
-                              <li data-value="q3">What documents do I need?</li>
+                              <li data-value="q1"><?php esc_html_e( 'Do you have any similar cars available?', 'retain-stock-locator' ); ?></li>
+                              <li data-value="q2"><?php esc_html_e( 'How do I book a test drive?', 'retain-stock-locator' ); ?></li>
+                              <li data-value="q3"><?php esc_html_e( 'What documents do I need?', 'retain-stock-locator' ); ?></li>
                             </ul>
                           </div>
                         </div>
                       </div>
                       <div class="col-lg-3 text-end">
-                        <button class="gfam-detail-button my-2">Ask a Question</button>
+                        <button class="gfam-detail-button my-2 ask-question-btn" data-bs-toggle="modal"
+                        data-bs-target="#askQuestionModal"><?php esc_html_e( 'Ask a Question', 'retain-stock-locator' ); ?></button>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
               <?php
-              global $xmlPath;
-              $allListings = rsl_parse_listings($xmlPath);
-              $similardata = trim($listing->make);
+                $allListings = rsl_parse_listings($xmlPath);
+                $similardata = trim($listing['make']);
 
-              $matchingListings = [];
-              $counter = 0;
-              
-              foreach ($allListings as $item) {
-                if (isset($item['make']) && strcasecmp(trim($item['make']), $similardata) === 0) {
-                  $matchingListings[] = $item;
-                  $counter++;
+                $matchingListings = [];
+                $counter = 0;
+                
+                foreach ($allListings as $item) {
+                  if (isset($item['make']) && strcasecmp(trim($item['make']), $similardata) === 0) {
+                    $matchingListings[] = $item;
+                    $counter++;
+                  }
+                  if ($counter >= 3) {
+                    break; // Stop after 5 matching records
+                  }
                 }
-                if ($counter >= 3) {
-                  break; // Stop after 5 matching records
-                }
-              }
               ?>
               <!-- similar products Section -->
               <div class="row mt-lg-5 mt-4">
@@ -436,9 +413,6 @@ foreach ($xml->listing as $listing) {
                       <?php foreach ($matchingListings as $listingItem) : 
                           $price = $listingItem['price'];
                           $hours = $listingItem['hours'];
-                        // echo "<pre>";
-                        // print_r($listingItem);
-                        // echo "</pre>";
                         ?>
                         <div class="gfam-product-card item">
                           <div class="gfam-product-image">
@@ -483,7 +457,7 @@ foreach ($xml->listing as $listing) {
 
                             <!-- <button class="gfam-btn">See Details</button> -->
                             <a class="gfam-btn" href="<?php echo site_url('/listing-detail/?stock_number=' . $listingItem['stock_number']); ?>">
-                              See Details
+                              <?php esc_html_e( 'See Details', 'retain-stock-locator' ); ?>
                             </a>
                           </div>
                         </div>
@@ -501,9 +475,9 @@ foreach ($xml->listing as $listing) {
               <div class="gfam-detail-sidebar">
                 <!-- Price Section -->
                 <div class="gfam-detail-price-section">
-                  <?php if ($getPrice) { ?>
+                  <?php if (! empty($listing['price'])) { ?>
                     <div class="gfam-detail-price-label mb-0 d-none d-xl-block">Price</div>
-                    <div class="gfam-detail-price d-none d-xl-block"><?php echo '$' . $getPrice; ?></div>
+                    <div class="gfam-detail-price d-none d-xl-block"><?php echo '$' . $listing['price']; ?></div>
                   <?php } ?>
 
                   <div class="gfam-detail-price-estimate d-none d-xl-inline-block">Est. $556/week*</div>
@@ -694,10 +668,11 @@ foreach ($xml->listing as $listing) {
                       <i class="fas fa-chevron-down gfam-detail-dropdown-arrow"></i>
                     </button>
                     <div class="gfam-detail-dropdown-menu" id="reqVideoDropdownMenu">
-                      <div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
+                      <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
+                      <!-- <div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
                       <div class="gfam-detail-dropdown-item" data-value="aero-full-ensuite">AERO FULL ENSUITE (1)</div>
                       <div class="gfam-detail-dropdown-item" data-value="all-terrain">ALL TERRAIN (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div>
+                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div> -->
                     </div>
                     <input type="text" name="make" id="gfamMakeInput" required style="visibility: hidden; position: absolute;">
                   </div>
@@ -764,10 +739,11 @@ foreach ($xml->listing as $listing) {
                       <i class="fas fa-chevron-down gfam-detail-dropdown-arrow"></i>
                     </button>
                     <div class="gfam-detail-dropdown-menu" id="testDriveDropdownMenu">
-                      <div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="aero-full-ensuite">AERO FULL ENSUITE (1)</div>
+                      <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
+                      <!--<div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
+                       <div class="gfam-detail-dropdown-item" data-value="aero-full-ensuite">AERO FULL ENSUITE (1)</div>
                       <div class="gfam-detail-dropdown-item" data-value="all-terrain">ALL TERRAIN (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div>
+                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div> -->
                     </div>
                     <input type="text" name="make" id="testDriveMakeInput" required style="visibility: hidden; position: absolute;">
                   </div>
@@ -800,20 +776,78 @@ foreach ($xml->listing as $listing) {
           </div>
         </div>
       </div>
+      
+      <!-- askQuestionModal  -->
+      <div class="modal fade gfam-detail-modal" id="askQuestionModal" tabindex="-1" aria-labelledby="askQuestionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+          <div class="modal-content">
+            <div class="gfam-detail-modal-header">
+              <h5 class="gfam-detail-modal-title" id="askQuestionModalLabel">Request a Ask a Question</h5>
+              <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body gfam-detail-modal-body">
+
+
+              <form id="askQuestionModalForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="text" class="form-control gfam-detail-form-control" name="first_name" placeholder="First Name" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="text" class="form-control gfam-detail-form-control" name="last_name" placeholder="Last Name" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="tel" class="form-control gfam-detail-form-control" name="phone" placeholder="Phone" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="text" class="form-control gfam-detail-form-control" name="post_code" placeholder="Post Code" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gfam-detail-form-group">
+                  <input type="email" class="form-control gfam-detail-form-control" name="email" placeholder="Email Address" required>
+                </div>
+
+                <div class="col-12 my-2">
+                  <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
+                </div>
+
+                <div class="gfam-detail-form-group">
+                  <button type="submit" class="gfam-detail-request-btn">Send a Request</button>
+                </div>
+              </form>
+              <div id="askQuestionResponse" style="margin-top:10px;"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
 
     <?php } ?>
 
 <?php  }
 } else {
-  echo '<p>No stock selected.</p>';
-  //esc_html_e( '<p>Stock Locator</p>', 'retain-stock-locator' );
+  esc_html_e( '<p>No stock selected</p>', 'retain-stock-locator' );
 }
 ?>
 
 
 <script>
   jQuery(document).ready(function($) {
-
     // Smooth scroll helper
     function smoothScroll(target, offset = 100, speed = 600) {
       if ($(target).length) {
@@ -939,212 +973,6 @@ foreach ($xml->listing as $listing) {
 
     modal.addEventListener('hide.bs.modal', function() {
       this.classList.remove('show');
-    });
-
-    // jQuery Validation
-    $('#requestTestDriveForm').validate({
-      rules: {
-        'make': {
-          required: true
-        },
-        'email': {
-          required: true,
-          email: true
-        },
-        'phone': {
-          required: true,
-          phoneUS: true // optional: use additional method if needed
-        },
-        'first_name': {
-          required: true
-        },
-        'last_name': {
-          required: true
-        },
-        'post_code': {
-          required: true
-        },
-        'preferred_date': {
-          required: true
-        },
-        'preferred_time': {
-          required: true
-        }
-      },
-      messages: {
-        'make': "Please select a Make",
-        'email': {
-          required: "Please enter your email",
-          email: "Please enter a valid email address"
-        },
-        'phone': {
-          required: "Please enter your phone number",
-          phoneUS: "Please enter a valid phone number"
-        },
-        'first_name': "Please enter your first name",
-        'last_name': "Please enter your last name",
-        'post_code': "Please enter your postcode",
-        'preferred_date': "Please select a date",
-        'preferred_time': "Please select a time"
-      },
-      errorPlacement: function(error, element) {
-        if (element.attr("name") === "make") {
-          error.insertAfter("#gfamMakeDropdown"); // show below dropdown button
-        } else {
-          error.insertAfter(element);
-        }
-      },
-
-      errorElement: "div",
-      errorPlacement: function(error, element) {
-        error.addClass("text-danger mt-1 small");
-        if (element.attr("type") === "checkbox") {
-          error.insertAfter(element.closest(".form-check"));
-
-        } else {
-          error.insertAfter(element);
-
-        }
-      },
-      // submitHandler: function(form) {
-      //   form.submit();
-      // }
-    });
-    // jQuery Validation setup
-    $("#requestVideoForm").validate({
-      rules: {
-        first_name: {
-          required: true,
-          minlength: 2
-        },
-        last_name: {
-          required: true,
-          minlength: 2
-        },
-        phone: {
-          required: true,
-          digits: true,
-          minlength: 8,
-          maxlength: 15
-        },
-        post_code: {
-          required: true,
-          minlength: 3
-        },
-        email: {
-          required: true,
-          email: true
-        },
-        make: {
-          required: true
-        }
-      },
-      messages: {
-        first_name: "Please enter your first name",
-        last_name: "Please enter your last name",
-        phone: {
-          required: "Please enter your phone number",
-          digits: "Please enter only numbers"
-        },
-        post_code: "Please enter your post code",
-        email: "Please enter a valid email address",
-        make: "Please select a make"
-      },
-      errorPlacement: function(error, element) {
-        if (element.attr("name") === "make") {
-          error.insertAfter("#gfamMakeDropdown"); // show below dropdown button
-        } else {
-          error.insertAfter(element);
-        }
-      },
-
-      errorElement: "div",
-      errorPlacement: function(error, element) {
-        error.addClass("text-danger mt-1 small");
-        if (element.attr("type") === "checkbox") {
-          error.insertAfter(element.closest(".form-check"));
-
-        } else {
-          error.insertAfter(element);
-
-        }
-      },
-      // submitHandler: function(form) {
-      //   alert("Form submitted successfully!");
-      //   form.submit();
-      // }
-    });
-
-    $("#gfam-form").validate({
-      rules: {
-        first_name: {
-          required: true,
-          minlength: 2
-        },
-        last_name: {
-          required: true,
-          minlength: 2
-        },
-        email: {
-          required: true,
-          email: true
-        },
-        phone: {
-          required: true,
-          digits: true,
-          minlength: 10,
-          maxlength: 15
-        },
-        comments: {
-          required: true,
-          minlength: 5
-        },
-        trade_in: {
-          required: true
-        }
-      },
-      messages: {
-        first_name: {
-          required: "Please enter your first name",
-          minlength: "First name must be at least 2 characters"
-        },
-        last_name: {
-          required: "Please enter your last name",
-          minlength: "Last name must be at least 2 characters"
-        },
-        email: {
-          required: "Please enter your email address",
-          email: "Please enter a valid email address"
-        },
-        phone: {
-          required: "Please enter your phone number",
-          digits: "Please enter only digits",
-          minlength: "Phone must be at least 10 digits",
-          maxlength: "Phone cannot exceed 15 digits"
-        },
-        comments: {
-          required: "Please enter your comments",
-          minlength: "Comments must be at least 5 characters"
-        },
-        trade_in: {
-          required: "Please confirm if you have a trade-in"
-        }
-      },
-      errorElement: "div",
-      errorPlacement: function(error, element) {
-        error.addClass("text-danger mt-1 small");
-        if (element.attr("type") === "checkbox") {
-          error.insertAfter(element.closest(".form-check"));
-        } else {
-          error.insertAfter(element);
-        }
-      },
-
-      // submitHandler: function(form) {
-      //   // You can handle the submit here
-      //   alert("Form submitted successfully!");
-      //   form.submit();
-      // }
     });
 
     // Custom dropdowns by class

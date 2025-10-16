@@ -5,12 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Initialize asset loading hooks.
  */
 function rsl_assets_init() {
-    add_action( 'wp_enqueue_scripts', 'rsl_assets_enqueue_frontend', 999 );
+    add_action( 'wp_enqueue_scripts', 'rsl_assets_enqueue_frontend', 1 );
+    add_action('wp_enqueue_scripts', 'rsl_assets_enqueue_frontend_css', 1);
 }
 
 /**
  * Enqueue frontend styles and scripts.
  */
+function rsl_assets_enqueue_frontend_css() {
+    // Register styles (don’t enqueue yet)
+    wp_register_style(
+        'rsl-custom-style',
+        RSL_PLUGIN_URL . 'assets/css/style2.css',
+        [],
+        filemtime(RSL_PLUGIN_DIR . 'assets/css/style2.css')
+    );
+
+    // Print in footer
+    add_action('wp_footer', function() {
+        wp_print_styles(['rsl-custom-style']);
+    });
+}
+
 function rsl_assets_enqueue_frontend() {
 
     /*cstm css and js*/
@@ -129,12 +145,12 @@ function rsl_assets_enqueue_frontend() {
     /* END cstm css and js*/ 
 
     // Custom CSS
-    wp_enqueue_style(
-        'rsl-custom-style',
-        RSL_PLUGIN_URL . 'assets/css/style2.css',
-        [],
-        filemtime( RSL_PLUGIN_DIR . 'assets/css/style2.css' )
-    );
+    // wp_enqueue_style(
+    //     'rsl-custom-style',
+    //     RSL_PLUGIN_URL . 'assets/css/style2.css',
+    //     [],
+    //     filemtime( RSL_PLUGIN_DIR . 'assets/css/style2.css' )
+    // );
 
     wp_enqueue_style(
         'rsl-responsive-style',
