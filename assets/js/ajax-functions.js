@@ -169,19 +169,19 @@ jQuery(document).ready(function($) {
         });
     });
 
+    // small helper to append tag in a specific container
+    function addTag(containerSelector, label, key, value) {
+        const tag = $(`
+            <span class="gfam-filter-tag" data-key="${key}" data-value="${value}">
+                ${label} <span class="gfam-clear-tag">×</span>
+            </span>
+        `);
+        $(containerSelector).append(tag);
+    }
+
     function show_selected_val_on_sidebar(filters) {        
         // clear each list
-        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();
-
-        // small helper to append tag in a specific container
-        function addTag(containerSelector, label, key, value) {
-            const tag = $(`
-                <span class="gfam-filter-tag" data-key="${key}" data-value="${value}">
-                    ${label} <span class="gfam-clear-tag">×</span>
-                </span>
-            `);
-            $(containerSelector).append(tag);
-        }
+        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();        
 
         // --- Category ---
         if (filters.categories.length) {

@@ -148,8 +148,11 @@ function rsl_get_xml_year_filters_cached( $attribute_name, $cache_ttl = 300 ) {
     
     $allListings = rsl_parse_listings( $xmlPath );
 
-    foreach ( $allListings as $listing ) {                
-        $data[] = $listing[$attribute_name];
+    foreach ( $allListings as $listing ) {     
+      
+      if ( isset($listing[$attribute_name]) && !empty($listing[$attribute_name]) ) {
+          $data[] = $listing[$attribute_name];
+      }
     }
 
     $data = array_unique(

@@ -11,11 +11,12 @@ if ( empty($item) || !is_array($item) ) {
 
 $product_title       = rsl_build_product_name($item);
 $product_images      = $item['images'];
-$listing_type        = $item['listing_type'];
-$stock_number        = $item['stock_number'];
-$item_specification  = $item['item_specification'];
-$hours               = $item['hours'];
-$price               = $item['price'];
+$listing_type        = !empty($item['listing_type']) ? $item['listing_type'] : 'N/A';
+$stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
+$item_specification  = !empty($item['item_specification']) ? $item['item_specification'] : 'N/A';
+$hours               = !empty($item['hours']) ? $item['hours'] : 'N/A';
+$price               = !empty($item['price']) ? $item['price'] : 'N/A';
+
 ?>
 
 <div class="col-lg-4 col-md-6 my-3">
@@ -49,18 +50,16 @@ $price               = $item['price'];
                 <div class="gfam-odometer">
                     <div class="gfam-odometer-icon">
                         <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
+                    </div>                    
+                    <div class="gfam-odometer-info">
+                        <span class="gfam-odometer-label">Odometer</span>
+                        <span class="gfam-odometer-value"><?php echo (is_string($hours)) ? $hours : number_format($hours, 0, '.', ',').' kms'; ?></span>
                     </div>
-                    <?php if (!empty($hours)) : ?>
-                        <div class="gfam-odometer-info">
-                            <span class="gfam-odometer-label">Odometer</span>
-                            <span class="gfam-odometer-value"><?php echo number_format($hours, 0, '.', ','); ?> kms</span>
-                        </div>
-                    <?php endif; ?>
                 </div>
 
                 <?php if (!empty($price)) : ?>
                     <div class="gfam-price-info">
-                        <div class="gfam-price mb-0"><?php echo "$" . number_format($price, 0, '.', ','); ?></div>
+                        <div class="gfam-price mb-0"><?php echo (is_string($price)) ? $price : "$" . number_format($price, 0, '.', ','); ?></div>
                     </div>
                 <?php endif; ?>
             </div>

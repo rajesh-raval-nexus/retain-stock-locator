@@ -100,14 +100,6 @@ jQuery(document).ready(function ($) {
       }
     });
   }
-  
-  reinitSeeMoreLess();
-  // Filter wrapper logic    
-
-  // jQuery(window).on('load', function() {
-  //   $('#loader').fadeOut(500);
-  // });
-  
 });
 
 function reinitSeeMoreLess(){
@@ -130,7 +122,7 @@ function reinitSeeMoreLess(){
     }
 
     // Expand/Collapse functionality
-    $toggleBtn.on("click", function () {      
+    $toggleBtn.on("click", function (e) {            
       if ($tags.hasClass("expanded")) {                
         $tags.css("max-height", "5.5em").removeClass("expanded");
         $toggleBtn.text("Show More");
