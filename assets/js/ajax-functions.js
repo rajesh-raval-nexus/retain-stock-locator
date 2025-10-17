@@ -78,31 +78,67 @@ jQuery(document).ready(function($) {
     /**
      * Load More Click
      */
-    $('.load-more-stocks-btn').on('click', function(e) {
-        e.preventDefault();
+    // $('.load-more-stocks-btn').on('click', function(e) {
+    //     e.preventDefault();
 
-        let $btn = $(this);
-        let currentPage = parseInt($btn.attr('next-page'));
-        let maxPages = parseInt($btn.attr('max-pages'));
+    //     let $btn = $(this);
+    //     let currentPage = parseInt($btn.attr('next-page'));
+    //     let maxPages = parseInt($btn.attr('max-pages'));
 
-        if (currentPage > maxPages) {
-            $btn.addClass('d-none');
-            return;
-        }
+    //     if (currentPage > maxPages) {
+    //         $btn.addClass('d-none');
+    //         return;
+    //     }
         
+    //     var filters = get_selected_filters();
+
+    //     rsl_fetch_listings({
+    //         page: currentPage,
+    //         per_page: rsl_ajax_obj.vdp_per_page,
+    //         append: true,
+    //         $btn: $btn,
+    //         max_pages: maxPages,
+    //         filters: filters
+    //     });
+    // });
+
+    // Pagination click
+    $(document).on('click', '.ajax-pagination .page-number, .ajax-pagination .prev-page, .ajax-pagination .next-page', function() {
+        if ($(this).hasClass('disabled') || $(this).hasClass('current')) return;
+
+        var page = $(this).data('page');
+
         var filters = get_selected_filters();
 
         rsl_fetch_listings({
-            page: currentPage,
+            page: page,
             per_page: rsl_ajax_obj.vdp_per_page,
-            append: true,
-            $btn: $btn,
-            max_pages: maxPages,
+            append: false, // replace current grid
+            filters: filters
+        });
+
+        // Scroll to top of the grid (optional)
+        $('html, body').animate({ scrollTop: $('.gfam-product-grid').offset().top - 100 }, 300);
+    });
+
+    $(".dropdown-menu .dropdown-item").on("click", function (e) {
+        e.preventDefault();
+        $(".gfam-sort-btn").text($(this).text());
+        $('.dropdown-menu .dropdown-item').removeClass('active');
+        $(this).addClass('active'); 
+        
+        var filters = get_selected_filters();        
+        show_selected_val_on_sidebar(filters);
+
+        rsl_fetch_listings({
+            page: 1,
+            per_page: rsl_ajax_obj.vdp_per_page,
+            append: false,
             filters: filters
         });
     });
 
-    function get_selected_filters(){
+    function get_selected_filters(){        
         // Collect all checked checkboxes with name="category[]"
         var selectedCategories = $('input[name="category[]"]:checked').map(function() {
             return $(this).val();
@@ -134,21 +170,69 @@ jQuery(document).ready(function($) {
         var selectedHoursFrom = $(activeHoursTabID + ' .rsl-hours-from').val();
         var selectedHoursTo   = $(activeHoursTabID + ' .rsl-hours-to').val();
 
+        //Collect selected sorting option
+        var selectedSortingOption = $('.stock-sorting-cls.active').data('val');
+
+        // Get search keyword
+        var searchKeyword = $('.main-listing-search').val().trim();
+
         // Example filter collection
         let filters = {
             categories: selectedCategories,        
             makeModel: selectedMakeModel,
             type: selectedType,
-            price_from: selectedPriceFrom || '', // empty if "Any" selected
+            price_from: selectedPriceFrom || '',
             price_to: selectedPriceTo   || '',
-            year_from: selectedYearFrom || '', // empty if "Any" selected
+            year_from: selectedYearFrom || '',
             year_to: selectedYearTo   || '',
-            hours_from: selectedHoursFrom || '', // empty if "Any" selected
-            hours_to: selectedHoursTo   || '',                
+            hours_from: selectedHoursFrom || '',
+            hours_to: selectedHoursTo   || '',
+            sort: selectedSortingOption,
+            keyword: searchKeyword || '',                
         };
 
         return filters
     }
+
+    let rslSearchTimeout = null;
+
+    $(document).on('input', '.main-listing-search', function () {
+        const value = $(this).val();
+
+        // Keep both inputs synced
+        $('.main-listing-search').not(this).val(value);
+
+        clearTimeout(rslSearchTimeout);
+
+        rslSearchTimeout = setTimeout(function() {
+            var filters = get_selected_filters();
+            show_selected_val_on_sidebar(filters);
+
+            rsl_fetch_listings({
+                page: 1,
+                per_page: rsl_ajax_obj.vdp_per_page,
+                append: false,
+                filters: filters
+            });
+        }, 500); // ⏱️ debounce time
+    });
+
+    $(document).on('keypress', '.main-listing-search', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            clearTimeout(rslSearchTimeout);
+
+            var filters = get_selected_filters();
+            show_selected_val_on_sidebar(filters);
+
+            rsl_fetch_listings({
+                page: 1,
+                per_page: rsl_ajax_obj.vdp_per_page,
+                append: false,
+                filters: filters
+            });
+        }
+    });
 
     /**
      * Filter Apply Click

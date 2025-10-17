@@ -40,7 +40,7 @@
       .sidebar-modal.modal.modal-slide-up.show .modal-dialog {
         opacity: 1;
     }
-    .gfam-show-toggle{display: block !important;}
+    /* .gfam-show-toggle{display: block !important;} */
     .sidebar-modal.modal.modal-slide-up .modal-dialog {
       opacity: 0;
       transition: opacity 0.05s ease-in-out;

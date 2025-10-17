@@ -14,8 +14,8 @@ $product_images      = $item['images'];
 $listing_type        = !empty($item['listing_type']) ? $item['listing_type'] : 'N/A';
 $stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
 $item_specification  = !empty($item['item_specification']) ? $item['item_specification'] : 'N/A';
-$hours               = !empty($item['hours']) ? $item['hours'] : 'N/A';
-$price               = !empty($item['price']) ? $item['price'] : 'N/A';
+$hours               = !empty($item['hours']) ? (int) $item['hours'] : 'N/A';
+$price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
 
 ?>
 

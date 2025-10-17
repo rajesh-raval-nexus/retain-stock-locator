@@ -28,6 +28,10 @@ function rsl_get_stock_list_ajax() {
         $allListings = rsl_sort($allListings, $filters['sort']);
     }
 
+    if (!empty($filters['keyword'])) {
+        $allListings = rsl_search($allListings, $filters['keyword']);
+    }
+
     if(empty($allListings)){
         $no_result_found = "<h2>". __('No stock available', 'retain-stock-locator')."</h2>";
 
@@ -55,13 +59,13 @@ function rsl_get_stock_list_ajax() {
         $html .= ob_get_clean();
     }
 
-    // Whether there are more results
-    $has_more = ($offset + count($paged_listings)) < $total_results;
+    // Generate AJAX pagination HTML
+    $pagination_html = core_ajax_pagination_html($total_results, $vdpPerPage, $page);
 
     wp_send_json_success([
         'html'        => $html,
         'next_page'   => $page + 1,
-        'has_more'    => $has_more,
+        'pagination'   => $pagination_html,
         'total_found' => $total_results,
         'max_pages'   => $max_pages
     ]);

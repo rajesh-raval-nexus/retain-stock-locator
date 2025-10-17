@@ -49,50 +49,6 @@ function rsl_get_attribute_value( $listing, $attrName ) {
     return null;
 }
 
-// function rsl_apply_filters( $listings, $filters ) {    
-
-//     $hasCategory     = !empty($filters['categories']);
-//     $hasMakeModel    = !empty($filters['makeModel']);    
-//     $hasYearSelected = ( ( isset($filters['year_from']) && !empty($filters['year_from']) ) || ( isset($filters['year_to']) && !empty($filters['year_to'])));    
-
-//     $listings = array_filter($listings, function($l) use ($filters, $hasCategory, $hasMakeModel) {
-
-//         // Category/Subtype
-//         $matchCategory = true;
-//         if ( $hasCategory ) {
-//             $matchCategory = in_array($l['type'], $filters['categories']) || in_array($l['subtype'], $filters['categories']);
-//         }
-
-//         // Make/Model
-//         $matchMakeModel = true;
-//         if ( $hasMakeModel ) {
-//             $matchMakeModel = in_array($l['make'], $filters['makeModel']) || in_array($l['model'], $filters['makeModel']);
-//         }
-//         // // Year range
-//         $matchYear = true;
-//         if ( $hasYearSelected ) {
-//             $year = intval($l['year']);
-//             if ( isset($filters['year_from']) && $filters['year_from'] !== '' && $year < intval($filters['year_from']) ) {
-//                 $matchYear = false;
-//             }
-//             if ( isset($filters['year_to']) && $filters['year_to'] !== '' && $year > intval($filters['year_to']) ) {
-//                 $matchYear = false;
-//             }
-//         }
-
-//         // Logic: if both category and make/model exist = AND, else = OR
-//         if ( $hasCategory && $hasMakeModel ) {
-//             return $matchCategory && $matchMakeModel;
-//         } else if( $hasCategory ) {
-//             return $matchCategory;
-//         }else if( $hasMakeModel ){
-//             return $matchMakeModel;
-//         }
-//     });
-
-//     return $listings;
-// }
-
 function rsl_apply_filters( $listings, $filters ) {
 
     return array_filter($listings, function($l) use ($filters) {
@@ -179,16 +135,111 @@ function rsl_search( $listings, $query ) {
     });
 }
 
-function rsl_sort( $listings, $sortKey ) {
+/**
+ * Core PHP AJAX-ready pagination
+ *
+ * @param int $total_items Total number of items
+ * @param int $per_page Items per page
+ * @param int $current_page Current page number
+ * @param int $adjacents Number of pages to show on each side of current
+ */
+function core_ajax_pagination($total_items, $per_page, $current_page = 1, $adjacents = 2) {
+    $total_pages = ceil($total_items / $per_page);
+    if ($total_pages <= 1) return;
+
+    echo '<ul class="ajax-pagination">';
+
+    // Previous button
+    if ($current_page > 1) {
+        echo '<li><span class="prev-page" data-page="' . ($current_page - 1) . '">&laquo; Prev</span></li>';
+    } else {
+        echo '<li><span class="prev-page disabled">&laquo; Prev</span></li>';
+    }
+
+    // Pages
+    for ($i = 1; $i <= $total_pages; $i++) {
+        // Always show first, last, current, and adjacents
+        if ($i == 1 || $i == $total_pages || ($i >= $current_page - $adjacents && $i <= $current_page + $adjacents)) {
+            if ($i == $current_page) {
+                echo '<li><span class="current">' . $i . '</span></li>';
+            } else {
+                echo '<li><span class="page-number" data-page="' . $i . '">' . $i . '</span></li>';
+            }
+        }
+        // Show ellipses if there’s a gap
+        elseif ($i == 2 && $current_page - $adjacents > 2) {
+            echo '<li><span class="dots">…</span></li>';
+        }
+        elseif ($i == $total_pages - 1 && $current_page + $adjacents < $total_pages - 1) {
+            echo '<li><span class="dots">…</span></li>';
+        }
+    }
+
+    // Next button
+    if ($current_page < $total_pages) {
+        echo '<li><span class="next-page" data-page="' . ($current_page + 1) . '">Next &raquo;</span></li>';
+    } else {
+        echo '<li><span class="next-page disabled">Next &raquo;</span></li>';
+    }
+
+    echo '</ul>';
+}
+
+function rsl_sort($listings, $sortKey) {
     usort($listings, function ($a, $b) use ($sortKey) {
         switch ($sortKey) {
-            case 'price_asc': return floatval($a['price']) <=> floatval($b['price']);
-            case 'price_desc': return floatval($b['price']) <=> floatval($a['price']);
-            case 'year_desc': return intval($b['year']) <=> intval($a['year']);
-            case 'year_asc': return intval($a['year']) <=> intval($b['year']);
-            default: return 0;
+
+            // Price
+            case 'price_asc':
+                return floatval($a['price']) <=> floatval($b['price']);
+            case 'price_desc':
+                return floatval($b['price']) <=> floatval($a['price']);
+
+            // Year
+            case 'year_asc':
+                return intval($a['year']) <=> intval($b['year']);
+            case 'year_desc':
+                return intval($b['year']) <=> intval($a['year']);
+
+            // KMs
+            case 'kms_asc':
+                return intval($a['hours']) <=> intval($b['hours']);
+            case 'kms_desc':
+                return intval($b['hours']) <=> intval($a['hours']);
+
+            // Make / Model
+            case 'make_model_az':
+                $makeCmp = strcasecmp($a['make'], $b['make']);
+                if ($makeCmp === 0) {
+                    return strcasecmp($a['model'], $b['model']);
+                }
+                return $makeCmp;
+
+            case 'make_model_za':
+                $makeCmp = strcasecmp($b['make'], $a['make']);
+                if ($makeCmp === 0) {
+                    return strcasecmp($b['model'], $a['model']);
+                }
+                return $makeCmp;
+
+            // Newest / Oldest (assuming array is time-ordered or has 'created' field)
+            case 'newest':
+                // return strtotime($b['created'] ?? 0) <=> strtotime($a['created'] ?? 0);
+                return 0;
+            case 'oldest':
+                // return strtotime($a['created'] ?? 0) <=> strtotime($b['created'] ?? 0);
+                return 0;
+
+            // Latest Update (if you have 'updated' field)
+            case 'latest_update':
+                // return strtotime($b['updated'] ?? 0) <=> strtotime($a['updated'] ?? 0);
+                return 0;
+
+            default:
+                return 0; // Relevancy or no sorting
         }
     });
+
     return $listings;
 }
 

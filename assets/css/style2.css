@@ -1255,7 +1255,9 @@ textarea:focus {
 .gfam-detail-step-link:hover {
   text-decoration: underline;
 }
-
+.gfam-product-card .owl-nav svg path{
+  fill: var(--gfam-white);
+}
 /* Owl Carousel Custom Styles */
 
 .gfam-detail-slider-container .owl-nav button, .gfam-product-grid>.owl-nav button{

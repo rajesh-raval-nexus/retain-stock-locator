@@ -1,10 +1,5 @@
 jQuery(document).ready(function ($) {
-  reinitCarousel();  
-
-  $(".dropdown-menu .dropdown-item").on("click", function (e) {
-    e.preventDefault();
-    $(".gfam-sort-btn").text($(this).text());
-  });
+  reinitCarousel();    
 
   const $original = $("#sortDropdownContainer");
   const $modalTarget = $("#sortDropdownModalContainer");
@@ -133,6 +128,7 @@ function reinitSeeMoreLess(){
     });
 
     const maxHeight = parseFloat($tags.css("max-height"));
+    console.log(maxHeight + '---' + $tags[0].scrollHeight)
     if ($tags[0].scrollHeight <= maxHeight + 1) {
       $toggleBtn.hide();
     } else {

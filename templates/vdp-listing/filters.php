@@ -6,7 +6,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
 
 <div class="mobile-header d-xl-none">
   <div class="gfam-searchbar d-flex align-items-center px-3 py-2 rounded">
-    <input type="text" class="form-control border-0 shadow-none bg-transparent gfam-search-input"
+    <input type="text" class="form-control border-0 shadow-none bg-transparent gfam-search-input main-listing-search"
       placeholder="Search" />
     <button class="gfam-search-btn border-0 rounded-circle d-flex justify-content-center align-items-center">
       
@@ -56,21 +56,6 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
       <div class="modal-body p-0">
         <!-- Filter Content -->
         <div class="gfam-filter-content gfam-filter-section">
-          <!-- Search -->
-          <div class="input-group gfam-search-section">
-            <input type="text" class="gfam-search-input" placeholder="Quick Search" aria-label="Quick Search" />
-            <div class="input-group-append">
-              <span class="input-group-text">
-
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="24" height="24" rx="12" fill="#FDBD3D" />
-                  <path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black" />
-                </svg>
-
-              </span>
-            </div>
-          </div>
-
           <ul class="gfam-filter-list">
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
@@ -176,7 +161,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
       <div class="modal-footer">
         <div class="gfam-btn-fixed row w-100 align-items-center">
           <div class="col-6">
-            <a href="#" class="clear-btn">Clear</a>
+            <a href="javascript:void(0);" class="clear-btn">Clear</a>
           </div>
           <div class="col-6 text-end">
             <button class="gfam-btn w-auto">Search</button>
@@ -269,7 +254,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     <div class="gfam-filter-content gfam-filter-section">
       <!-- Search -->
       <div class="input-group gfam-search-section">
-        <input type="text" class="gfam-search-input" placeholder="Quick Search" aria-label="Quick Search" />
+        <input type="text" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
         <div class="input-group-append">
           <span class="input-group-text">
 
@@ -399,23 +384,6 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
           <h1 class="gfam-title fw-bold mb-0">Farm Trailers For Sale</h1>
         </div>
 
-        <!-- Search Bar -->
-        <div class="col-md-4 my-2 d-none d-xl-block">
-          <div class="gfam-searchbar d-flex align-items-center ps-0 pe-3 py-2 rounded">
-            <input type="text" class="form-control border-0 shadow-none bg-transparent gfam-search-input"
-              placeholder="Search" />
-            <button
-              class="gfam-search-btn border-0 rounded-circle d-flex justify-content-center align-items-center">
-              
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="24" height="24" rx="12" fill="#FDBD3D"/>
-<path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black"/>
-</svg>
-
-            </button>
-          </div>
-        </div>
-
         <!-- Sort Dropdown -->
         <div class="col-md-auto my-2 d-flex justify-content-end d-none d-xl-block" id="sortDropdownContainer">
           <div class="gfam-sort d-flex align-items-center">
@@ -426,37 +394,65 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 Relevancy
               </button>
               <ul class="dropdown-menu">
-                <li class=" d-block d-xl-none">
-                  <a class="dropdown-item" href="#">Relevancy</a>
+                <li class="d-block d-xl-none">
+                  <a class="dropdown-item stock-sorting-cls" data-val="relevancy" href="javascript:void(0);">
+                    Relevancy
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Price (Low - High)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="price_asc" href="javascript:void(0);">
+                    Price (Low - High)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Price (High - Low)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="price_desc" href="javascript:void(0);">
+                    Price (High - Low)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Make / Model (A - Z)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="make_model_az" href="javascript:void(0);">
+                    Make / Model (A - Z)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Make / Model (Z - A)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="make_model_za" href="javascript:void(0);">
+                    Make / Model (Z - A)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Year (Youngest - Oldest)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="year_asc" href="javascript:void(0);">
+                    Year (Youngest - Oldest)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Year (Oldest - Youngest)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="year_desc" href="javascript:void(0);">
+                    Year (Oldest - Youngest)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">KMs (Low - High)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="kms_low_high" href="javascript:void(0);">
+                    KMs (Low - High)
+                  </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">KMs (High - Low)</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="kms_high_low" href="javascript:void(0);">
+                    KMs (High - Low)
+                  </a>
                 </li>
-                <li><a class="dropdown-item" href="#">Newest</a></li>
-                <li><a class="dropdown-item" href="#">Oldest</a></li>
                 <li>
-                  <a class="dropdown-item" href="#">Latest Update</a>
+                  <a class="dropdown-item stock-sorting-cls" data-val="newest" href="javascript:void(0);">
+                    Newest
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item stock-sorting-cls" data-val="oldest" href="javascript:void(0);">
+                    Oldest
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item stock-sorting-cls" data-val="latest_update" href="javascript:void(0);">
+                    Latest Update
+                  </a>
                 </li>
               </ul>
             </div>
