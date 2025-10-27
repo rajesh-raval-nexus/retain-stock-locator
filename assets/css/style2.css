@@ -674,7 +674,9 @@ textarea:focus {
   line-height: 30px;
 }
 
-
+.gfam-product-card .owl-nav svg path{
+  fill: var(--gfam-white);
+}
 /* Owl Carousel Custom Styles */
 .gfam-carousel .owl-nav {
   position: absolute;
@@ -2472,14 +2474,18 @@ ease;
 /* Full-screen loader */
 #loader {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #00000030;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    z-index: 9999;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    padding-top: 50%;
 }
 
 .loader-circle {
