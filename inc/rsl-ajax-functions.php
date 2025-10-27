@@ -53,14 +53,51 @@ function rsl_get_stock_list_ajax() {
 
     // Build HTML
     $html = '';
+    $global_index_start = $offset + 1; // First product number on this page
+    $global_index = $global_index_start;
+
+    $custom_sections = [
+        [
+            'slug'     => 'why_choose_us',
+            'is_enabled' => get_field('do_you_want_to_show_why_choose_us_section','option'),
+            'position' => get_field('after_how_many_stock_list_you_want_to_show_why_choose_us', 'option'),
+            'template' => 'templates/vdp-listing/why-choose-us.php'
+        ],
+        [
+            'slug'     => 'filter_by_price',
+            'is_enabled' => get_field('do_you_want_to_show_machinery_price_filter','option'),
+            'position' => get_field('after_how_many_stock_list_you_want_to_show', 'option'),
+            'template' => 'templates/vdp-listing/farm-machinery-by-price.php'
+        ],
+        [
+            'slug'     => 'filter_by_brand',
+            'is_enabled' => get_field('do_you_want_to_show_machinery_by_brand_section','option'),
+            'position' => get_field('after_how_many_stock_list_you_want_to_show_brand', 'option'),
+            'template' => 'templates/vdp-listing/farm-machinery-by-brand.php'
+        ],
+    ];
+
     foreach ( $paged_listings as $item ) {
         ob_start();
         include RSL_PLUGIN_DIR . 'templates/parts/product-card.php';
         $html .= ob_get_clean();
+
+        // Check if any custom section should appear after this product
+        foreach ($custom_sections as $section) {
+            if ($section['is_enabled'] && $section['position'] == $global_index) {
+                ob_start();
+                require RSL_PLUGIN_DIR . $section['template'];
+                $html .= ob_get_clean();
+            }
+        }
+
+        $global_index++;
     }
 
     // Generate AJAX pagination HTML
-    $pagination_html = core_ajax_pagination_html($total_results, $vdpPerPage, $page);
+    ob_start();
+    core_ajax_pagination($total_results, $vdpPerPage, $page); //
+    $pagination_html = ob_get_clean();
 
     wp_send_json_success([
         'html'        => $html,

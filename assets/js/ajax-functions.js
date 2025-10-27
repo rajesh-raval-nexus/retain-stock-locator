@@ -4,256 +4,141 @@ jQuery(document).ready(function($) {
      * Generic function to fetch listings via AJAX
      */
     function rsl_fetch_listings(params) {        
-        let {
-            page = 1,
-            per_page = 10,
-            append = false,
-            $btn = null,
-        } = params;
+        let { page = 1, per_page = 10, filters = {} } = params;
 
-        if ($btn) {
-            $btn.text('Loading...').prop('disabled', true);
-        }
+        $('#loader').fadeIn(500);
 
         $.ajax({
             url: rsl_ajax_obj.ajax_url,
             type: 'POST',
             dataType: 'json',
-            beforeSend: function( xhr ) {
-                $('#loader').fadeIn(500);
-            },
             data: {
                 action: 'rsl_get_stock_list',
                 security: rsl_ajax_obj.nonce,
                 page: page,
                 per_page: per_page,
-                filters: params.filters || {}
+                filters: filters
             },
             success: function(response) {
-                if (response.success && response.data.html) {
-                    if (append) {
-                        $('.gfam-product-grid').append(response.data.html);
-                    } else {
-                        $('.gfam-product-grid').html(response.data.html);
-                    }
+                if (response.success) {
+                    // Replace product grid
+                    $('.gfam-product-grid').html(response.data.html);
+
+                    // Remove old pagination and append new one
+                    $('.ajax-pagination').remove();
+                    $('.gfam-product-grid').after(response.data.pagination);
+
                     reinitCarousel();
-
-                    if ($btn) {
-                        $btn.text('Load More...').prop('disabled', false);
-                        $btn.attr('next-page', response.data.next_page);                        
-
-                        if (page >= response.data.max_pages) {
-                            $btn.addClass('d-none');
-                        }else{
-                            $btn.removeClass('d-none');
-                        }
-                    }else{                    
-                        let $loadmore_button = $('.load-more-stocks-btn');
-                        if ($loadmore_button.length) {
-                            if (response.data.has_more === false) {
-                                $loadmore_button.addClass('d-none');
-                            }else{
-                                $loadmore_button.removeClass('d-none');
-                            }
-                            $loadmore_button.attr({
-                                'next-page': response.data.next_page,
-                                'max-pages': response.data.max_pages
-                            });
-                        } else {
-                            console.warn('No load more button found');
-                        }
-                    }
-                } else {
-                    if ($btn) $btn.addClass('d-none');
                 }
                 $('#loader').fadeOut(500);
             },
             error: function(xhr, status, error) {
                 $('#loader').fadeOut(500);
-                if ($btn) $btn.text('Error').prop('disabled', true);
+                console.error('AJAX Error:', error);
             }
         });
     }
 
     /**
-     * Load More Click
+     * Pagination click
      */
-    // $('.load-more-stocks-btn').on('click', function(e) {
-    //     e.preventDefault();
-
-    //     let $btn = $(this);
-    //     let currentPage = parseInt($btn.attr('next-page'));
-    //     let maxPages = parseInt($btn.attr('max-pages'));
-
-    //     if (currentPage > maxPages) {
-    //         $btn.addClass('d-none');
-    //         return;
-    //     }
-        
-    //     var filters = get_selected_filters();
-
-    //     rsl_fetch_listings({
-    //         page: currentPage,
-    //         per_page: rsl_ajax_obj.vdp_per_page,
-    //         append: true,
-    //         $btn: $btn,
-    //         max_pages: maxPages,
-    //         filters: filters
-    //     });
-    // });
-
-    // Pagination click
     $(document).on('click', '.ajax-pagination .page-number, .ajax-pagination .prev-page, .ajax-pagination .next-page', function() {
         if ($(this).hasClass('disabled') || $(this).hasClass('current')) return;
 
-        var page = $(this).data('page');
-
-        var filters = get_selected_filters();
+        let page = $(this).data('page');
+        let filters = get_selected_filters();
 
         rsl_fetch_listings({
             page: page,
             per_page: rsl_ajax_obj.vdp_per_page,
-            append: false, // replace current grid
             filters: filters
         });
 
-        // Scroll to top of the grid (optional)
+        // Scroll to top of grid (optional)
         $('html, body').animate({ scrollTop: $('.gfam-product-grid').offset().top - 100 }, 300);
     });
 
+    /**
+     * Sorting click
+     */
     $(".dropdown-menu .dropdown-item").on("click", function (e) {
         e.preventDefault();
         $(".gfam-sort-btn").text($(this).text());
         $('.dropdown-menu .dropdown-item').removeClass('active');
         $(this).addClass('active'); 
         
-        var filters = get_selected_filters();        
+        let filters = get_selected_filters();        
         show_selected_val_on_sidebar(filters);
 
         rsl_fetch_listings({
             page: 1,
             per_page: rsl_ajax_obj.vdp_per_page,
-            append: false,
             filters: filters
         });
     });
 
+    /**
+     * Get all selected filters
+     */
     function get_selected_filters(){        
-        // Collect all checked checkboxes with name="category[]"
-        var selectedCategories = $('input[name="category[]"]:checked').map(function() {
-            return $(this).val();
-        }).get(); // convert to array
-
-        // Collect all checked checkboxes with name="category[]"
-        var selectedMakeModel = $('input[name="make-model[]"]:checked').map(function() {
-            return $(this).val();
-        }).get(); // convert to array
-
-        // Collect all checked checkboxes with name="category[]"
-        var selectedType = $('input[name="type[]"]:checked').map(function() {
-            return $(this).val();
-        }).get(); // convert to array
-
-
-        // Collect selected price range (dropdowns)
-        var activePriceTabID = $('.rsl-price-tabs.active').data('bs-target');
-        var selectedPriceFrom = $(activePriceTabID + ' .rsl-price-from').val();
-        var selectedPriceTo   = $(activePriceTabID + ' .rsl-price-to').val();
-
-        // Collect selected price range (dropdowns)
-        var activeYearTabID = $('.rsl-year-tabs.active').data('bs-target');
-        var selectedYearFrom = $(activeYearTabID + ' .rsl-year-from').val();
-        var selectedYearTo   = $(activeYearTabID + ' .rsl-year-to').val();
-
-        // Collect selected hour range (dropdowns)
-        var activeHoursTabID = $('.rsl-hours-tabs.active').data('bs-target');
-        var selectedHoursFrom = $(activeHoursTabID + ' .rsl-hours-from').val();
-        var selectedHoursTo   = $(activeHoursTabID + ' .rsl-hours-to').val();
-
-        //Collect selected sorting option
-        var selectedSortingOption = $('.stock-sorting-cls.active').data('val');
-
-        // Get search keyword
-        var searchKeyword = $('.main-listing-search').val().trim();
-
-        // Example filter collection
         let filters = {
-            categories: selectedCategories,        
-            makeModel: selectedMakeModel,
-            type: selectedType,
-            price_from: selectedPriceFrom || '',
-            price_to: selectedPriceTo   || '',
-            year_from: selectedYearFrom || '',
-            year_to: selectedYearTo   || '',
-            hours_from: selectedHoursFrom || '',
-            hours_to: selectedHoursTo   || '',
-            sort: selectedSortingOption,
-            keyword: searchKeyword || '',                
+            categories: $('input[name="category[]"]:checked').map(function(){ return $(this).val(); }).get(),
+            makeModel: $('input[name="make-model[]"]:checked').map(function(){ return $(this).val(); }).get(),
+            type: $('input[name="type[]"]:checked').map(function(){ return $(this).val(); }).get(),
+            price_from: $('.rsl-price-tabs.active .rsl-price-from').val() || '',
+            price_to: $('.rsl-price-tabs.active .rsl-price-to').val() || '',
+            year_from: $('.rsl-year-tabs.active .rsl-year-from').val() || '',
+            year_to: $('.rsl-year-tabs.active .rsl-year-to').val() || '',
+            hours_from: $('.rsl-hours-tabs.active .rsl-hours-from').val() || '',
+            hours_to: $('.rsl-hours-tabs.active .rsl-hours-to').val() || '',
+            sort: $('.stock-sorting-cls.active').data('val') || '',
+            keyword: $('.main-listing-search').val().trim() || ''
         };
-
-        return filters
+        return filters;
     }
 
+    /**
+     * Search input (with debounce)
+     */
     let rslSearchTimeout = null;
-
     $(document).on('input', '.main-listing-search', function () {
         const value = $(this).val();
-
-        // Keep both inputs synced
         $('.main-listing-search').not(this).val(value);
 
         clearTimeout(rslSearchTimeout);
-
         rslSearchTimeout = setTimeout(function() {
-            var filters = get_selected_filters();
+            let filters = get_selected_filters();
             show_selected_val_on_sidebar(filters);
-
-            rsl_fetch_listings({
-                page: 1,
-                per_page: rsl_ajax_obj.vdp_per_page,
-                append: false,
-                filters: filters
-            });
-        }, 500); // ⏱️ debounce time
+            rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
+        }, 500);
     });
 
     $(document).on('keypress', '.main-listing-search', function(e) {
         if (e.which === 13) {
             e.preventDefault();
             clearTimeout(rslSearchTimeout);
-
-            var filters = get_selected_filters();
+            let filters = get_selected_filters();
             show_selected_val_on_sidebar(filters);
-
-            rsl_fetch_listings({
-                page: 1,
-                per_page: rsl_ajax_obj.vdp_per_page,
-                append: false,
-                filters: filters
-            });
+            rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
     });
 
     /**
-     * Filter Apply Click
+     * Apply filter button
      */
     $('.rsl-apply-filter').on('click', function(e) {
         e.preventDefault();
-        
-        // remove focus temporarily
         $(this).blur();
-        var filters = get_selected_filters();        
+
+        let filters = get_selected_filters();        
         show_selected_val_on_sidebar(filters);
 
-        rsl_fetch_listings({
-            page: 1,
-            per_page: rsl_ajax_obj.vdp_per_page,
-            append: false,
-            filters: filters
-        });
+        rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     });
 
-    // small helper to append tag in a specific container
+    /**
+     * Sidebar tag helper
+     */
     function addTag(containerSelector, label, key, value) {
         const tag = $(`
             <span class="gfam-filter-tag" data-key="${key}" data-value="${value}">
@@ -263,76 +148,38 @@ jQuery(document).ready(function($) {
         $(containerSelector).append(tag);
     }
 
-    function show_selected_val_on_sidebar(filters) {        
-        // clear each list
-        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();        
+    function show_selected_val_on_sidebar(filters) {
+        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();
 
-        // --- Category ---
-        if (filters.categories.length) {
-            filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
-        }
+        if (filters.categories.length) filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
+        if (filters.makeModel.length) filters.makeModel.forEach(val => addTag('.selected-make-options-list', val, 'make-model', val));
+        if (filters.type.length) filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
+        if (filters.price_from || filters.price_to) addTag('.selected-price-options-list', `Price: ${filters.price_from || 'Any'} - ${filters.price_to || 'Any'}`, 'price', `${filters.price_from}-${filters.price_to}`);
+        if (filters.year_from || filters.year_to) addTag('.selected-year-options-list', `Year: ${filters.year_from || 'Any'} - ${filters.year_to || 'Any'}`, 'year', `${filters.year_from}-${filters.year_to}`);
+        if (filters.hours_from || filters.hours_to) addTag('.selected-hours-options-list', `Hours: ${filters.hours_from || 'Any'} - ${filters.hours_to || 'Any'}`, 'hours', `${filters.hours_from}-${filters.hours_to}`);
 
-        // --- Make / Model ---
-        if (filters.makeModel.length) {
-            filters.makeModel.forEach(val => addTag('.selected-make-options-list', val, 'make-model', val));
-        }
-
-        // --- Type ---
-        if (filters.type.length) {
-            filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
-        }
-
-        // --- Price ---
-        if (filters.price_from || filters.price_to) {
-            let label = `${filters.price_from || 'Any'} - ${filters.price_to || 'Any'}`;
-            addTag('.selected-price-options-list', 'Price: ' + label, 'price', label);
-        }
-
-        // --- Year ---
-        if (filters.year_from || filters.year_to) {
-            let label = `${filters.year_from || 'Any'} - ${filters.year_to || 'Any'}`;
-            addTag('.selected-year-options-list', 'Year: ' + label, 'year', label);
-        }
-
-        // --- Hours ---
-        if (filters.hours_from || filters.hours_to) {
-            let label = `${filters.hours_from || 'Any'} - ${filters.hours_to || 'Any'}`;
-            addTag('.selected-hours-options-list', 'Hours: ' + label, 'hours', label);
-        }
-        
-        reinitSeeMoreLess();        
+        reinitSeeMoreLess();
     }
 
+    /**
+     * Remove filter tag
+     */
     $(document).on('click', '.gfam-clear-tag', function() {
         const tag = $(this).closest('.gfam-filter-tag');
         const key = tag.data('key');
         const value = tag.data('value');
 
-        // Uncheck or reset corresponding filter
-        if (key === 'category') {
-            $(`input[name="category[]"][value="${value}"]`).prop('checked', false);
-        } else if (key === 'make-model') {
-            $(`input[name="make-model[]"][value="${value}"]`).prop('checked', false);
-        } else if (key === 'type') {
-            $(`input[name="type[]"][value="${value}"]`).prop('checked', false);
-        } else if (key === 'price') {
-            $('.rsl-price-from, .rsl-price-to').val('');
-        } else if (key === 'year') {
-            $('.rsl-year-from, .rsl-year-to').val('');
-        } else if (key === 'hours') {
-            $('.rsl-hours-from, .rsl-hours-to').val('');
-        }
+        if (key === 'category') $(`input[name="category[]"][value="${value}"]`).prop('checked', false);
+        else if (key === 'make-model') $(`input[name="make-model[]"][value="${value}"]`).prop('checked', false);
+        else if (key === 'type') $(`input[name="type[]"][value="${value}"]`).prop('checked', false);
+        else if (key === 'price') $('.rsl-price-from, .rsl-price-to').val('');
+        else if (key === 'year') $('.rsl-year-from, .rsl-year-to').val('');
+        else if (key === 'hours') $('.rsl-hours-from, .rsl-hours-to').val('');
 
-        // Remove tag
         tag.remove();
 
-        // Re-fetch updated listings
-        const filters = get_selected_filters();
-        rsl_fetch_listings({
-            page: 1,
-            per_page: rsl_ajax_obj.vdp_per_page,
-            append: false,
-            filters: filters
-        });
+        let filters = get_selected_filters();
+        rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     });
+
 });

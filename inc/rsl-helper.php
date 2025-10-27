@@ -144,6 +144,7 @@ function rsl_search( $listings, $query ) {
  * @param int $adjacents Number of pages to show on each side of current
  */
 function core_ajax_pagination($total_items, $per_page, $current_page = 1, $adjacents = 2) {
+    // echo $total_items;die();
     $total_pages = ceil($total_items / $per_page);
     if ($total_pages <= 1) return;
 

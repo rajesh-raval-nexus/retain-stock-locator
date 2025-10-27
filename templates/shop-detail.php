@@ -902,7 +902,7 @@ foreach ($allListingsData as $listing) {
       }
     });
 
-    $('.gfam-product-grid').owlCarousel({
+    $('.gfam-product-grid.row.main').owlCarousel({
       loop: false,
       margin: 30,
       nav: true,
