@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=gfam_form_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=request_call_back_submit&security=' + gfam_ajax_obj.nonce,
         success: function(response) {
           if (response.success) {
             $('#gfam-response').html('<p style="color:green;">' + response.data + '</p>');
@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=gfam_detail_form_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=request_video_submit&security=' + gfam_ajax_obj.nonce,
         success: function(response) {
           if (response.success) {
             $('#reqVideoFrmResponse').html('<p style="color:green;">' + response.data + '</p>');
@@ -313,7 +313,7 @@ jQuery(document).ready(function($) {
         $.ajax({
           url: gfam_ajax_obj.ajax_url,
           type: 'POST',
-          data: formData + '&action=gfam_video_request_submit&security=' + gfam_ajax_obj.nonce,
+          data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce,
           success: function(response) {
             if (response.success) {
               $('#gfamDetailResponse').html('<p style="color:green;">' + response.data + '</p>');
