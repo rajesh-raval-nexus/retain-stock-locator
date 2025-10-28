@@ -80,20 +80,53 @@ jQuery(document).ready(function($) {
     /**
      * Get all selected filters
      */
-    function get_selected_filters(){        
-        let filters = {
-            categories: $('input[name="category[]"]:checked').map(function(){ return $(this).val(); }).get(),
-            makeModel: $('input[name="make-model[]"]:checked').map(function(){ return $(this).val(); }).get(),
-            type: $('input[name="type[]"]:checked').map(function(){ return $(this).val(); }).get(),
-            price_from: $('.rsl-price-tabs.active .rsl-price-from').val() || '',
-            price_to: $('.rsl-price-tabs.active .rsl-price-to').val() || '',
-            year_from: $('.rsl-year-tabs.active .rsl-year-from').val() || '',
-            year_to: $('.rsl-year-tabs.active .rsl-year-to').val() || '',
-            hours_from: $('.rsl-hours-tabs.active .rsl-hours-from').val() || '',
-            hours_to: $('.rsl-hours-tabs.active .rsl-hours-to').val() || '',
-            sort: $('.stock-sorting-cls.active').data('val') || '',
-            keyword: $('.main-listing-search').val().trim() || ''
-        };
+    function get_selected_filters() {
+        let filters = {};
+
+        if ($('input[name="category[]"]').length) {
+            filters.categories = $('input[name="category[]"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+        }
+
+        if ($('input[name="make-model[]"]').length) {
+            filters.makeModel = $('input[name="make-model[]"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+        }
+
+        if ($('input[name="type[]"]').length) {
+            filters.type = $('input[name="type[]"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+        }
+
+        if ($('.rsl-price-tabs').length) {
+            var activePriceTabID = $('.rsl-price-tabs.active').data('bs-target');            
+            filters.price_from = $(activePriceTabID + ' .rsl-price-from').val();
+            filters.price_to   = $(activePriceTabID + ' .rsl-price-to').val();
+        }
+
+        if ($('.rsl-year-tabs').length) {
+            var activeYearTabID = $('.rsl-year-tabs.active').data('bs-target');
+            filters.year_from = $(activeYearTabID + ' .rsl-year-from').val();
+            filters.year_to   = $(activeYearTabID + ' .rsl-year-to').val();
+        }
+
+        if ($('.rsl-hours-tabs').length) {
+            var activeHoursTabID = $('.rsl-hours-tabs.active').data('bs-target');
+            filters.hours_from = $(activeHoursTabID + ' .rsl-hours-from').val();
+            filters.hours_to   = $(activeHoursTabID + ' .rsl-hours-to').val();
+        }
+
+        if ($('.stock-sorting-cls').length) {
+            filters.sort = $('.stock-sorting-cls.active').data('val') || '';
+        }
+
+        if ($('.main-listing-search').length) {
+            filters.keyword = $('.main-listing-search').val()?.trim() || '';
+        }
+
         return filters;
     }
 

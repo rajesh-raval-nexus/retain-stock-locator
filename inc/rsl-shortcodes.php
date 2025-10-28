@@ -347,7 +347,7 @@ function rsl_build_category_modal_html( $filters ) {
                           </div>
                       <?php endforeach;
                   else : ?>
-                      <div class="text-muted"><?php esc_html_e( 'No subtypes', 'retain-stock-locator' ); ?></div>
+                      <div class="text-muted"><?php esc_html_e( 'No sub-categories found', 'retain-stock-locator' ); ?></div>
                   <?php endif; ?>
                 </div>
               </div>
@@ -356,7 +356,7 @@ function rsl_build_category_modal_html( $filters ) {
           <div class="modal-footer">
             <div class="gfam-btn-fixed row w-100 align-items-center">
               <div class="col-6 px-1">
-                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="category"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
               <div class="col-6 text-end px-1">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-search="category-filter-search" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
@@ -501,7 +501,7 @@ function rsl_build_make_model_modal_html( $filters ) {
           <div class="modal-footer">
             <div class="gfam-btn-fixed row w-100 align-items-center">
               <div class="col-6 px-1">
-                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="make-model"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
               <div class="col-6 text-end px-1">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
@@ -574,7 +574,7 @@ function rsl_build_type_filter_modal_html( $filters, $modal_id = 'popupTypeDeskt
           <div class="modal-footer">
             <div class="gfam-btn-fixed row w-100 align-items-center">
               <div class="col-6 px-1">
-                <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="type"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
               <div class="col-6 text-end px-1">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
@@ -626,13 +626,13 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
               <!-- Tabs -->
               <ul class="nav nav-tabs mb-3" id="priceRangeTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link price-tabs active" id="select-tab" data-bs-toggle="tab" data-bs-target="#selectRange"
+                  <button class="nav-link rsl-price-tabs active" id="select-tab" data-bs-toggle="tab" data-bs-target="#selectRange"
                     type="button" role="tab">
                     <?php esc_html_e( 'Select Range', 'retain-stock-locator' ); ?>
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link price-tabs" id="enter-tab" data-bs-toggle="tab" data-bs-target="#enterRange" type="button"
+                  <button class="nav-link rsl-price-tabs" id="enter-tab" data-bs-toggle="tab" data-bs-target="#enterRange" type="button"
                     role="tab">
                     <?php esc_html_e( 'Enter Range', 'retain-stock-locator' ); ?>
                   </button>
@@ -646,7 +646,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                 <div class="tab-pane fade show active" id="selectRange" role="tabpanel">
                   <div class="mb-4">
                     <label for="priceFromSelect" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
-                    <select class="form-select price-from-cls" name="price-from" id="priceFromSelect">
+                    <select class="form-select rsl-price-from" name="price-from" id="priceFromSelect">
                       <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
                       <?php foreach ( $prices as $i => $price ): ?>
                         <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>
@@ -655,7 +655,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                   </div>
                   <div class="mb-4">
                     <label for="priceToSelect" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
-                    <select class="form-select price-to-cls" name="price-to" id="priceToSelect">
+                    <select class="form-select rsl-price-to" name="price-to" id="priceToSelect">
                       <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
                       <?php foreach ( $prices as $i => $price ): ?>
                         <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>

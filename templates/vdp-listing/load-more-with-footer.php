@@ -17,19 +17,43 @@
 </div>
 
 <!-- Category Modal -->
-<?php echo do_shortcode('[rsl_category_options]'); ?>
+<?php 
+    if(!$hide_category_filter){
+        echo do_shortcode('[rsl_category_options]'); 
+    }
+?>
 
 <!-- Make Modal -->
-<?php echo do_shortcode('[rsl_make_model_options]');?>
+<?php 
+    if(!$hide_make_model_filter){
+        echo do_shortcode('[rsl_make_model_options]');
+    }
+?>
 
 <!-- Type Modal -->
-<?php echo do_shortcode('[rsl_type_options]');?>
+<?php 
+    if(!$hide_type_filter){
+        echo do_shortcode('[rsl_type_options]');
+    }
+?>
 
 <!-- Price Range Modal -->    
-<?php echo do_shortcode('[rsl_price_options]')?>
+<?php 
+    if(!$hide_price_range_filter){
+        echo do_shortcode('[rsl_price_options]');
+    }
+?>
 
 <!-- Year Modal -->
-<?php echo do_shortcode('[rsl_year_options]')?>
+<?php 
+    if(!$hide_year_filter){
+        echo do_shortcode('[rsl_year_options]');
+    }
+?>
 
 <!-- Hours Modal -->
-<?php echo do_shortcode('[rsl_hours_options]')?>
+<?php 
+    if(!$hide_hours_filter){
+        echo do_shortcode('[rsl_hours_options]');
+    }
+?>

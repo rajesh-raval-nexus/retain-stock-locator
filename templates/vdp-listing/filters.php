@@ -1,22 +1,31 @@
 <?php
 
 include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
+$hide_search_bar = get_field('hide_search_bar','option');
+$hide_category_filter = get_field('hide_category_filter','option');
+$hide_make_model_filter = get_field('hide_make_&_model_filter','option');
+$hide_type_filter = get_field('hide_type_filter','option');
+$hide_price_range_filter = get_field('hide_price_range_filter','option');
+$hide_year_filter = get_field('hide_year_filter','option');
+$hide_hours_filter = get_field('hide_hour_filter','option');
 
 ?>
 
 <div class="mobile-header d-xl-none">
+  <!-- <<<<- Mobile Search Section Start ->>>> -->
+  <?php if(!$hide_search_bar){?>
   <div class="gfam-searchbar d-flex align-items-center px-3 py-2 rounded">
     <input type="text" class="form-control border-0 shadow-none bg-transparent gfam-search-input main-listing-search"
       placeholder="Search" />
-    <button class="gfam-search-btn border-0 rounded-circle d-flex justify-content-center align-items-center">
-      
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="24" height="24" rx="12" fill="#FDBD3D"/>
-<path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black"/>
-</svg>
-
+    <button class="gfam-search-btn border-0 rounded-circle d-flex justify-content-center align-items-center">      
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="12" fill="#FDBD3D"/>
+        <path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black"/>
+      </svg>
     </button>
   </div>
+  <?php }?>
+  <!-- <<<<- Mobile Search Section END ->>>> -->
   <div class="row text-center justify-content-center p-3">
     <div class="col-6" style="border-right: 1px solid #e0e0e0">
       <button class="modal-btn bg-transparent border-0 shadow-none outline-none" data-bs-toggle="modal"
@@ -57,6 +66,8 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
         <!-- Filter Content -->
         <div class="gfam-filter-content gfam-filter-section">
           <ul class="gfam-filter-list">
+            <!-- <<<<- Mobile Category Section Start ->>>> -->
+            <?php if(!$hide_category_filter){?>
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupCategoryMobile">
@@ -76,6 +87,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </div>
               </div>
             </li>
+            <?php } ?>
+            <!-- <<<<- Mobile Category Section End ->>>> -->
+            
+            <!-- <<<<- Mobile Make Model Section Start ->>>> -->
+            <?php if(!$hide_make_model_filter){?>
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupMakeMobile">
@@ -95,6 +111,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </div>
               </div>
             </li>
+            <?php }?>
+            <!-- <<<<- Mobile Make Model Section End ->>>> -->
+
+            <!-- <<<<- Mobile Type Section Start ->>>> -->
+            <?php if(!$hide_type_filter){?>
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupTypeMobile">
@@ -114,6 +135,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </div>
               </div>
             </li>
+            <?php }?>
+            <!-- <<<<- Mobile Type Section End ->>>> -->
+            
+            <!-- <<<<- Mobile Price Range Section Start ->>>> -->
+            <?php if(!$hide_price_range_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupRangeMobile">
               <span>Price Range</span>
               <button class="gfam-arrow">
@@ -124,6 +150,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </svg>
               </button>
             </li>
+            <?php }?>
+            <!-- <<<<- Mobile Price Range Section End ->>>> -->
+
+            <!-- <<<<- Mobile Year Section Start ->>>> -->
+            <?php if(!$hide_year_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupYearMobile">
               <span>Year</span>
               <button class="gfam-arrow">
@@ -134,6 +165,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </svg>
               </button>
             </li>
+            <?php } ?>
+            <!-- <<<<- Mobile Year Section End ->>>> -->
+            
+            <!-- <<<<- Mobile Hours Section Start ->>>> -->
+            <?php if(!$hide_hours_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupHourMobile">
               <span>Hours</span>
               <button class="gfam-arrow">
@@ -144,6 +180,8 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
                 </svg>
               </button>
             </li>
+            <?php } ?>
+            <!-- <<<<- Mobile Hours Section End ->>>> -->
           </ul>
         </div>
       </div>
@@ -151,6 +189,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
   </div>
 </div>
 <!-- Mobile category Modal -->
+<?php if(!$hide_category_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupCategoryMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -161,7 +200,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
       <div class="modal-footer">
         <div class="gfam-btn-fixed row w-100 align-items-center">
           <div class="col-6">
-            <a href="javascript:void(0);" class="clear-btn">Clear</a>
+            <a href="javascript:void(0);" class="clear-btn" data-bs-dismiss="modal" data-type="category">Clear</a>
           </div>
           <div class="col-6 text-end">
             <button class="gfam-btn w-auto">Search</button>
@@ -171,7 +210,9 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Mobile make Modal -->
+<?php if(!$hide_make_model_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupMakeMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -181,7 +222,9 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Mobile Type Modal -->
+<?php if(!$hide_type_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupTypeMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -191,7 +234,9 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Mobile Range Modal -->
+<?php if($hide_price_range_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupRangeMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -201,7 +246,9 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Mobile Year Modal -->
+<?php if(!$hide_year_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupYearMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -211,7 +258,9 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Mobile Hour Modal -->
+<?php if(!$hide_hours_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupHourMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 
@@ -221,6 +270,7 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     </div>
   </div>
 </div>
+<?php } ?>
 <!-- Sort Modal (Mobile Only) -->
 <div class="modal fade modal-slide-up" id="mobileSortModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
@@ -250,23 +300,26 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
       <!-- <span class="gfam-clear-all">Clear All</span> -->
     </div>
 
-    <!-- Filter Content -->
+    <!-- Filter Content Desktop Started -->
     <div class="gfam-filter-content gfam-filter-section">
-      <!-- Search -->
+      <!-- <<<<- Desktop Search Section Start ->>>> -->
+      <?php if(!$hide_search_bar){?>
       <div class="input-group gfam-search-section">
         <input type="text" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
         <div class="input-group-append">
           <span class="input-group-text">
-
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="24" height="24" rx="12" fill="#FDBD3D" />
               <path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black" />
             </svg>
-
           </span>
         </div>
       </div>
+      <?php } ?>
+      <!-- <<<<- Desktop Search Section End ->>>> -->
       <ul class="gfam-filter-list">
+        <!-- <<<<- Desktop Category Section Start ->>>> -->
+        <?php if(!$hide_category_filter){?>
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupCategoryDesktop">
@@ -286,6 +339,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
             </div>
           </div>
         </li>
+        <?php } ?>
+        <!-- <<<<- Desktop Category Section End ->>>> -->
+        
+        <!-- <<<<- Desktop Make Model Section Start ->>>> -->
+        <?php if(!$hide_make_model_filter){?>
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupMakeDesktop">
@@ -305,6 +363,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
             </div>
           </div>
         </li>
+        <?php }?>
+        <!-- <<<<- Desktop Make Model Section End ->>>> -->
+
+        <!-- <<<<- Desktop Type Section Start ->>>> -->
+        <?php if(!$hide_type_filter){?>
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupTypeDesktop">
@@ -320,10 +383,14 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
           <!-- Selected Filters -->
           <div class="gfam-filter-wrapper">
             <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-type-options-list">
-
             </div>
           </div>
         </li>
+        <?php }?>
+        <!-- <<<<- Desktop Type Section End ->>>> -->
+
+        <!-- <<<<- Desktop Price Range Section Start ->>>> -->
+        <?php if(!$hide_price_range_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupRangeDesktop">
           <span>Price Range</span>
           <button class="gfam-arrow">
@@ -334,6 +401,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
             </svg>
           </button>
         </li>
+        <?php }?>
+        <!-- <<<<- Desktop Price Range Section End ->>>> -->
+
+        <!-- <<<<- Desktop Year Section Start ->>>> -->
+        <?php if(!$hide_year_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupYearDesktop">
           <span>Year</span>
           <button class="gfam-arrow">
@@ -344,6 +416,11 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
             </svg>
           </button>
         </li>
+        <?php } ?>
+        <!-- <<<<- Desktop Year Section End ->>>> -->
+
+        <!-- <<<<- Desktop Hours Section Start ->>>> -->
+        <?php if(!$hide_hours_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupHourDesktop">
           <span>Hours</span>
           <button class="gfam-arrow">
@@ -354,6 +431,8 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
             </svg>
           </button>
         </li>
+        <?php } ?>
+        <!-- <<<<- Desktop Hours Section End ->>>> -->
       </ul>
     </div>
 
@@ -365,17 +444,6 @@ include RSL_PLUGIN_DIR . 'templates/vdp-listing/breadcrumb.php';
     <div id="loader" style="display:none;">
       <div class="loader-circle"></div>
     </div>
-    <!-- <div class="gfam-applied-filters my-3">
-    <strong class="me-2">Applied filters:</strong>
-
-    <div class="d-inline-flex flex-wrap gap-2">
-      <span class="gfam-filter-tag">Filter 1 <span class="gfam-clear-tag">×</span></span>
-      <span class="gfam-filter-tag">Filter 2 <span class="gfam-clear-tag">×</span></span>
-      <span class="gfam-filter-tag">Filter 3 <span class="gfam-clear-tag">×</span></span>
-    </div>
-
-    <hr class="mt-3 mb-0" />
-  </div> -->
     <!-- Content Header -->
     <div class="gfam-content-header mb-3">
       <div class="row align-items-center gfam-header-row justify-content-between">
