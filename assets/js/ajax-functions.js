@@ -26,11 +26,18 @@ jQuery(document).ready(function($) {
 
                     // Remove old pagination and append new one
                     $('.ajax-pagination').remove();
-                    $('.gfam-product-grid').after(response.data.pagination);
+                    $('.load-more-btn').html(response.data.pagination);
 
                     reinitCarousel();
                 }
                 $('#loader').fadeOut(500);
+                // Give browser time to render all items first
+                setTimeout(function() {
+                    $('html, body').stop(true).animate({
+                        scrollTop: $('.gfam-product-grid').offset().top - 100
+                    }, 400);
+                }, 150); // small delay helps smooth scroll
+
             },
             error: function(xhr, status, error) {
                 $('#loader').fadeOut(500);
@@ -52,10 +59,7 @@ jQuery(document).ready(function($) {
             page: page,
             per_page: rsl_ajax_obj.vdp_per_page,
             filters: filters
-        });
-
-        // Scroll to top of grid (optional)
-        $('html, body').animate({ scrollTop: $('.gfam-product-grid').offset().top - 100 }, 300);
+        });        
     });
 
     /**
@@ -100,12 +104,18 @@ jQuery(document).ready(function($) {
       });
     });
 
-    $(document).on('click', '.block-price-filter', function() {
+    $(document).on('click', '.block-price-filter', function(e) {
+        e.preventDefault();
         var filter_type = $(this).data('filter-type');
-        var filter_price = $(this).data('filter-price');        
+        var filter_price = $(this).data('filter-price');
+        
+        $('.clear-btn').click();
 
         let filters = get_selected_filters();              
         show_selected_val_on_sidebar(filters);
+
+        filters.price_from = '';
+        filters.price_to = '';
 
         if(filter_type == 'above' && filter_price != undefined){
             filters.price_from = filter_price;
@@ -120,13 +130,15 @@ jQuery(document).ready(function($) {
             per_page: rsl_ajax_obj.vdp_per_page,
             filters: filters
         });
+            
     });
 
     /**
-     * Sorting click
+     * Clear button click
      */
     $(".clear-btn").on("click", function (e) {
         e.preventDefault();
+        $(this).blur();
         var clicked_clear_section = $(this).data('type');
 
         if(clicked_clear_section == 'category' || clicked_clear_section == 'make-model' || clicked_clear_section == 'type'){
@@ -167,15 +179,16 @@ jQuery(document).ready(function($) {
             $('input[name="hourFromInput"]').val('');
             $('input[name="hourToInput"]').val('');
         }
-        
-        let filters = get_selected_filters();        
-        show_selected_val_on_sidebar(filters);
+        if (e.originalEvent && e.originalEvent.isTrusted) {
+            let filters = get_selected_filters();        
+            show_selected_val_on_sidebar(filters);
 
-        rsl_fetch_listings({
-            page: 1,
-            per_page: rsl_ajax_obj.vdp_per_page,
-            filters: filters
-        });
+            rsl_fetch_listings({
+                page: 1,
+                per_page: rsl_ajax_obj.vdp_per_page,
+                filters: filters
+            });
+        }
     });
 
     /**
@@ -228,6 +241,20 @@ jQuery(document).ready(function($) {
             filters.keyword = $('.main-listing-search').val()?.trim() || '';
         }
 
+        if(filters.price_from.trim() === '' && filters.price_to.trim() === '' ){
+            if($('.block-price-filter.active').length != 0){
+                var current_active_type = $('.block-price-filter.active').data('filter-type');
+                var current_filter_price = $('.block-price-filter.active').data('filter-price');
+                if(current_active_type == 'above'){
+                    filters.price_from = current_filter_price;
+                }else{
+                    filters.price_to   = current_filter_price;
+                }
+                filters.filter_type = current_active_type;
+                filters.filter_price = current_filter_price;                
+            }
+        }
+
         return filters;
     }
 
@@ -264,6 +291,8 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $(this).blur();
 
+        $('.block-price-filter').removeClass('active');
+
         let filters = get_selected_filters();        
         show_selected_val_on_sidebar(filters);
 
@@ -288,9 +317,9 @@ jQuery(document).ready(function($) {
         if (filters.categories.length) filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
         if (filters.makeModel.length) filters.makeModel.forEach(val => addTag('.selected-make-options-list', val, 'make-model', val));
         if (filters.type.length) filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
-        if (filters.price_from || filters.price_to) addTag('.selected-price-options-list', `Price: ${filters.price_from || 'Any'} - ${filters.price_to || 'Any'}`, 'price', `${filters.price_from}-${filters.price_to}`);
-        if (filters.year_from || filters.year_to) addTag('.selected-year-options-list', `Year: ${filters.year_from || 'Any'} - ${filters.year_to || 'Any'}`, 'year', `${filters.year_from}-${filters.year_to}`);
-        if (filters.hours_from || filters.hours_to) addTag('.selected-hours-options-list', `Hours: ${filters.hours_from || 'Any'} - ${filters.hours_to || 'Any'}`, 'hours', `${filters.hours_from}-${filters.hours_to}`);
+        // if (filters.price_from || filters.price_to) addTag('.selected-price-options-list', `Price: ${filters.price_from || 'Any'} - ${filters.price_to || 'Any'}`, 'price', `${filters.price_from}-${filters.price_to}`);
+        // if (filters.year_from || filters.year_to) addTag('.selected-year-options-list', `Year: ${filters.year_from || 'Any'} - ${filters.year_to || 'Any'}`, 'year', `${filters.year_from}-${filters.year_to}`);
+        // if (filters.hours_from || filters.hours_to) addTag('.selected-hours-options-list', `Hours: ${filters.hours_from || 'Any'} - ${filters.hours_to || 'Any'}`, 'hours', `${filters.hours_from}-${filters.hours_to}`);
 
         reinitSeeMoreLess();
     }
@@ -306,9 +335,9 @@ jQuery(document).ready(function($) {
         if (key === 'category') $(`input[name="category[]"][value="${value}"]`).prop('checked', false);
         else if (key === 'make-model') $(`input[name="make-model[]"][value="${value}"]`).prop('checked', false);
         else if (key === 'type') $(`input[name="type[]"][value="${value}"]`).prop('checked', false);
-        else if (key === 'price') $('.rsl-price-from, .rsl-price-to').val('');
-        else if (key === 'year') $('.rsl-year-from, .rsl-year-to').val('');
-        else if (key === 'hours') $('.rsl-hours-from, .rsl-hours-to').val('');
+        // else if (key === 'price') $('.rsl-price-from, .rsl-price-to').val('');
+        // else if (key === 'year') $('.rsl-year-from, .rsl-year-to').val('');
+        // else if (key === 'hours') $('.rsl-hours-from, .rsl-hours-to').val('');
 
         tag.remove();
 

@@ -951,6 +951,12 @@ textarea:focus {
     border-color: var(--gfam-white) !important;
     color: var(--gfam-white) !important;
   }
+
+  button.gfam-price-btn.w-100.text-center.block-price-filter.active {
+    background-color: var(--gfam-secondary) !important;
+    border-color: var(--gfam-white) !important;
+    color: var(--gfam-white) !important;
+  }
   
   .gfam-price-section h4 span:first-child {
     color: #0c0c22;
