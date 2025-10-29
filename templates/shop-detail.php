@@ -7,6 +7,8 @@ if ($stock_number) {
 
 $allListingsData = rsl_parse_listings($xmlPath);
 
+$vehicle_seach = RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+
 foreach ($allListingsData as $listing) {
 
   if ($listing['stock_number'] === $stock_number) { ?>
@@ -551,7 +553,8 @@ foreach ($allListingsData as $listing) {
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
-                      <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
+                      <!-- <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_1520_9890)">
                           <g clip-path="url(#clip1_1520_9890)">
                             <path
@@ -575,7 +578,7 @@ foreach ($allListingsData as $listing) {
                             <rect width="60" height="60" fill="white" transform="translate(0.380859 0.414795)" />
                           </clipPath>
                         </defs>
-                      </svg>
+                      </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4>Video Walkaround</h4>
@@ -587,7 +590,8 @@ foreach ($allListingsData as $listing) {
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
-                      <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
+                      <!-- <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_1520_9890)">
                           <g clip-path="url(#clip1_1520_9890)">
                             <path
@@ -611,7 +615,7 @@ foreach ($allListingsData as $listing) {
                             <rect width="60" height="60" fill="white" transform="translate(0.380859 0.414795)" />
                           </clipPath>
                         </defs>
-                      </svg>
+                      </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4>Test Drive</h4>
