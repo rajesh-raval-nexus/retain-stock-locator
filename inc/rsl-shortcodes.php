@@ -668,12 +668,12 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                 <div class="tab-pane fade" id="enterRange" role="tabpanel">
                   <div class="mb-4">
                     <label for="priceFromInput" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
-                    <input type="number" class="form-control price-from-cls" name="priceFromInput" id="priceFromInput" placeholder=""
+                    <input type="number" class="form-control rsl-price-from" name="priceFromInput" id="priceFromInput" placeholder=""
                           min="<?php echo esc_attr( $min_price ); ?>" max="<?php echo esc_attr( $max_price ); ?>" />
                   </div>
                   <div class="mb-4">
                     <label for="priceToInput" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
-                    <input type="number" class="form-control price-to-cls" name="priceToInput" id="priceToInput" placeholder=""
+                    <input type="number" class="form-control rsl-price-to" name="priceToInput" id="priceToInput" placeholder=""
                           min="<?php echo esc_attr( $min_price ); ?>" max="<?php echo esc_attr( $max_price ); ?>" />
                   </div>
                 </div>
@@ -685,7 +685,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
             <div class="modal-footer">
               <div class="gfam-btn-fixed row w-100 align-items-center">
                 <div class="col-6 px-1">
-                  <a href="#" class="clear-btn"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                  <a href="javascript:void(0);" class="clear-btn" data-bs-dismiss="modal" data-type="price-range"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                 </div>
                 <div class="col-6 text-end px-1">
                   <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal">
@@ -795,7 +795,7 @@ function rsl_build_year_filter_modal_html( $years, $modal_id = 'popupYearDesktop
                 <div class="modal-footer">
                     <div class="gfam-btn-fixed row w-100 align-items-center">
                         <div class="col-6 px-1">
-                            <a href="#" class="clear-btn rsl-clear-year"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                            <a href="javascript:void(0);" class="clear-btn rsl-clear-year" data-bs-dismiss="modal" data-type="year-range"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                         </div>
                         <div class="col-6 text-end px-1">
                             <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal" ><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
@@ -902,7 +902,7 @@ function rsl_build_hours_filter_modal_html( $hours, $modal_id = 'popupHourDeskto
                 <div class="modal-footer">
                     <div class="gfam-btn-fixed row w-100 align-items-center">
                         <div class="col-6 px-1">
-                            <a href="#" class="clear-btn rsl-clear-hour"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
+                            <a href="javascript:void(0);" class="clear-btn rsl-clear-hour" data-bs-dismiss="modal" data-type="hours-range" ><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                         </div>
                         <div class="col-6 text-end px-1">
                             <button class="gfam-btn w-auto rsl-apply-filter"  data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>

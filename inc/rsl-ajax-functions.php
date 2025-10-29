@@ -53,7 +53,7 @@ function rsl_get_stock_list_ajax() {
 
     // Build HTML
     $html = '';
-    $global_index_start = $offset + 1; // First product number on this page
+    $global_index_start = 1; // First product number on this page
     $global_index = $global_index_start;
 
     $custom_sections = [

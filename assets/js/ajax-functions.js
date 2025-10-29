@@ -77,6 +77,107 @@ jQuery(document).ready(function($) {
         });
     });
 
+    // --- Search for Makes ---
+    $(document).on('input', '#popupMakeDesktop .category-body .gfam-search-input, #gfampopupMakeMobile .category-body .gfam-search-input', function() {
+      const searchTerm = $(this).val().toLowerCase().trim();
+      const $items = $('#popupMakeDesktop .category-body .accordion-item, #gfampopupMakeMobile .category-body .accordion-item');
+
+      $items.each(function() {
+        const makeName = $(this).find('label').text().toLowerCase();
+        $(this).toggle(makeName.indexOf(searchTerm) !== -1);
+      });
+    });
+
+    // --- Search for Models (inside subcategory-body) ---
+    $(document).on('input', '#popupMakeDesktop .subcategory-body .gfam-search-input, #gfampopupMakeMobile .subcategory-body .gfam-search-input', function() {
+      const searchTerm = $(this).val().toLowerCase().trim();
+      const $container = $(this).closest('.subcategory-body');
+      const $items = $container.find('.accordion-item');
+
+      $items.each(function() {
+        const modelName = $(this).find('label').text().toLowerCase();
+        $(this).toggle(modelName.indexOf(searchTerm) !== -1);
+      });
+    });
+
+    $(document).on('click', '.block-price-filter', function() {
+        var filter_type = $(this).data('filter-type');
+        var filter_price = $(this).data('filter-price');        
+
+        let filters = get_selected_filters();              
+        show_selected_val_on_sidebar(filters);
+
+        if(filter_type == 'above' && filter_price != undefined){
+            filters.price_from = filter_price;
+        }else{
+            filters.price_to = filter_price;
+        }
+        filters.filter_type = filter_type;
+        filters.filter_price = filter_price;
+
+        rsl_fetch_listings({
+            page: 1,
+            per_page: rsl_ajax_obj.vdp_per_page,
+            filters: filters
+        });
+    });
+
+    /**
+     * Sorting click
+     */
+    $(".clear-btn").on("click", function (e) {
+        e.preventDefault();
+        var clicked_clear_section = $(this).data('type');
+
+        if(clicked_clear_section == 'category' || clicked_clear_section == 'make-model' || clicked_clear_section == 'type'){
+            // Uncheck all checkboxes for that group
+            $('input[name="' + clicked_clear_section + '[]"]').prop('checked', false);
+
+            if (clicked_clear_section == 'make-model') {
+                const $inputs = $('#popupMakeDesktop .category-body .gfam-search-input, \
+                                    #gfampopupMakeMobile .category-body .gfam-search-input, \
+                                    #popupMakeDesktop .subcategory-body .gfam-search-input, \
+                                    #gfampopupMakeMobile .subcategory-body .gfam-search-input');
+                
+                $inputs.val('');
+                $('.category-body .accordion-item, .subcategory-body .accordion-item').show();
+            }
+        }
+
+        if(clicked_clear_section == 'price-range'){
+            // Clear the select(s) having that name
+            $('select[name="price-from"]').val('').trigger('change');
+            $('select[name="price-to"]').val('').trigger('change');
+            $('input[name="priceFromInput"]').val('');
+            $('input[name="priceToInput"]').val('');
+        }
+
+        if(clicked_clear_section == 'year-range'){
+            // Clear the select(s) having that name
+            $('select[name="year-from"]').val('').trigger('change');
+            $('select[name="year-to"]').val('').trigger('change');
+            $('input[name="yearFromInput"]').val('');
+            $('input[name="yearToInput"]').val('');
+        }
+
+        if(clicked_clear_section == 'hours-range'){
+            // Clear the select(s) having that name
+            $('select[name="hour-from"]').val('').trigger('change');
+            $('select[name="hour-to"]').val('').trigger('change');
+            $('input[name="hourFromInput"]').val('');
+            $('input[name="hourToInput"]').val('');
+        }
+        
+        let filters = get_selected_filters();        
+        show_selected_val_on_sidebar(filters);
+
+        rsl_fetch_listings({
+            page: 1,
+            per_page: rsl_ajax_obj.vdp_per_page,
+            filters: filters
+        });
+    });
+
     /**
      * Get all selected filters
      */

@@ -139,7 +139,8 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <!-- <<<<- Mobile Type Section End ->>>> -->
             
             <!-- <<<<- Mobile Price Range Section Start ->>>> -->
-            <?php if(!$hide_price_range_filter){?>
+            <?php
+             if(!$hide_price_range_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupRangeMobile">
               <span>Price Range</span>
               <button class="gfam-arrow">
@@ -236,7 +237,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
 </div>
 <?php } ?>
 <!-- Mobile Range Modal -->
-<?php if($hide_price_range_filter){?>
+<?php if(!$hide_price_range_filter){?>
 <div class="modal fade modal-slide-up sidebar-modal" id="gfampopupRangeMobile" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
 

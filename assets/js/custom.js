@@ -108,6 +108,12 @@ function reinitSeeMoreLess(){
           overflow: "hidden",
           height: 'auto',
         });
+    }else{
+      $wrapper.css({
+          transition: "all 0.4s ease",
+          overflow: "hidden",
+          height: 0,
+        });
     }
             
     let $toggleBtn = $wrapper.find(".gfam-show-toggle");
@@ -127,8 +133,7 @@ function reinitSeeMoreLess(){
       }
     });
 
-    const maxHeight = parseFloat($tags.css("max-height"));
-    console.log(maxHeight + '---' + $tags[0].scrollHeight)
+    const maxHeight = parseFloat($tags.css("max-height"));    
     if ($tags[0].scrollHeight <= maxHeight + 1) {
       $toggleBtn.hide();
     } else {
