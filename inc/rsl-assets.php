@@ -242,10 +242,10 @@ function rsl_assets_enqueue_frontend() {
 
     // Custom JS
     wp_enqueue_script(
-        'rsl-custom',
-        RSL_PLUGIN_URL . 'assets/js/custom.js',
-        [ 'jquery', 'rsl-main', 'rsl-owl-carousel' ],
-        filemtime( RSL_PLUGIN_DIR . 'assets/js/custom.js' ),
+        'rsl-validation',
+        RSL_PLUGIN_URL . 'assets/js/validation.js',
+        [ 'jquery', 'rsl-jquery-validate' ],
+        filemtime( RSL_PLUGIN_DIR . 'assets/js/validation.js' ),
         true
     );
 
@@ -269,9 +269,18 @@ function rsl_assets_enqueue_frontend() {
                 'vdp_per_page' => get_field('vdp_per_page', 'option')
             ]
         );
-    }    
+    }
 
-    wp_enqueue_script('gfam-ajax', RSL_PLUGIN_URL . '/assets/js/cstm.js', ['jquery'], null, true);
+    // Custom JS
+    wp_enqueue_script(
+        'rsl-custom',
+        RSL_PLUGIN_URL . 'assets/js/custom.js',
+        [ 'jquery', 'rsl-main', 'rsl-owl-carousel' ],
+        filemtime( RSL_PLUGIN_DIR . 'assets/js/custom.js' ),
+        true
+    );    
+
+    wp_enqueue_script('gfam-ajax', RSL_PLUGIN_URL . 'assets/js/cstm.js', ['jquery'], null, true);
     wp_localize_script('gfam-ajax', 'gfam_ajax_obj', [
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce'    => wp_create_nonce('gfam_form_nonce')

@@ -646,7 +646,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                 <div class="tab-pane fade show active" id="selectRange" role="tabpanel">
                   <div class="mb-4">
                     <label for="priceFromSelect" class="form-label"><?php esc_html_e( 'From', 'retain-stock-locator' ); ?></label>
-                    <select class="form-select rsl-price-from" name="price-from" id="priceFromSelect">
+                    <select class="form-select rsl-price-from" name="price_from" id="priceFromSelect">
                       <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
                       <?php foreach ( $prices as $i => $price ): ?>
                         <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>
@@ -655,7 +655,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                   </div>
                   <div class="mb-4">
                     <label for="priceToSelect" class="form-label"><?php esc_html_e( 'To', 'retain-stock-locator' ); ?></label>
-                    <select class="form-select rsl-price-to" name="price-to" id="priceToSelect">
+                    <select class="form-select rsl-price-to" name="price_to" id="priceToSelect">
                       <option value=""><?php esc_html_e( 'Any', 'retain-stock-locator' ); ?></option>
                       <?php foreach ( $prices as $i => $price ): ?>
                         <option value="<?php echo esc_attr( $price ); ?>"><?php echo esc_html( $formatted_prices[ $i ] ); ?></option>
