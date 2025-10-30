@@ -905,6 +905,11 @@ textarea:focus {
   font-size: 16px;
   font-weight: 500;
   transition: 0.4s all;
+  cursor: pointer;
+}
+.load-more-btn ul.ajax-pagination li span.prev-page img, .load-more-btn ul.ajax-pagination li span.next-page img {
+  width: 100%;
+  max-width: 23px;
 }
 .load-more-btn ul.ajax-pagination li span.current {
   background-color: #92191C;
@@ -917,6 +922,10 @@ textarea:focus {
 .load-more-btn ul.ajax-pagination li span.page-number:hover, .load-more-btn ul.ajax-pagination li span.prev-page:hover, .load-more-btn ul.ajax-pagination li span.next-page:hover {
   background-color: #92191C;
   color: #fff;
+}
+
+.load-more-btn ul.ajax-pagination li span.prev-page:hover img, .load-more-btn ul.ajax-pagination li span.next-page:hover img{
+  filter: invert(1);
 }
 
 

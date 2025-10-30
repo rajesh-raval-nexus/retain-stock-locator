@@ -152,9 +152,13 @@ function core_ajax_pagination($total_items, $per_page, $current_page = 1, $adjac
 
     // Previous button
     if ($current_page > 1) {
-        echo '<li><span class="prev-page" data-page="' . ($current_page - 1) . '">&laquo; Prev</span></li>';
+        echo '<li><span class="prev-page" data-page="' . ($current_page - 1) . '">
+        <img src="' . esc_url(RSL_PLUGIN_URL . 'assets/images/left-arrow.svg') . '" class="w-100 mx-auto" alt="" />
+        </span></li>';
     } else {
-        echo '<li><span class="prev-page disabled">&laquo; Prev</span></li>';
+        echo '<li><span class="prev-page disabled">
+        <img src="' . esc_url(RSL_PLUGIN_URL . 'assets/images/left-arrow.svg') . '" class="w-100 mx-auto" alt="" />
+        </span></li>';
     }
 
     // Pages
@@ -178,9 +182,13 @@ function core_ajax_pagination($total_items, $per_page, $current_page = 1, $adjac
 
     // Next button
     if ($current_page < $total_pages) {
-        echo '<li><span class="next-page" data-page="' . ($current_page + 1) . '">Next &raquo;</span></li>';
+        echo '<li><span class="next-page" data-page="' . ($current_page + 1) . '">
+                <img src="' . esc_url(RSL_PLUGIN_URL . 'assets/images/right-arrow.svg') . '" class="w-100 mx-auto" alt="" />
+              </span></li>';
     } else {
-        echo '<li><span class="next-page disabled">Next &raquo;</span></li>';
+        echo '<li><span class="next-page disabled">
+        <img src="' . esc_url(RSL_PLUGIN_URL . 'assets/images/right-arrow.svg') . '" class="w-100 mx-auto" alt="" />
+        </span></li>';
     }
 
     echo '</ul>';
