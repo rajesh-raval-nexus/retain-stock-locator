@@ -42,9 +42,15 @@
                     } else {
                         $label = 'Under $' . $formatted_price;
                     }
+                    $is_active_cls = '';
+
+                    if(isset($filters['filter_type'], $filters['filter_price']) && ($type == $filters['filter_type'] && $price == $filters['filter_price']) ){
+                        $is_active_cls = ' active';
+                    }
+
                 ?>
                     <div class="col-md-4 col-10 my-2">
-                        <button type="button" class="gfam-price-btn w-100 text-center">
+                        <button type="button" class="gfam-price-btn w-100 text-center block-price-filter<?php echo $is_active_cls;?>" data-filter-type='<?php echo $type; ?>' data-filter-price=<?php echo $price; ?>>
                             <?php echo esc_html( $label ); ?>
                         </button>
                     </div>
