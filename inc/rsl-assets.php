@@ -259,15 +259,21 @@ function rsl_assets_enqueue_frontend() {
             true
         );
 
+        $filter_data = rsl_get_filter_data_for_localization();
+
         // Pass admin-ajax URL + other variables to JS
         wp_localize_script(
             'rsl-ajax-functions',
             'rsl_ajax_obj',
-            [
-                'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'nonce'    => wp_create_nonce( 'rsl_ajax_nonce' ),
-                'vdp_per_page' => get_field('vdp_per_page', 'option')
-            ]
+            array_merge(
+                [
+                    'ajax_url' => admin_url( 'admin-ajax.php' ),
+                    'nonce' => wp_create_nonce( 'rsl_ajax_nonce' ),
+                    'vdp_per_page' => get_field('vdp_per_page', 'option'),
+                    'current_page_url' => get_the_permalink(get_the_ID()),
+                ],
+                $filter_data
+            )
         );
     }
 

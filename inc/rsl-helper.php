@@ -39,6 +39,54 @@ function rsl_parse_listings( $xmlPath ) {
     return $listings;
 }
 
+function rsl_get_filter_data_for_localization() {
+    global $xmlPath;
+    
+    $listings = rsl_parse_listings( $xmlPath );
+
+    $makes = [];
+    $models = [];
+    $categories = [];
+    $types = [];
+
+    foreach ( $listings as $listing ) {
+        if ( !empty($listing['make']) ) {
+            $makes[] = $listing['make'];
+        }
+        if ( !empty($listing['model']) ) {
+            $models[] = $listing['model'];
+        }
+        // Assuming 'type' and 'subtype' are your categories or categories data
+        if ( !empty($listing['listing_type']) ) {
+            $types[] = $listing['listing_type'];
+        }
+        if ( !empty($listing['subtype']) ) {
+            $categories[] = $listing['type'];
+            $categories[] = $listing['subtype'];
+        }
+    }
+
+    // Unique and sort the arrays to keep them clean and ordered
+    $makes = array_values(array_unique($makes));
+    sort($makes);
+
+    $models = array_values(array_unique($models));
+    sort($models);
+
+    $categories = array_values(array_unique($categories));
+    sort($categories);
+
+    $types = array_values(array_unique($types));
+    sort($types);
+
+    return [
+        'validMakes'      => $makes,
+        'validModels'     => $models,
+        'validCategories' => $categories,
+        'validTypes'      => $types,
+    ];
+}
+
 function rsl_get_attribute_value( $listing, $attrName ) {    
 
     foreach ($listing->attributes->attribute as $attr) {
@@ -61,8 +109,12 @@ function rsl_apply_filters( $listings, $filters ) {
         }
 
         // --- Make/Model ---
-        if ( !empty($filters['makeModel']) ) {
-            $matches[] = in_array($l['make'], $filters['makeModel']) || in_array($l['model'], $filters['makeModel']);
+        if ( !empty($filters['make']) ) {
+            $matches[] = in_array($l['make'], $filters['make']);
+        }
+
+        if ( !empty($filters['model']) ) {
+            $matches[] = in_array($l['model'], $filters['model']);
         }
 
         // --- Listing Type i.e New, Used ---
@@ -129,9 +181,16 @@ function rsl_get_max_pages( $stock_data, $per_page = 10 ) {
 
 function rsl_search( $listings, $query ) {
     $query = strtolower(trim($query));
+
     return array_filter($listings, function ($l) use ($query) {
-        return strpos(strtolower($l['make']), $query) !== false ||
-               strpos(strtolower($l['model']), $query) !== false;
+        $make  = isset($l['make']) ? strtolower(trim($l['make'])) : '';
+        $model = isset($l['model']) ? strtolower(trim($l['model'])) : '';
+        $title = trim("$make $model"); // Combine both for full-title search
+
+        // Match if query appears in make, model, or combined title
+        return strpos($make, $query) !== false ||
+               strpos($model, $query) !== false ||
+               strpos($title, $query) !== false;
     });
 }
 

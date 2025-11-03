@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
             const toVal = $activePane.find('.rsl-price-to').val();
             const $searchBtn = $modal.find('.rsl-apply-filter');
 
-            const hasValue = (fromVal && fromVal !== '') || (toVal && toVal !== '');
+            const hasValue = (fromVal && fromVal !== '') && (toVal && toVal !== '');
             const isValid = $form.valid();
 
             $searchBtn.prop('disabled', !hasValue || !isValid).toggleClass('disabled', !hasValue || !isValid);
@@ -283,7 +283,7 @@ jQuery(document).ready(function($) {
             const toVal = $activePane.find('.rsl-year-to').val();
             const $searchBtn = $modal.find('.rsl-apply-filter');
 
-            const hasValue = (fromVal && fromVal !== '') || (toVal && toVal !== '');
+            const hasValue = (fromVal && fromVal !== '') && (toVal && toVal !== '');
             const isValid = $form.valid();
 
             $searchBtn.prop('disabled', !hasValue || !isValid).toggleClass('disabled', !hasValue || !isValid);
@@ -393,7 +393,7 @@ jQuery(document).ready(function($) {
             const toVal = $activePane.find('.rsl-hours-to').val();
             const $searchBtn = $modal.find('.rsl-apply-filter');
 
-            const hasValue = (fromVal && fromVal !== '') || (toVal && toVal !== '');
+            const hasValue = (fromVal && fromVal !== '') && (toVal && toVal !== '');
             const isValid = $form.valid();
 
             $searchBtn.prop('disabled', !hasValue || !isValid).toggleClass('disabled', !hasValue || !isValid);

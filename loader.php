@@ -41,3 +41,26 @@ add_action( 'plugins_loaded', function() {
     }
 
 });
+
+// Add rewrite rules
+function rsl_add_rewrite_rules() {
+    // Get the page ID or slug where your listing is displayed
+    // Adjust 'for-sale' to match your actual page slug
+    $page_slug = get_post_field('post_name', get_the_ID()); // or get dynamically: get_post_field('post_name', $page_id);
+    
+    // Match: /for-sale/anything/
+    // This will catch all URLs like /for-sale/SUV/, /for-sale/SUV/Toyota/, etc.
+    add_rewrite_rule(
+        '^' . $page_slug . '/(.+?)/?$',
+        'index.php?pagename=' . $page_slug . '&rsl_filter_path=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'rsl_add_rewrite_rules');
+
+// Register the query var
+function rsl_query_vars($vars) {
+    $vars[] = 'rsl_filter_path';
+    return $vars;
+}
+add_filter('query_vars', 'rsl_query_vars');
