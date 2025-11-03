@@ -48,11 +48,12 @@ jQuery(document).ready(function($) {
             if (arr.length === 1) {
                 pathParts.push(encodeURIComponent(String(arr[0])));
             } else if (arr.length > 1) {
-                arr.forEach(v => {
-                    if (v !== undefined && v !== null && String(v).trim() !== '') {
-                        queryParts.push(`${encodeURIComponent(paramName)}=${encodeURIComponent(String(v))}`);
-                    }
-                });
+                // multiple → "type=type1&type2&type3"
+                let paramStr = encodeURIComponent(paramName) + '=' + encodeURIComponent(arr[0]);
+                for (let i = 1; i < arr.length; i++) {
+                    paramStr += '&' + encodeURIComponent(arr[i]);
+                }
+                queryParts.push(paramStr);
             }
         }
 
@@ -93,7 +94,7 @@ jQuery(document).ready(function($) {
         });
 
         // 6) pagination
-        if (page && Number(page) > 1) queryParts.push(`page=${Number(page)}`);
+        if (page && Number(page) > 1) queryParts.push(`pg=${Number(page)}`);
 
         // 7) build final URL
         const cleanBase = basePath.replace(/\/+$/, '');
@@ -257,7 +258,7 @@ jQuery(document).ready(function($) {
         if (params.has('sort')) filters.sort = params.get('sort');
 
         // Pagination
-        const page = params.has('page') ? (parseInt(params.get('page'), 10) || 1) : 1;        
+        const page = params.has('pg') ? (parseInt(params.get('pg'), 10) || 1) : 1;        
 
         // Final cleanup: remove empty arrays
         ['type', 'make', 'model', 'categories'].forEach(k => {
@@ -476,12 +477,19 @@ jQuery(document).ready(function($) {
         if (filters.year_from !== undefined) $('.rsl-year-from').val(filters.year_from || '');
         if (filters.year_to !== undefined) $('.rsl-year-to').val(filters.year_to || '');
         if (filters.hours_from !== undefined) $('.rsl-hours-from').val(filters.hours_from || '');
-        if (filters.hours_to !== undefined) $('.rsl-hours-to').val(filters.hours_to || '');
-        
+        if (filters.hours_to !== undefined) $('.rsl-hours-to').val(filters.hours_to || '');        
+
         if (filters.sort !== undefined) {
             $('.stock-sorting-cls').removeClass('active');
-            $('.stock-sorting-cls[data-val="' + filters.sort + '"]').addClass('active');
+            const $activeSort = $('.stock-sorting-cls[data-val="' + filters.sort + '"]');
+            $activeSort.addClass('active');
+
+            // Update dropdown button text to match active sort
+            if ($activeSort.length) {
+                $('.gfam-sort-btn').text($activeSort.text().trim());
+            }
         }
+
         if (filters.keyword !== undefined) {
             $('.main-listing-search').val(filters.keyword);
         }
