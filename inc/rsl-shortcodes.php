@@ -419,7 +419,7 @@ function rsl_build_make_model_modal_html( $filters ) {
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
                         <div class="form-check form-check-inline gap-3">
-                          <input class="form-check-input rsl-filter-parent" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $make_checkbox_id ); ?>" value="<?php echo esc_attr( $make ); ?>" />
+                          <input class="form-check-input rsl-filter-parent make-listing" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $make_checkbox_id ); ?>" value="<?php echo esc_attr( $make ); ?>" />
                           <label class="form-check-label" for="<?php echo esc_attr( $make_checkbox_id ); ?>">
                             <?php echo esc_html( $make ); ?> (<?php echo $make_count; ?>)
                           </label>
@@ -481,7 +481,7 @@ function rsl_build_make_model_modal_html( $filters ) {
                             <h2 class="accordion-header">
                               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
                                 <div class="form-check form-check-inline gap-3">
-                                  <input class="form-check-input rsl-filter-sub" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $model_id ); ?>" value="<?php echo esc_attr( $model ); ?>" data-parent="<?php echo esc_attr( $make ); ?>" />
+                                  <input class="form-check-input rsl-filter-sub model-listing" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $model_id ); ?>" value="<?php echo esc_attr( $model ); ?>" data-parent="<?php echo esc_attr( $make ); ?>" />
                                   <label class="form-check-label" for="<?php echo esc_attr( $model_id ); ?>">
                                     <?php echo esc_html( $model ); ?> (<?php echo intval( $count ); ?>)
                                   </label>
