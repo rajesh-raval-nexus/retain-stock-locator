@@ -12,11 +12,6 @@ $vehicle_seach = RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
 foreach ($allListingsData as $listing) {
 
   if ($listing['stock_number'] === $stock_number) { ?>
-      <?php 
-        // echo "<pre>";
-        // print_r($listing);
-        // echo "</pre>";
-      ?>
       <!-- Header -->
       <div class="gfam-detail-header">
         <div class="container">
@@ -115,18 +110,18 @@ foreach ($allListingsData as $listing) {
                               <?php endforeach; ?>
                           </div>
                           <button class="gfam-detail-gallery-btn" id="openGallery">
-                          <svg width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.588867" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
-<rect x="9.62305" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
-<rect x="18.6587" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
-<rect x="0.588867" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
-<rect x="9.62305" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
-<rect x="18.6587" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
-<rect x="0.588867" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
-<rect x="9.62305" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
-<rect x="18.6587" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
-</svg>
- <?php esc_html_e( 'view gallery', 'retain-stock-locator' ); ?>
+                            <svg width="25" height="23" viewBox="0 0 25 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="0.588867" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="9.62305" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="18.6587" y="0.908203" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="0.588867" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="9.62305" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="18.6587" y="16.0059" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="0.588867" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="9.62305" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
+                              <rect x="18.6587" y="8.45801" width="6.25474" height="6.25474" fill="black"/>
+                              </svg>
+                              <?php esc_html_e( 'view gallery', 'retain-stock-locator' ); ?>
                           </button>
                       </div>
 
@@ -277,7 +272,7 @@ foreach ($allListingsData as $listing) {
                     </h2>
 
                     <div class="gfam-detail-comments-content">
-                      <p><?php echo esc_html( $listing['description'] ); ?></p>
+                      <p><?php echo esc_html( wp_strip_all_tags( $listing['description'] ) ); ?></p>
                     </div>
                   </div>
                 </div>
@@ -489,26 +484,26 @@ foreach ($allListingsData as $listing) {
                 <!-- Price Section -->
                 <div class="gfam-detail-price-section">
                   <?php if (! empty($listing['price'])) { ?>
-                    <div class="gfam-detail-price-label mb-0 d-none d-xl-block">Price</div>
+                    <div class="gfam-detail-price-label mb-0 d-none d-xl-block"><?php esc_html_e('Price', 'retain-stock-locator'); ?></div>
                     <div class="gfam-detail-price d-none d-xl-block"><?php echo '$' . $listing['price']; ?></div>
                   <?php } ?>
 
-                  <div class="gfam-detail-price-estimate d-none d-xl-inline-block">Est. $556/week*</div>
+                  <div class="gfam-detail-price-estimate d-none d-xl-inline-block"><?php esc_html_e('Est. $556/week*', 'retain-stock-locator'); ?> </div>
 
-                  <button class="gfam-detail-contact-btn d-none d-xl-block">Contact Us</button>
+                  <button class="gfam-detail-contact-btn d-none d-xl-block"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?> </button>
 
                   <div class="accordion gfam-detail-form-accordion d-none d-xl-block" id="gfam-detailAccordion">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="gfam-detailHeading">
                         <button class="accordion-button collapsed gfam-detail-toggle-btn gfam-detail-callback-btn"
                           type="button" data-bs-toggle="collapse" data-bs-target="#gfam-detailCollapse">
-                          Request a Call Back
+                          <?php esc_html_e('Request a Call Back', 'retain-stock-locator'); ?>
                         </button>
                       </h2>
                       <div id="gfam-detailCollapse" class="accordion-collapse collapse"
                         data-bs-parent="#gfam-detailAccordion">
                         <div class="accordion-body gfam-detail-form-box">
-                          <h5 class="gfam-detail-title">REQUEST A <br> CALL BACK</h5>
+                          <h5 class="gfam-detail-title"><?php esc_html_e('REQUEST A CALL BACK', 'retain-stock-locator'); ?></h5>
 
                           <form id="gfam-form">
                             <div class="row">
@@ -531,11 +526,11 @@ foreach ($allListingsData as $listing) {
 
                             <div class="col-12 my-2 form-check d-flex align-items-center gap-2 bg-white p-2 rounded">
                               <input class="form-check-input ms-0" type="checkbox" name="trade_in" value="Yes" id="gfam-detail-trade">
-                              <label class="form-check-label" for="gfam-detail-trade">I have trade in</label>
+                              <label class="form-check-label" for="gfam-detail-trade"><?php esc_html_e('I have trade in', 'retain-stock-locator'); ?></label>
                             </div>
 
                             <div class="col-12 mt-3">
-                              <button type="submit" class="btn gfam-detail-submit w-100">LET’S CHAT</button>
+                              <button type="submit" class="btn gfam-detail-submit w-100"><?php esc_html_e('LET’S CHAT', 'retain-stock-locator'); ?></button>
                             </div>
                           </form>
 
@@ -549,7 +544,7 @@ foreach ($allListingsData as $listing) {
 
                 <!-- Easy Steps Section -->
                 <div class="gfam-detail-steps-section d-none d-xl-block">
-                  <h3 class="gfam-detail-steps-title">Easy Steps to<br>Own Your Vehicle</h3>
+                  <h3 class="gfam-detail-steps-title"><?php esc_html_e('Easy Steps to Own Your Vehicle', 'retain-stock-locator'); ?></h3>
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
@@ -581,10 +576,10 @@ foreach ($allListingsData as $listing) {
                       </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
-                      <h4>Video Walkaround</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                      <h4><?php esc_html_e('Video Walkaround', 'retain-stock-locator'); ?> </h4>
+                      <p><?php esc_html_e('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'retain-stock-locator'); ?></p>
                       <a href="#" class="gfam-detail-step-link" data-bs-toggle="modal"
-                        data-bs-target="#gfamDetailModal">Send Message >></a>
+                        data-bs-target="#gfamDetailModal"><?php esc_html_e('Send Message >>', 'retain-stock-locator'); ?></a>
                     </div>
                   </div>
 
@@ -618,10 +613,10 @@ foreach ($allListingsData as $listing) {
                       </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
-                      <h4>Test Drive</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                      <h4><?php esc_html_e('Test Drive', 'retain-stock-locator'); ?></h4>
+                      <p><?php esc_html_e('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'retain-stock-locator'); ?></p>
                       <a href="#" class="gfam-detail-step-link" data-bs-toggle="modal"
-                        data-bs-target="#gfamtestdriverModal">Send Message >></a>
+                        data-bs-target="#gfamtestdriverModal"><?php esc_html_e('Send Message >>', 'retain-stock-locator'); ?></a>
                     </div>
                   </div>
                 </div>
@@ -637,7 +632,7 @@ foreach ($allListingsData as $listing) {
         <div class="modal-dialog modal-md modal-dialog-centered">
           <div class="modal-content">
             <div class="gfam-detail-modal-header">
-              <h5 class="gfam-detail-modal-title" id="gfamDetailModalLabel">Request a Video Walkthrough</h5>
+              <h5 class="gfam-detail-modal-title" id="gfamDetailModalLabel"><?php esc_html_e('Request a Video Walkthrough', 'retain-stock-locator'); ?></h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
@@ -683,7 +678,7 @@ foreach ($allListingsData as $listing) {
                 <div class="gfam-detail-form-group">
                   <div class="gfam-detail-dropdown-modal">
                     <button type="button" class="gfam-detail-dropdown-toggle" id="reqVideoDropdown">
-                      <span class="gfam-detail-dropdown-text">Make</span>
+                      <span class="gfam-detail-dropdown-text"><?php esc_html_e('Make', 'retain-stock-locator'); ?></span>
                       <svg class=" gfam-detail-dropdown-arrow" width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878"></path>
                               </svg>
@@ -701,7 +696,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <button type="submit" class="gfam-detail-request-btn">Request a Video</button>
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Request a Video', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
               <div id="reqVideoFrmResponse" style="margin-top:10px;"></div>
@@ -780,7 +775,7 @@ foreach ($allListingsData as $listing) {
 
                 <div class="row">
                   <div class="col-12">
-                    <label class="gfam-detail-label">Preferred Date</label>
+                    <label class="gfam-detail-label"><?php esc_html_e('Preferred Date', 'retain-stock-locator'); ?></label>
                   </div>
                   <div class="col-md-6">
                     <div class="gfam-detail-form-group">
@@ -795,7 +790,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <button type="submit" class="gfam-detail-request-btn">Request a Video</button>
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Request a Video', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
 
@@ -812,7 +807,7 @@ foreach ($allListingsData as $listing) {
         <div class="modal-dialog modal-md modal-dialog-centered">
           <div class="modal-content">
             <div class="gfam-detail-modal-header">
-              <h5 class="gfam-detail-modal-title" id="askQuestionModalLabel">Request a Ask a Question</h5>
+              <h5 class="gfam-detail-modal-title" id="askQuestionModalLabel"><?php esc_html_e('Request a Ask a Question', 'retain-stock-locator'); ?></h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fas fa-times"></i>
               </button>
@@ -856,7 +851,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <button type="submit" class="gfam-detail-request-btn">Send a Request</button>
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Send a Request', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
               <div id="askQuestionResponse" style="margin-top:10px;"></div>
