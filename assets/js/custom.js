@@ -95,6 +95,22 @@ jQuery(document).ready(function ($) {
       }
     });
   }
+
+  $('.gfam-detail-comments-content').each(function(){
+    let content = $(this).find('.readmore-text');
+    let button = $(this).find('.readmore-toggle');
+    let fullHeight = content.prop('scrollHeight');
+    let collapsed = true;
+
+    if(fullHeight <= 80){ button.hide(); return; }
+
+    button.on('click', function(e){
+      e.preventDefault();
+      content.animate({ maxHeight: collapsed ? fullHeight : 80 }, 400);
+      $(this).text(collapsed ? 'Show less' : 'Show more');
+      collapsed = !collapsed;
+    });
+  });
 });
 
 function reinitSeeMoreLess(){

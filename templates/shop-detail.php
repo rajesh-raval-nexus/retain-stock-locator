@@ -277,7 +277,8 @@ foreach ($allListingsData as $listing) {
                     </h2>
 
                     <div class="gfam-detail-comments-content">
-                      <p><?php echo esc_html( $listing['description'] ); ?></p>
+                      <p class="readmore-text"><?php echo esc_html( $listing['description'] ); ?></p>
+                      <a href="javascript:void(0);" class="readmore-toggle">Show more</a>
                     </div>
                   </div>
                 </div>
