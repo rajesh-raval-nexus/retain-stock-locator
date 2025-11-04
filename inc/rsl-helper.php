@@ -342,3 +342,12 @@ function rsl_build_product_name( $item ) {
     // Join with single spaces
     return implode(' ', $parts);
 }
+
+if ( ! function_exists( 'enable_svg_uploads' ) ) {
+    function enable_svg_uploads( $mimes ) {
+        // Add SVG mime type
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
+    }
+    add_filter( 'upload_mimes', 'enable_svg_uploads' );
+}
