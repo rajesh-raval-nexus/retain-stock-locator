@@ -358,7 +358,7 @@ function rsl_build_category_modal_html( $filters ) {
               <div class="col-6 px-1">
                 <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="category"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
-              <div class="col-6 text-end px-1">
+              <div class="col-6 text-end px-1 search-btn-div">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-search="category-filter-search" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
               </div>
             </div>

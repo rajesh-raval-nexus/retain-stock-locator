@@ -323,3 +323,41 @@ function rsl_assets_is_script_loaded_by_src( $needle ) {
     }
     return false;
 }
+
+// Dynamic colors function
+function theme_global_color_head() {
+    // Define your color variables
+    $red_badge_bg_color          = '#92191C'; 
+    $red_badge_txt_color         = '#ffffff';
+    $darkgrey_badge_bg_color     = '#272727';
+    $yellow_btn_bg_color         = '#fdbd3d';
+    $yellow_btn_hover_bg_color   = '#92191C';
+    $yellow_btn_txt_color        = '#272727';
+    $yellow_btn_txt_hover_color  = '#ffffff';
+    $grey_box_bg_color           = '#f8f8f8';
+    $lightgrey_box_bg_color      = '#f5f5f5';
+
+    echo "
+    <style id='theme-global-colors'>
+        :root {
+            --red_badge_bg_color: {$red_badge_bg_color};
+            --red_badge_txt_color: {$red_badge_txt_color};
+            --darkgrey_badge_bg_color: {$darkgrey_badge_bg_color};
+            --yellow_btn_bg_color: {$yellow_btn_bg_color};
+            --yellow_btn_hover_bg_color: {$yellow_btn_hover_bg_color};
+            --yellow_btn_txt_color: {$yellow_btn_txt_color};
+            --yellow_btn_txt_hover_color: {$yellow_btn_txt_hover_color};
+            --grey_box_bg_color: {$grey_box_bg_color};
+            --lightgrey_box_bg_color: {$lightgrey_box_bg_color};
+        }
+    </style>
+    ";
+}
+add_action('wp_head', 'theme_global_color_head');
+
+// Code for the add Stock locator class in body
+function rsl_plugin_body_class($classes){
+    $classes[] = 'rsl-stock-locator';
+    return $classes;
+}
+add_filter('body_class', 'rsl_plugin_body_class');
