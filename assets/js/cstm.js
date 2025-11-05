@@ -32,6 +32,9 @@ jQuery(document).ready(function($) {
     var value = $(this).data('value');
     var text = $(this).text();
 
+    $('#askQuestionModalLabel').text(text);
+    $('.ask_question_fm_val').val(text);
+
     var $select = $(this).closest('.custom-select');
     $select.find('.selected').text(text).addClass('selected-d-block'); // add class on selection
 
@@ -246,6 +249,62 @@ jQuery(document).ready(function($) {
   });
 
 
+  // Contact US FORM
+  $("#contactUsModalForm").validate({
+    rules: {
+      first_name: { required: true, minlength: 2 },
+      last_name: { required: true, minlength: 2 },
+      phone: { required: true, digits: true, minlength: 8, maxlength: 15 },
+      email: { required: true, email: true }
+    },
+    messages: {
+      first_name: "Please enter your first name",
+      last_name: "Please enter your last name",
+      phone: {
+        required: "Please enter your phone number",
+        digits: "Please enter only numbers"
+      },
+      email: "Please enter a valid email address"
+    },
+    errorElement: "div",
+    errorPlacement: function(error, element) {
+      error.addClass("text-danger mt-1 small");
+      if (element.attr("type") === "checkbox") {
+        error.insertAfter(element.closest(".form-check"));
+      } else if (element.attr("name") === "make") {
+        error.insertAfter("#gfamMakeDropdown"); // show below dropdown button
+      } else {
+        error.insertAfter(element);
+      }
+    },
+
+    submitHandler: function(form) {
+      var formData = $(form).serialize();
+      $('#contactUsModalResponse').html('<p>Submitting...</p>');
+
+      $.ajax({
+        url: gfam_ajax_obj.ajax_url,
+        type: 'POST',
+        data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce,
+        success: function(response) {
+          if (response.success) {
+            $('#contactUsModalResponse').html('<p style="color:green;">' + response.data + '</p>');
+            form.reset();
+            $('#reqVideoDropdown .gfam-detail-dropdown-text').text('Make'); // reset dropdown
+          } else {
+            $('#contactUsModalResponse').html('<p style="color:red;">' + response.data + '</p>');
+          }
+        },
+        error: function() {
+          $('#contactUsModalResponse').html('<p style="color:red;">Error! Please try again.</p>');
+        }
+      });
+
+      return false;
+    }
+  });
+
+
 
   //Request a Test Drive form js
    // Dropdown logic
@@ -298,13 +357,6 @@ jQuery(document).ready(function($) {
       errorElement: "div",
       errorPlacement: function(error, element) {
         error.addClass("text-danger mt-1 small");
-        if (element.attr("type") === "checkbox") {
-          error.insertAfter(element.closest(".form-check"));
-        } else if (element.attr("name") === "make") {
-          error.insertAfter("#gfamMakeDropdown"); // show below dropdown button
-        } else {
-          error.insertAfter(element);
-        }
       },
       submitHandler: function(form) {
         var formData = $(form).serialize();
@@ -313,7 +365,7 @@ jQuery(document).ready(function($) {
         $.ajax({
           url: gfam_ajax_obj.ajax_url,
           type: 'POST',
-          data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce,
+          data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce,
           success: function(response) {
             if (response.success) {
               $('#gfamDetailResponse').html('<p style="color:green;">' + response.data + '</p>');

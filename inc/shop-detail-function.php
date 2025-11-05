@@ -47,7 +47,7 @@ function handle_request_call_back_submit() {
     // -----------------------------
     $logo_url = get_field('email_logo', 'option');
     if (empty($logo_url)) {
-        $logo_url = get_site_url() . '/wp-content/uploads/default-logo.png';
+        $logo_url = RSL_PLUGIN_URL . 'assets/images/default-logo.png';
     }
 
     $replacements = [
@@ -148,7 +148,7 @@ function handle_request_video_submit() {
     // -----------------------------
     $logo_url = get_field('email_logo', 'option');
     if (empty($logo_url)) {
-        $logo_url = get_site_url() . '/wp-content/uploads/default-logo.png';
+        $logo_url = RSL_PLUGIN_URL . 'assets/images/default-logo.png';
     }
 
     $replacements = [
@@ -219,7 +219,8 @@ function handle_ask_question_form_submit() {
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
-    $question   = sanitize_textarea_field($_POST['question'] ?? '');
+    $question   = sanitize_textarea_field($_POST['ask_question_fm_val'] ?? '');
+    $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
 
     if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($post_code)) {
         wp_send_json_error('Please fill all required fields.');
@@ -249,7 +250,7 @@ function handle_ask_question_form_submit() {
     // -----------------------------
     $logo_url = get_field('email_logo', 'option');
     if (empty($logo_url)) {
-        $logo_url = get_site_url() . '/wp-content/uploads/default-logo.png';
+        $logo_url = RSL_PLUGIN_URL . 'assets/images/default-logo.png';
     }
 
     $replacements = [
@@ -259,6 +260,7 @@ function handle_ask_question_form_submit() {
         '{phone}'      => esc_html($phone),
         '{post_code}'  => esc_html($post_code),
         '{question}'   => nl2br(esc_html($question)),
+        '{comments}'   => nl2br(esc_html($comments)),
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
@@ -327,7 +329,7 @@ function handle_test_drive_request_submit() {
 
     $logo_url = get_field('email_logo', 'option');
     if (empty($logo_url)) {
-        $logo_url = get_site_url() . '/wp-content/uploads/default-logo.png';
+        $logo_url = RSL_PLUGIN_URL . 'assets/images/default-logo.png';
     }
 
     // ==============================
@@ -381,6 +383,96 @@ function handle_test_drive_request_submit() {
     wp_die();
 }
 
+// popup contact us 
+add_action('wp_ajax_contact_us_request_submit', 'handle_contact_us_request_submit');
+add_action('wp_ajax_nopriv_contact_us_request_submit', 'handle_contact_us_request_submit');
+
+function handle_contact_us_request_submit() {
+    check_ajax_referer('gfam_form_nonce', 'security');
+
+    // -----------------------------
+    // Sanitize and validate fields
+    // -----------------------------
+    $first_name = sanitize_text_field($_POST['first_name'] ?? '');
+    $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
+    $email      = sanitize_email($_POST['email'] ?? '');
+    $phone      = sanitize_text_field($_POST['phone'] ?? '');
+    $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+    
+    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
+        wp_send_json_error('Please fill all required fields.');
+    }
+
+    // -----------------------------
+    // Get ACF Email Templates
+    // -----------------------------
+    $template_data = get_field('ask_question_email_template', 'option');
+
+    $admin_subject = $template_data['ask_question_subject_name'] ?? 'Contact Submission';
+    $admin_content = $template_data['ask_question_email_content'] ?? '';
+
+    $user_subject  = $template_data['ask_question_subject_name_for_user'] ?? 'Thank you for your Submit';
+    $user_content  = $template_data['ask_question_email_content_for_user'] ?? '';
+
+    if (empty($admin_content)) {
+        $admin_content = '<p>No admin email template found in backend.</p>';
+    }
+
+    if (empty($user_content)) {
+        $user_content = '<p>No user email template found in backend.</p>';
+    }
+
+    // -----------------------------
+    // Prepare placeholders
+    // -----------------------------
+    $logo_url = get_field('email_logo', 'option');
+    if (empty($logo_url)) {
+        $logo_url = RSL_PLUGIN_URL . 'assets/images/default-logo.png';
+    }
+
+    $replacements = [
+        '{first_name}' => esc_html($first_name),
+        '{last_name}'  => esc_html($last_name),
+        '{email}'      => esc_html($email),
+        '{phone}'      => esc_html($phone),
+        '{comments}'   => nl2br(esc_html($comments)),
+        '{logo_url}'   => esc_url($logo_url),
+        '{site_name}'  => esc_html(get_bloginfo('name')),
+        
+    ];
+
+    // -----------------------------
+    // Replace placeholders
+    // -----------------------------
+    $admin_message = strtr($admin_content, $replacements);
+    $user_message  = strtr($user_content, $replacements);
+
+    $headers = ['Content-Type: text/html; charset=UTF-8'];
+    $to_admin = get_option('admin_email');
+
+    // -----------------------------
+    // Send emails
+    // -----------------------------
+    $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
+
+    if (!empty($email)) {
+        $user_sent = wp_mail($email, $user_subject, $user_message, $headers);
+        if (!$user_sent) {
+            error_log('User email failed to send to: ' . $email);
+        }
+    }
+
+    // -----------------------------
+    // Final response
+    // -----------------------------
+    if ($admin_sent) {
+        wp_send_json_success('Thank you! Your Contact has been sent successfully.');
+    } else {
+        wp_send_json_error('Failed to send email. Please try again.');
+    }
+
+    wp_die();
+}
 
 
 ?>

@@ -1246,7 +1246,7 @@ textarea:focus {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
-  margin: 17px 0;
+  /* margin: 17px 0; */
 }
 
 .rsl-stock-locator .gfam-detail-price-estimate {
@@ -2754,4 +2754,15 @@ ease;
   left: 50%;
   text-align: center;
   transform: translate(-50%, -50%);
+}
+
+.gfam-detail-button:disabled,
+.gfam-detail-button[disabled] {
+  opacity: 0.6; 
+  cursor: not-allowed; 
+  pointer-events: none;   
+  background-color: #ccc; 
+  color: #666;      
+  border-color: #ccc;  
+  box-shadow: none;  
 }

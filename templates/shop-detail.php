@@ -57,7 +57,6 @@ foreach ($allListingsData as $listing) {
               <div class="gfam-detail-price-label mb-0"><?php esc_html_e('Price', 'retain-stock-locator'); ?></div>
               <div class="gfam-detail-price"><?php echo '$' . esc_html( $listing['price'] ); ?></div>
             <?php } ?>
-            <div class="gfam-detail-price-estimate">Est. $556/week*</div>
           </div>
         </div>
       </div>
@@ -209,7 +208,7 @@ foreach ($allListingsData as $listing) {
                             <h5><?php echo __( 'Year', 'retain-stock-locator' ); ?></h5>
                             <p><?php if($listing['year']){
                               echo esc_html( $listing['year'] );
-                            }else{ echo " - "; }  ?></p>
+                            }else{ echo " N/A "; }  ?></p>
                           </div>
                         </div>
                       </div>
@@ -234,9 +233,11 @@ foreach ($allListingsData as $listing) {
                           </div>
                           <div class="gfam-detail-feature-content">
                             <h5><?php esc_html_e('Odometer', 'retain-stock-locator'); ?></h5>
-                            <?php if (! empty($listing['hours'])) : ?>
+                            <?php if (! empty($listing['hours'])) { ?>
                               <p><?php echo number_format($listing['hours'], 0, '.', ','); ?> Kms</p>
-                            <?php endif; ?>
+                            <?php }else{
+                              echo "<p>N/A</p>";
+                            } ?>
                           </div>
                         </div>
                       </div>
@@ -273,8 +274,9 @@ foreach ($allListingsData as $listing) {
 
                     <div class="gfam-detail-comments-content">
                       <p class="readmore-text"><?php echo wp_kses_post( $listing['description'] ); ?></p>
-                      <a href="javascript:void(0);" class="readmore-toggle">Show more</a>
+                      <a href="javascript:void(0);" class="toggle-btn d-block mt-3">Show more</a>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -416,7 +418,9 @@ foreach ($allListingsData as $listing) {
               <div class="row mt-lg-5 mt-4">
                 <div class="col-12">
                   <div class="gfam-detail-similiar-product">
-                    <h2 class="gfam-detail-section-title text-center"><?php esc_html_e('Similar Listings', 'retain-stock-locator'); ?> <span><?php esc_html_e('You Might Like', 'retain-stock-locator'); ?></span></h2>
+                    <?php if (!empty($matchingListings)) : ?>
+                        <h2 class="gfam-detail-section-title text-center"><?php esc_html_e('Similar Listings', 'retain-stock-locator'); ?> <span><?php esc_html_e('You Might Like', 'retain-stock-locator'); ?></span></h2>
+                    <?php endif; ?>
                     <!-- Product Grid -->
                     <div class="gfam-product-grid owl-carousel owl-theme">
                       <?php foreach ($matchingListings as $listingItem) : 
@@ -489,10 +493,8 @@ foreach ($allListingsData as $listing) {
                     <div class="gfam-detail-price d-none d-xl-block"><?php echo '$' . $listing['price']; ?></div>
                   <?php } ?>
 
-                  <div class="gfam-detail-price-estimate d-none d-xl-inline-block"><?php esc_html_e('Est. $556/week*', 'retain-stock-locator'); ?> </div>
-
-                  <button class="gfam-detail-contact-btn d-none d-xl-block"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?> </button>
-
+                  <button class="gfam-detail-contact-btn d-none d-xl-block" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?> </button>
+                  
                   <div class="accordion gfam-detail-form-accordion d-none d-xl-block" id="gfam-detailAccordion">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="gfam-detailHeading">
@@ -550,31 +552,6 @@ foreach ($allListingsData as $listing) {
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
                       <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
-                      <!-- <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_1520_9890)">
-                          <g clip-path="url(#clip1_1520_9890)">
-                            <path
-                              d="M23.9274 4.86792C20.2261 4.86792 16.8713 7.04562 15.3645 10.4262L9.26742 24.1054C5.61234 24.3566 2.72461 27.3991 2.72461 31.1179V36.5086C2.72461 39.7446 5.34797 42.3679 8.58398 42.3679H10.19C10.1987 41.917 10.2102 41.4662 10.2246 41.0153C9.84316 40.2378 9.62813 39.3638 9.62813 38.4393L9.52148 34.282C9.52148 31.2075 10.147 30.0242 12.4292 29.5645C13.514 29.3459 14.4222 28.6068 14.8667 27.5934L22.3957 10.4262C23.9024 7.04562 27.2573 4.86792 30.9586 4.86792H23.9274Z"
-                              fill="#EEF1FB" />
-                            <path
-                              d="M8.58398 42.3679C5.34797 42.3679 2.72461 39.7446 2.72461 36.5086V31.1179C2.72461 27.3991 5.61234 24.3566 9.26742 24.1054L15.3645 10.4262C16.8712 7.04562 20.226 4.86792 23.9274 4.86792H34.6026C38.125 4.86792 41.3501 6.8423 42.952 9.97941L45.9668 15.8836M58.0371 31.1179C58.0371 27.2347 54.8891 24.0867 51.0059 24.0867H19.0137M28.6231 15.8836V4.98511M32.8418 42.3679H27.5682M21.1229 37.6804C18.5341 37.6804 16.4354 39.7791 16.4354 42.3679C16.4354 44.9567 18.5341 47.0554 21.1229 47.0554C23.7116 47.0554 25.8104 44.9567 25.8104 42.3679C25.8104 39.7791 23.7118 37.6804 21.1229 37.6804Z"
-                              stroke="#0E0E0E" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M58.037 42.0164C58.037 46.5145 54.3906 50.2195 49.8925 50.2195C45.3944 50.2195 41.748 46.5731 41.748 42.075C41.748 37.5768 45.453 33.9304 49.9511 33.9304M43.916 48.5203L36.4746 55.9617"
-                              stroke="#999999" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"
-                              stroke-linejoin="round" />
-                          </g>
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_1520_9890">
-                            <rect width="58.2301" height="58.2301" fill="white" transform="translate(0.380859 0.414795)" />
-                          </clipPath>
-                          <clipPath id="clip1_1520_9890">
-                            <rect width="60" height="60" fill="white" transform="translate(0.380859 0.414795)" />
-                          </clipPath>
-                        </defs>
-                      </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4><?php esc_html_e('Video Walkaround', 'retain-stock-locator'); ?> </h4>
@@ -587,31 +564,6 @@ foreach ($allListingsData as $listing) {
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
                       <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
-                      <!-- <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_1520_9890)">
-                          <g clip-path="url(#clip1_1520_9890)">
-                            <path
-                              d="M23.9274 4.86792C20.2261 4.86792 16.8713 7.04562 15.3645 10.4262L9.26742 24.1054C5.61234 24.3566 2.72461 27.3991 2.72461 31.1179V36.5086C2.72461 39.7446 5.34797 42.3679 8.58398 42.3679H10.19C10.1987 41.917 10.2102 41.4662 10.2246 41.0153C9.84316 40.2378 9.62813 39.3638 9.62813 38.4393L9.52148 34.282C9.52148 31.2075 10.147 30.0242 12.4292 29.5645C13.514 29.3459 14.4222 28.6068 14.8667 27.5934L22.3957 10.4262C23.9024 7.04562 27.2573 4.86792 30.9586 4.86792H23.9274Z"
-                              fill="#EEF1FB" />
-                            <path
-                              d="M8.58398 42.3679C5.34797 42.3679 2.72461 39.7446 2.72461 36.5086V31.1179C2.72461 27.3991 5.61234 24.3566 9.26742 24.1054L15.3645 10.4262C16.8712 7.04562 20.226 4.86792 23.9274 4.86792H34.6026C38.125 4.86792 41.3501 6.8423 42.952 9.97941L45.9668 15.8836M58.0371 31.1179C58.0371 27.2347 54.8891 24.0867 51.0059 24.0867H19.0137M28.6231 15.8836V4.98511M32.8418 42.3679H27.5682M21.1229 37.6804C18.5341 37.6804 16.4354 39.7791 16.4354 42.3679C16.4354 44.9567 18.5341 47.0554 21.1229 47.0554C23.7116 47.0554 25.8104 44.9567 25.8104 42.3679C25.8104 39.7791 23.7118 37.6804 21.1229 37.6804Z"
-                              stroke="#0E0E0E" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M58.037 42.0164C58.037 46.5145 54.3906 50.2195 49.8925 50.2195C45.3944 50.2195 41.748 46.5731 41.748 42.075C41.748 37.5768 45.453 33.9304 49.9511 33.9304M43.916 48.5203L36.4746 55.9617"
-                              stroke="#999999" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round"
-                              stroke-linejoin="round" />
-                          </g>
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_1520_9890">
-                            <rect width="58.2301" height="58.2301" fill="white" transform="translate(0.380859 0.414795)" />
-                          </clipPath>
-                          <clipPath id="clip1_1520_9890">
-                            <rect width="60" height="60" fill="white" transform="translate(0.380859 0.414795)" />
-                          </clipPath>
-                        </defs>
-                      </svg> -->
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4><?php esc_html_e('Test Drive', 'retain-stock-locator'); ?></h4>
@@ -636,10 +588,9 @@ foreach ($allListingsData as $listing) {
               <h5 class="gfam-detail-modal-title" id="gfamDetailModalLabel"><?php esc_html_e('Request a Video Walkthrough', 'retain-stock-locator'); ?></h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
-<path d="M16.9053 17.916C16.6777 17.916 16.45 17.8334 16.2758 17.6648L0.299496 2.20786C-0.0490509 1.87064 -0.0490509 1.32695 0.299496 0.98973C0.648044 0.652512 1.20998 0.652512 1.55853 0.98973L17.5348 16.4467C17.8833 16.7839 17.8833 17.3276 17.5348 17.6648C17.3605 17.8334 17.1329 17.916 16.9053 17.916Z" fill="white"/>
-</svg>
-
+                <path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
+                <path d="M16.9053 17.916C16.6777 17.916 16.45 17.8334 16.2758 17.6648L0.299496 2.20786C-0.0490509 1.87064 -0.0490509 1.32695 0.299496 0.98973C0.648044 0.652512 1.20998 0.652512 1.55853 0.98973L17.5348 16.4467C17.8833 16.7839 17.8833 17.3276 17.5348 17.6648C17.3605 17.8334 17.1329 17.916 16.9053 17.916Z" fill="white"/>
+                </svg>
               </button>
             </div>
             <div class="modal-body gfam-detail-modal-body">
@@ -687,10 +638,6 @@ foreach ($allListingsData as $listing) {
                     </button>
                     <div class="gfam-detail-dropdown-menu" id="reqVideoDropdownMenu">
                       <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
-                      <!-- <div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="aero-full-ensuite">AERO FULL ENSUITE (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="all-terrain">ALL TERRAIN (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div> -->
                     </div>
                     <input type="text" name="make" id="gfamMakeInput" required style="visibility: hidden; position: absolute;">
                   </div>
@@ -706,6 +653,7 @@ foreach ($allListingsData as $listing) {
           </div>
         </div>
       </div>
+
       <!-- Test driver Modal -->
       <div class="modal fade gfam-detail-modal" id="gfamtestdriverModal" tabindex="-1"
         aria-labelledby="gfamtestdriverModalLabel" aria-hidden="true">
@@ -715,9 +663,9 @@ foreach ($allListingsData as $listing) {
               <h5 class="gfam-detail-modal-title" id="gfamtestdriverModalLabel">Request a Test Drive Time</h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
-<path d="M16.9053 17.916C16.6777 17.916 16.45 17.8334 16.2758 17.6648L0.299496 2.20786C-0.0490509 1.87064 -0.0490509 1.32695 0.299496 0.98973C0.648044 0.652512 1.20998 0.652512 1.55853 0.98973L17.5348 16.4467C17.8833 16.7839 17.8833 17.3276 17.5348 17.6648C17.3605 17.8334 17.1329 17.916 16.9053 17.916Z" fill="white"/>
-</svg>
+                <path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
+                <path d="M16.9053 17.916C16.6777 17.916 16.45 17.8334 16.2758 17.6648L0.299496 2.20786C-0.0490509 1.87064 -0.0490509 1.32695 0.299496 0.98973C0.648044 0.652512 1.20998 0.652512 1.55853 0.98973L17.5348 16.4467C17.8833 16.7839 17.8833 17.3276 17.5348 17.6648C17.3605 17.8334 17.1329 17.916 16.9053 17.916Z" fill="white"/>
+                </svg>
 
               </button>
             </div>
@@ -765,10 +713,6 @@ foreach ($allListingsData as $listing) {
                     </button>
                     <div class="gfam-detail-dropdown-menu" id="testDriveDropdownMenu">
                       <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
-                      <!--<div class="gfam-detail-dropdown-item" data-value="1760-r-ensuite">1760 R/ENSUITE (1)</div>
-                       <div class="gfam-detail-dropdown-item" data-value="aero-full-ensuite">AERO FULL ENSUITE (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="all-terrain">ALL TERRAIN (1)</div>
-                      <div class="gfam-detail-dropdown-item" data-value="birdsville-b7452sl">BIRDSVILLE B7452SL (1)</div> -->
                     </div>
                     <input type="text" name="make" id="testDriveMakeInput" required style="visibility: hidden; position: absolute;">
                   </div>
@@ -851,11 +795,73 @@ foreach ($allListingsData as $listing) {
                   <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
                 </div>
 
+                <input type="hidden" name="ask_question_fm_val" class="ask_question_fm_val" value="">
+
                 <div class="gfam-detail-form-group">
                   <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Send a Request', 'retain-stock-locator'); ?></button>
                 </div>
+                
+
               </form>
               <div id="askQuestionResponse" style="margin-top:10px;"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- contactUsModalForm  -->
+      <div class="modal fade gfam-detail-modal" id="contactUsfmModal" tabindex="-1" aria-labelledby="contactUsfmModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+          <div class="modal-content">
+            <div class="gfam-detail-modal-header">
+              <h5 class="gfam-detail-modal-title" id="contactUsfmModalLabel"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?></h5>
+              <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body gfam-detail-modal-body">
+
+
+              <form id="contactUsModalForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="text" class="form-control gfam-detail-form-control" name="first_name" placeholder="First Name" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="text" class="form-control gfam-detail-form-control" name="last_name" placeholder="Last Name" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="tel" class="form-control gfam-detail-form-control" name="phone" placeholder="Phone" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="gfam-detail-form-group">
+                      <input type="email" class="form-control gfam-detail-form-control" name="email" placeholder="Email Address" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 my-2">
+                  <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
+                </div>
+
+                <div class="gfam-detail-form-group">
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Submit', 'retain-stock-locator'); ?></button>
+                </div>
+                
+
+              </form>
+              <div id="contactUsModalResponse" style="margin-top:10px;"></div>
 
             </div>
           </div>
@@ -1163,4 +1169,12 @@ foreach ($allListingsData as $listing) {
 
   // document.addEventListener('DOMContentLoaded', function() {
   // });
+
+  document.querySelectorAll('.toggle-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const text = this.previousElementSibling;
+        text.classList.toggle('expanded');
+        this.textContent = text.classList.contains('expanded') ? 'Show less' : 'Show more';
+      });
+    });
 </script>

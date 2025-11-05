@@ -848,7 +848,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "New Call Back Request - GFAM",
+                    "default_value": "New Call-Back Request Received – GFAM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -890,7 +890,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank You for Your Call Back Request",
+                    "default_value": "Thank You for Your Call-Back Request – GFAM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -923,7 +923,7 @@
         {
             "key": "field_6901fd2b0a0db",
             "label": "Video Walkthrough Email Template",
-            "name": "video_walkthrough_email_template",
+            "name": "New_Video_Walkthrough_Request_-_GAFM",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -992,7 +992,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank you for your request",
+                    "default_value": "We’ve Received Your Video Walkthrough Request - GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1052,7 +1052,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "New Question Submission",
+                    "default_value": "New Customer Question About Vehicle – GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1094,7 +1094,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank you for your question",
+                    "default_value": "We’ve Received Your Question About the Vehicle - GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1225,6 +1225,108 @@
                     "delay": 0
                 }
             ]
+        },
+        {
+            "key": "field_690a096757abb",
+            "label": "Contact Us Popup Email Template",
+            "name": "contact_us_popup_email_template",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_690a096757abc",
+                    "label": "Contact Us - Subject Name",
+                    "name": "contact_us_subject_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Contact Us Submission",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690a096757abd",
+                    "label": "Contact Us - Email Content",
+                    "name": "contact_us_email_content",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "<table style=\"margin: 0; padding: 0; border-collapse: collapse; border-spacing: 0;\" width=\"100%\" bgcolor=\"#f5f5f5\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 20px;\" align=\"center\">\r\n<table style=\"max-width: 600px; width: 100%; border-radius: 8px; margin: 0 auto; border-collapse: collapse;\" bgcolor=\"#ffffff\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 30px 20px; text-align: center;\" bgcolor=\"#92191C\">\r\n<div style=\"background-color: #fff; padding: 10px; display: inline-block; border-radius: 10px;\"><img style=\"max-width: 120px; height: auto; display: block; margin: 0 auto;\" src=\"{logo_url}\" alt=\"Logo\" \/><\/div>\r\n<h1 style=\"color: #fff; margin: 15px 0 0 0; font-family: Arial, sans-serif; font-size: 24px;\">New Question Submission<\/h1>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"padding: 40px 30px; color: #333; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;\">Hi Admin,\r\n\r\nA new question has been submitted via the Ask a Question form. Here are the details:\r\n<table style=\"border-left: 4px solid #FDBD3D; border-radius: 4px; margin-top: 20px; border-collapse: collapse;\" width=\"100%\" bgcolor=\"#f9f9f9\">\r\n<tbody>\r\n<tr>\r\n<td><strong>Name:<\/strong> {first_name} {last_name}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Email:<\/strong> {email}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Phone:<\/strong> {phone}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Post Code:<\/strong> {post_code}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Question:<\/strong> {question}<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"color: #ffffff; padding: 20px; text-align: center; font-size: 12px; font-family: Arial, sans-serif;\" bgcolor=\"#333333\">© {year} {site_name}. All rights reserved.<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                },
+                {
+                    "key": "field_690a096757abe",
+                    "label": "Contact Us - Subject Name for User",
+                    "name": "contact_us_subject_name_for_user",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Thank you for your Contact",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690a096757abf",
+                    "label": "Contact Us - Email Content for User",
+                    "name": "contact_us_email_content_for_user",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "<table style=\"margin: 0; padding: 0; border-collapse: collapse; border-spacing: 0;\" width=\"100%\" bgcolor=\"#f5f5f5\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 20px;\" align=\"center\">\r\n<table style=\"max-width: 600px; width: 100%; border-radius: 8px; margin: 0 auto; border-collapse: collapse;\" bgcolor=\"#ffffff\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 30px 20px; text-align: center;\" bgcolor=\"#92191C\">\r\n<div style=\"background-color: #fff; padding: 10px; display: inline-block; border-radius: 10px;\"><img style=\"max-width: 120px; height: auto; display: block; margin: 0 auto;\" src=\"{logo_url}\" alt=\"Logo\" \/><\/div>\r\n<h1 style=\"color: #fff; margin: 15px 0 0 0; font-family: Arial, sans-serif; font-size: 24px;\">Thank You for Your Question<\/h1>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"padding: 40px 30px; color: #333; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;\">Hi {first_name},\r\n\r\nThank you for reaching out with your question. Our team has received your inquiry and will get back to you shortly.\r\n\r\nWe appreciate your interest in {site_name}. If you have any urgent questions, feel free to contact us directly.\r\n\r\nBest regards,\r\n<strong>The {site_name} Team<\/strong><\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"color: #ffffff; padding: 20px; text-align: center; font-size: 12px; font-family: Arial, sans-serif;\" bgcolor=\"#333333\">© {year} {site_name}. All rights reserved.<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                }
+            ]
         }
     ],
     "location": [
@@ -1245,5 +1347,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762264981
+    "modified": 1762268588
 }
