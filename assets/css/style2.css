@@ -2710,7 +2710,7 @@ ease;
   text-decoration: underline;
   text-align: end;
   margin-left: auto;
-  display: block;
+  /* display: block; */
   font-size: 14px;
   line-height: normal;
 }

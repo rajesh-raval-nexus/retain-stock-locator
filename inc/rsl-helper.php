@@ -450,3 +450,18 @@ function is_stock_locator_page() {
     return str_starts_with( $current_url_clean, $stock_locator_url );
 }
 
+function gfam_add_listing_detail_rewrite_rule() {
+    add_rewrite_rule(
+        '^listing-detail/([^/]+)/?',
+        'index.php?pagename=listing-detail&stock_number=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'gfam_add_listing_detail_rewrite_rule');
+
+// Register query var so WordPress recognizes it
+function gfam_add_stock_number_query_var($vars) {
+    $vars[] = 'stock_number';
+    return $vars;
+}
+add_filter('query_vars', 'gfam_add_stock_number_query_var');
