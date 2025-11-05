@@ -250,7 +250,7 @@ function rsl_assets_enqueue_frontend() {
     );
 
     // Ajax Functions JS
-    if ( ! rsl_assets_is_script_loaded_by_src( 'ajax-functions' ) ) {
+    if ( ! rsl_assets_is_script_loaded_by_src( 'ajax-functions' ) && is_stock_locator_page() ) {
         wp_enqueue_script(
             'rsl-ajax-functions',
             RSL_PLUGIN_URL . 'assets/js/ajax-functions.js',
@@ -261,6 +261,12 @@ function rsl_assets_enqueue_frontend() {
 
         $filter_data = rsl_get_filter_data_for_localization();
 
+        // Get selected Stock Locator page ID from ACF Options
+        $page_id = get_field('select_stock_locator_page', 'option');
+
+        // Fallback URL in case page isn't selected
+        $current_page_url = $page_id ? get_the_permalink($page_id) : '';
+
         // Pass admin-ajax URL + other variables to JS
         wp_localize_script(
             'rsl-ajax-functions',
@@ -270,7 +276,7 @@ function rsl_assets_enqueue_frontend() {
                     'ajax_url' => admin_url( 'admin-ajax.php' ),
                     'nonce' => wp_create_nonce( 'rsl_ajax_nonce' ),
                     'vdp_per_page' => get_field('vdp_per_page', 'option'),
-                    'current_page_url' => get_the_permalink(get_the_ID()),
+                    'current_page_url' => $current_page_url,
                 ],
                 $filter_data
             )

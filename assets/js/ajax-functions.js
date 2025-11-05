@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
      * Get the base label for breadcrumbs
      */
     function getBaseLabel() {
-        const basePath = getBasePath();
+        const basePath = getBasePath();        
         const segments = basePath.split('/').filter(s => s);
         const pageSlug = segments[segments.length - 1] || 'Home';
         
@@ -75,7 +75,9 @@ jQuery(document).ready(function($) {
         addToUrl(filters.make, 'make');
         addToUrl(filters.model, 'model');
         addToUrl(filters.categories, 'categories');
-
+        
+        console.log(filters)
+        
         // 2) if filter_type present -> add /under-2500/ or /above-50000/
         if (filters.filter_type && filters.filter_price) {
             const type = String(filters.filter_type).trim().toLowerCase();
@@ -115,169 +117,169 @@ jQuery(document).ready(function($) {
         const query = queryParts.join('&');
 
         return path + (query ? '?' + query : '');
-    }
-    
+    }    
 
     // ---------------------------
     // PARSE: reads URL -> filters object
     // ---------------------------
 
     function parseFiltersFromURL() {
-    const pathname = window.location.pathname || '';
-    const params = new URLSearchParams(window.location.search || '');
-    const search = window.location.search || '';
-    const filters = {};
+        const pathname = window.location.pathname || '';
+        const params = new URLSearchParams(window.location.search || '');
+        const search = window.location.search || '';
+        const filters = {};
 
-    const basePath = getBasePath(); // '/stock-locator'
-    const filterPath = pathname.replace(basePath, '').replace(/^\/+|\/+$/g, '');
-    const segments = filterPath.split('/').filter(s => s && s.trim().length);
+        const basePath = getBasePath(); // '/stock-locator'
+        const filterPath = pathname.replace(basePath, '').replace(/^\/+|\/+$/g, '');
+        const segments = filterPath.split('/').filter(s => s && s.trim().length);
 
-    // sets for classification (populated server side via rsl_ajax_obj)
-    const validMakes = new Set((rsl_ajax_obj.validMakes || []).map(m => String(m).toLowerCase()));
-    const validModels = new Set((rsl_ajax_obj.validModels || []).map(m => String(m).toLowerCase()));
-    const validCategories = new Set((rsl_ajax_obj.validCategories || []).map(m => String(m).toLowerCase()));
-    const validTypes = new Set((rsl_ajax_obj.validTypes || []).map(m => String(m).toLowerCase()));
+        // sets for classification (populated server side via rsl_ajax_obj)
+        const validMakes = new Set((rsl_ajax_obj.validMakes || []).map(m => String(m).toLowerCase()));
+        const validModels = new Set((rsl_ajax_obj.validModels || []).map(m => String(m).toLowerCase()));
+        const validCategories = new Set((rsl_ajax_obj.validCategories || []).map(m => String(m).toLowerCase()));
+        const validTypes = new Set((rsl_ajax_obj.validTypes || []).map(m => String(m).toLowerCase()));
 
-    filters.type = [];
-    filters.make = [];
-    filters.model = [];
-    filters.categories = [];
+        filters.type = [];
+        filters.make = [];
+        filters.model = [];
+        filters.categories = [];
 
-    let hasPricePath = false;
+        let hasPricePath = false;
 
-    // parse path segments
-    for (const seg of segments) {
-        const decodedRaw = decodeSegment(seg); // use decodeSegment here
-        const decoded = String(decodedRaw).toLowerCase();
+        // parse path segments
+        for (const seg of segments) {
+            const decodedRaw = decodeSegment(seg); // use decodeSegment here
+            const decoded = String(decodedRaw).toLowerCase();
 
-        // match /under-2500/ or /above-50000/
-        const m = decoded.match(/^(under|above)-(\d+)$/i);
-        if (m) {
-            const t = m[1].toLowerCase();
-            const val = m[2];
-            hasPricePath = true;
-            filters.filter_type = t;
-            filters.filter_price = val;
-            if (t === 'under') {
-                filters.price_to = val;
-            } else {
-                filters.price_from = val;
+            // match /under-2500/ or /above-50000/
+            const m = decoded.match(/^(under|above)[/-](\d+)$/i);
+
+            if (m) {
+                const t = m[1].toLowerCase();
+                const val = m[2];
+                hasPricePath = true;
+                filters.filter_type = t;
+                filters.filter_price = val;
+                if (t === 'under') {
+                    filters.price_to = val;
+                } else {
+                    filters.price_from = val;
+                }
+                continue;
             }
-            continue;
+
+            // classify other segments (case-insensitive comparison)
+            if (validTypes.has(decoded)) {
+                filters.type.push(decodedRaw);
+            } else if (validMakes.has(decoded)) {
+                filters.make.push(decodedRaw);
+            } else if (validModels.has(decoded)) {
+                filters.model.push(decodedRaw);
+            } else if (validCategories.has(decoded)) {
+                filters.categories.push(decodedRaw);
+            } else {
+                console.warn('Unknown segment in URL:', decodedRaw);
+            }
         }
 
-        // classify other segments (case-insensitive comparison)
-        if (validTypes.has(decoded)) {
-            filters.type.push(decodedRaw);
-        } else if (validMakes.has(decoded)) {
-            filters.make.push(decodedRaw);
-        } else if (validModels.has(decoded)) {
-            filters.model.push(decodedRaw);
-        } else if (validCategories.has(decoded)) {
-            filters.categories.push(decodedRaw);
-        } else {
-            console.warn('Unknown segment in URL:', decodedRaw);
-        }
-    }
-
-    // Handle query string multi-values (keeps support for weird ?type=New&Demo form)
-        const queryString = search.replace(/^\?/, '');
-        if (queryString) {
-            const parts = queryString.split('&');
-            let lastKey = null;
-            for (const part of parts) {
-                if (!part) continue;
-                if (part.includes('=')) {
-                    const [rawKey, rawVal] = part.split('=');
-                    const key = decodeURIComponent(rawKey || '').trim();
-                    const rawValue = rawVal === undefined ? '' : rawVal;
-                    const value = decodeURIComponent(rawValue).trim();
-                    lastKey = key;
-                    // store multi-values as arrays (except special range keys we'll decode later)
-                    if (!filters[key]) filters[key] = [];
-                    if (value !== '') filters[key].push(value);
-                } else if (lastKey) {
-                    // e.g. ?type=New&Demo (Demo has no key) -> use lastKey
-                    const value = decodeURIComponent(part).trim();
-                    if (!filters[lastKey]) filters[lastKey] = [];
-                    if (value !== '') filters[lastKey].push(value);
+        // Handle query string multi-values (keeps support for weird ?type=New&Demo form)
+            const queryString = search.replace(/^\?/, '');
+            if (queryString) {
+                const parts = queryString.split('&');
+                let lastKey = null;
+                for (const part of parts) {
+                    if (!part) continue;
+                    if (part.includes('=')) {
+                        const [rawKey, rawVal] = part.split('=');
+                        const key = decodeURIComponent(rawKey || '').trim();
+                        const rawValue = rawVal === undefined ? '' : rawVal;
+                        const value = decodeURIComponent(rawValue).trim();
+                        lastKey = key;
+                        // store multi-values as arrays (except special range keys we'll decode later)
+                        if (!filters[key]) filters[key] = [];
+                        if (value !== '') filters[key].push(value);
+                    } else if (lastKey) {
+                        // e.g. ?type=New&Demo (Demo has no key) -> use lastKey
+                        const value = decodeURIComponent(part).trim();
+                        if (!filters[lastKey]) filters[lastKey] = [];
+                        if (value !== '') filters[lastKey].push(value);
+                    }
                 }
             }
-        }
 
-        // decode canonical range query params (price_range/year_range/hours_range)
-        if (params.has('price_range')) {
-            const range = params.get('price_range') || '';
-            const [from, to] = range.split('-').map(s => (s || '').trim());
-            if (from) filters.price_from = from;
-            if (to) filters.price_to = to;
-        }
-
-        if (params.has('year_range')) {
-            const range = params.get('year_range') || '';
-            const [from, to] = range.split('-').map(s => (s || '').trim());
-            if (from) filters.year_from = from;
-            if (to) filters.year_to = to;
-        }
-
-        if (params.has('hours_range')) {
-            const range = params.get('hours_range') || '';
-            const [from, to] = range.split('-').map(s => (s || '').trim());
-            if (from) filters.hours_from = from;
-            if (to) filters.hours_to = to;
-        }
-
-        // also support explicit numeric params (if someone used price_from/price_to directly)
-        if (params.has('price_from') && !filters.price_from) filters.price_from = params.get('price_from');
-        if (params.has('price_to') && !filters.price_to) filters.price_to = params.get('price_to');
-
-        if (params.has('year_from') && !filters.year_from) filters.year_from = params.get('year_from');
-        if (params.has('year_to') && !filters.year_to) filters.year_to = params.get('year_to');
-
-        if (params.has('hours_from') && !filters.hours_from) filters.hours_from = params.get('hours_from');
-        if (params.has('hours_to') && !filters.hours_to) filters.hours_to = params.get('hours_to');
-
-        // If path-based price exists, skip any query-provided filter_type/filter_price to avoid duplicates
-        if (hasPricePath) {
-            if (filters.filter_type && filters.filter_price) {
-                // already set from path; remove any query-sourced duplicates kept in filters['filter_type'] array
-                if (Array.isArray(filters.filter_type)) delete filters.filter_type;
-                if (Array.isArray(filters.filter_price)) delete filters.filter_price;
+            // decode canonical range query params (price_range/year_range/hours_range)
+            if (params.has('price_range')) {
+                const range = params.get('price_range') || '';
+                const [from, to] = range.split('-').map(s => (s || '').trim());
+                if (from) filters.price_from = from;
+                if (to) filters.price_to = to;
             }
-        } else {
-            // if no price in path but filter_type/filter_price in query arrays, normalize them
-            if (Array.isArray(filters.filter_type) && filters.filter_type.length) {
-                filters.filter_type = String(filters.filter_type[0]);
-            }
-            if (Array.isArray(filters.filter_price) && filters.filter_price.length) {
-                filters.filter_price = String(filters.filter_price[0]);
-            }
-        }
 
-        // Normalize multi-valued keys left from query parsing:
-        // convert arrays to proper typed filters where applicable
+            if (params.has('year_range')) {
+                const range = params.get('year_range') || '';
+                const [from, to] = range.split('-').map(s => (s || '').trim());
+                if (from) filters.year_from = from;
+                if (to) filters.year_to = to;
+            }
+
+            if (params.has('hours_range')) {
+                const range = params.get('hours_range') || '';
+                const [from, to] = range.split('-').map(s => (s || '').trim());
+                if (from) filters.hours_from = from;
+                if (to) filters.hours_to = to;
+            }
+
+            // also support explicit numeric params (if someone used price_from/price_to directly)
+            if (params.has('price_from') && !filters.price_from) filters.price_from = params.get('price_from');
+            if (params.has('price_to') && !filters.price_to) filters.price_to = params.get('price_to');
+
+            if (params.has('year_from') && !filters.year_from) filters.year_from = params.get('year_from');
+            if (params.has('year_to') && !filters.year_to) filters.year_to = params.get('year_to');
+
+            if (params.has('hours_from') && !filters.hours_from) filters.hours_from = params.get('hours_from');
+            if (params.has('hours_to') && !filters.hours_to) filters.hours_to = params.get('hours_to');
+
+            // If path-based price exists, skip any query-provided filter_type/filter_price to avoid duplicates
+            if (hasPricePath) {
+                if (filters.filter_type && filters.filter_price) {
+                    // already set from path; remove any query-sourced duplicates kept in filters['filter_type'] array
+                    if (Array.isArray(filters.filter_type)) delete filters.filter_type;
+                    if (Array.isArray(filters.filter_price)) delete filters.filter_price;
+                }
+            } else {
+                // if no price in path but filter_type/filter_price in query arrays, normalize them
+                if (Array.isArray(filters.filter_type) && filters.filter_type.length) {
+                    filters.filter_type = String(filters.filter_type[0]);
+                }
+                if (Array.isArray(filters.filter_price) && filters.filter_price.length) {
+                    filters.filter_price = String(filters.filter_price[0]);
+                }
+            }
+
+            // Normalize multi-valued keys left from query parsing:
+            // convert arrays to proper typed filters where applicable
+            ['type', 'make', 'model', 'categories'].forEach(k => {
+                if (filters[k] && filters[k].length === 0) delete filters[k];
+                // if query gave these as arrays via ?make=Abbey&make=Aitchison, we want arrays preserved
+                if (filters[k] && filters[k].length === 1) {
+                    // keep as array with single value (your buildURL expects arrays)
+                }
+            });
+
+        // Final cleanup
         ['type', 'make', 'model', 'categories'].forEach(k => {
-            if (filters[k] && filters[k].length === 0) delete filters[k];
-            // if query gave these as arrays via ?make=Abbey&make=Aitchison, we want arrays preserved
-            if (filters[k] && filters[k].length === 1) {
-                // keep as array with single value (your buildURL expects arrays)
-            }
+            if (Array.isArray(filters[k]) && filters[k].length === 0) delete filters[k];
         });
 
-    // Final cleanup
-    ['type', 'make', 'model', 'categories'].forEach(k => {
-        if (Array.isArray(filters[k]) && filters[k].length === 0) delete filters[k];
-    });
+        // return both filters and page as before
+        const page = params.has('pg') ? (parseInt(params.get('pg'), 10) || 1) : 1;
 
-    // return both filters and page as before
-    const page = params.has('pg') ? (parseInt(params.get('pg'), 10) || 1) : 1;
+        // Scalars from params (keyword, sort)
+        if (params.has('keyword')) filters.keyword = params.get('keyword');
+        if (params.has('sort')) filters.sort = params.get('sort');
 
-    // Scalars from params (keyword, sort)
-    if (params.has('keyword')) filters.keyword = params.get('keyword');
-    if (params.has('sort')) filters.sort = params.get('sort');
-
-    return { filters, page };
-}
+        return { filters, page };
+    }
 
     /**
      * Merge server-side parsed filters with URL filters
@@ -333,8 +335,8 @@ jQuery(document).ready(function($) {
             console.warn('History API not available', e);
         }
 
-        updateBreadcrumbs(filters);
-        updateTitle(filters);
+        // updateBreadcrumbs(filters);
+        // updateTitle(filters);
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -862,8 +864,8 @@ jQuery(document).ready(function($) {
     window.addEventListener('popstate', function(e) {
         const parsed = parseFiltersFromURL();
         applyFiltersToUI(parsed.filters);
-        updateBreadcrumbs(parsed.filters);
-        updateTitle(parsed.filters);
+        // updateBreadcrumbs(parsed.filters);
+        // updateTitle(parsed.filters);
         rsl_fetch_listings({ page: parsed.page, per_page: rsl_ajax_obj.vdp_per_page, filters: parsed.filters });
     });
 
@@ -877,8 +879,8 @@ jQuery(document).ready(function($) {
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
             const filters = get_selected_filters();
-            updateBreadcrumbs(filters);
-            updateTitle(filters);
+            // updateBreadcrumbs(filters);
+            // updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
     })();

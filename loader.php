@@ -43,20 +43,30 @@ add_action( 'plugins_loaded', function() {
 });
 
 // Add rewrite rules
+add_action('init', 'rsl_add_rewrite_rules');
 function rsl_add_rewrite_rules() {
-    // Get the page ID or slug where your listing is displayed
-    // Adjust 'for-sale' to match your actual page slug
-    $page_slug = get_post_field('post_name', get_the_ID()); // or get dynamically: get_post_field('post_name', $page_id);
-    
-    // Match: /for-sale/anything/
-    // This will catch all URLs like /for-sale/SUV/, /for-sale/SUV/Toyota/, etc.
+    // Get the selected page ID from ACF Options
+    $page_id = get_field('select_stock_locator_page', 'option');
+
+    // Only proceed if a valid page is selected
+    if (empty($page_id) || !is_numeric($page_id)) {
+        return;
+    }
+
+    // Get the page slug from the ID
+    $page_slug = get_post_field('post_name', $page_id);
+
+    if (empty($page_slug)) {
+        return;
+    }
+
+    // Add the rewrite rule
     add_rewrite_rule(
         '^' . $page_slug . '/(.+?)/?$',
         'index.php?pagename=' . $page_slug . '&rsl_filter_path=$matches[1]',
         'top'
     );
 }
-add_action('init', 'rsl_add_rewrite_rules');
 
 // Register the query var
 function rsl_query_vars($vars) {

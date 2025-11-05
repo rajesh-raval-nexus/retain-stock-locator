@@ -33,7 +33,7 @@ function rsl_get_stock_list_ajax() {
     }
 
     if(empty($allListings)){
-        $no_result_found = "<h2>". __('No stock available', 'retain-stock-locator')."</h2>";
+        $no_result_found = "<h2 class='no-stock-available'>". __('No stock available', 'retain-stock-locator')."</h2>";
 
         wp_send_json_success([
             'html'        => $no_result_found,
