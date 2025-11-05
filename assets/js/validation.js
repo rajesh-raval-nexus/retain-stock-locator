@@ -6,49 +6,56 @@ jQuery(document).ready(function($) {
      * =======================
      */
     function validateCategoryModal() {
-        const $modal = $('#popupCategoryDesktop, #gfampopupCategoryMobile');
-        const $searchBtn = $modal.find('.rsl-apply-filter');
-        const $clearButton = $modal.find('.clear-btn');
-        const $checkboxes = $modal.find('input[name="category[]"]');
-
-        $searchBtn.prop('disabled', true).addClass('disabled');
-        $clearButton.prop('disabled', true).addClass('isDisabled');
-
-        $checkboxes.on('change', function() {
+        const modalSelectors = '#popupCategoryDesktop, #gfampopupCategoryMobile';
+        
+        // Delegated event for dynamically loaded checkboxes
+        $(document).on('change', `${modalSelectors} input[name="category[]"]`, function() {
+            const $modal = $(this).closest('.modal');
             const hasChecked = $modal.find('input[name="category[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
 
-        $modal.on('shown.bs.modal', function() {
+        // Also update buttons when modal is shown
+        $(document).on('shown.bs.modal', modalSelectors, function() {
+            const $modal = $(this);
             const hasChecked = $modal.find('input[name="category[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
     }
-
     /**
      * =======================
      * MAKE/MODEL MODAL VALIDATION
      * =======================
      */
     function validateMakeModelModal() {
-        const $modal = $('#popupMakeDesktop, #gfampopupMakeMobile');
-        const $searchBtn = $modal.find('.rsl-apply-filter');
-        const $clearButton = $modal.find('.clear-btn');
-        const $checkboxes = $modal.find('input[name="make-model[]"]');
+        const modalSelectors = '#popupMakeDesktop, #gfampopupMakeMobile';
 
-        $searchBtn.prop('disabled', true).addClass('disabled');
-        $clearButton.prop('disabled', true).addClass('isDisabled');
-
-        $checkboxes.on('change', function() {
+        // Delegated checkbox handler (works for dynamically loaded modals)
+        jQuery(document).on('change', `${modalSelectors} input[name="make-model[]"]`, function() {
+            const $modal = jQuery(this).closest('.modal');
             const hasChecked = $modal.find('input[name="make-model[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
 
-        $modal.on('shown.bs.modal', function() {
+        // Handle when modal is shown (e.g., recheck buttons)
+        jQuery(document).on('shown.bs.modal', modalSelectors, function() {
+            const $modal = jQuery(this);
             const hasChecked = $modal.find('input[name="make-model[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
@@ -60,22 +67,26 @@ jQuery(document).ready(function($) {
      * =======================
      */
     function validateTypeModal() {
-        const $modal = $('#popupTypeDesktop, #gfampopupTypeMobile');
-        const $searchBtn = $modal.find('.rsl-apply-filter');
-        const $clearButton = $modal.find('.clear-btn');
-        const $checkboxes = $modal.find('input[name="type[]"]');
+        const modalSelectors = '#popupTypeDesktop, #gfampopupTypeMobile';
 
-        $searchBtn.prop('disabled', true).addClass('disabled');
-        $clearButton.prop('disabled', true).addClass('isDisabled');
-
-        $checkboxes.on('change', function() {
+        // Delegated checkbox handler — works even if content is dynamically replaced
+        jQuery(document).on('change', `${modalSelectors} input[name="type[]"]`, function() {
+            const $modal = jQuery(this).closest('.modal');
             const hasChecked = $modal.find('input[name="type[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
 
-        $modal.on('shown.bs.modal', function() {
+        // Update button states when the modal is opened
+        jQuery(document).on('shown.bs.modal', modalSelectors, function() {
+            const $modal = jQuery(this);
             const hasChecked = $modal.find('input[name="type[]"]:checked').length > 0;
+            const $searchBtn = $modal.find('.rsl-apply-filter');
+            const $clearButton = $modal.find('.clear-btn');
+
             $searchBtn.prop('disabled', !hasChecked).toggleClass('disabled', !hasChecked);
             $clearButton.prop('disabled', !hasChecked).toggleClass('isDisabled', !hasChecked);
         });
@@ -129,7 +140,7 @@ jQuery(document).ready(function($) {
                 }
             },
             messages: {
-                'price-from': {
+                'price_from': {
                     number: 'Please enter a valid price.',
                     min: function() {
                         const min = $('#priceFromSelect').attr('min') || 0;
@@ -140,7 +151,7 @@ jQuery(document).ready(function($) {
                         return `Please choose a starting price below $${parseInt(max).toLocaleString()}.`;
                     }
                 },
-                'price-to': {
+                'price_to': {
                     number: 'Please enter a valid price.',
                     min: function() {
                         const fromVal = $('.rsl-price-tabs.active').find('.rsl-price-from').val();
