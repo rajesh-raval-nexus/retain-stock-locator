@@ -173,6 +173,10 @@ body {
   border-bottom: none;
 } */
 
+.gfam-filter-section:last-child{
+  border-bottom: 1px solid var(--gfam-border);
+}
+
 .gfam-filter-header-item {
   background-color: var(--red_badge_txt_color);
   padding: 12px 15px;
@@ -698,12 +702,23 @@ textarea:focus {
 }
 
 .rsl-stock-locator .gfam-detail-form-box #gfam-form div.error, .rsl-stock-locator #requestVideoForm .gfam-detail-form-group div.error,
-.rsl-stock-locator #requestTestDriveForm .gfam-detail-form-group div.error{
+.rsl-stock-locator #requestTestDriveForm .gfam-detail-form-group div.error, .rsl-stock-locator #askQuestionModalForm .gfam-detail-form-group div.error,
+.rsl-stock-locator #contactUsModalForm .gfam-detail-form-group div.error{
   display: none !important;
 }
 .rsl-stock-locator .gfam-detail-form-box #gfam-form input.error, .rsl-stock-locator .gfam-detail-input.error, .rsl-stock-locator .gfam-detail-form-box .form-check.error,
-#requestVideoForm .gfam-detail-form-group input.error, .rsl-stock-locator #requestTestDriveForm .gfam-detail-form-group input.error{
+#requestVideoForm .gfam-detail-form-group input.error, .rsl-stock-locator #requestTestDriveForm .gfam-detail-form-group input.error,
+.rsl-stock-locator #askQuestionModalForm .gfam-detail-form-group input.error, .rsl-stock-locator #askQuestionModalForm .gfam-detail-form-group .form-control.gfam-detail-input.error,
+.rsl-stock-locator #contactUsModalForm .gfam-detail-form-group input.error, .rsl-stock-locator #contactUsModalForm .gfam-detail-form-group .form-control.gfam-detail-input.error {
   border: 1px solid red;
+}
+
+.rsl-stock-locator #contactUsModalForm .gfam-detail-form-group input.error:focus,
+.rsl-stock-locator .gfam-detail-form-box #gfam-form input.error:focus,
+#requestVideoForm .gfam-detail-form-group input.error:focus,
+.rsl-stock-locator #requestTestDriveForm .gfam-detail-form-group input.error:focus,
+.rsl-stock-locator #askQuestionModalForm .gfam-detail-form-group input.error:focus{
+  box-shadow: none !important;
 }
 
 .gfam-product-card .owl-nav svg path{
@@ -1148,9 +1163,9 @@ textarea:focus {
   text-decoration: none;
   font-size: 16px;
 }
-.gfam-detail-breadcrumb span.active{
+/* .gfam-detail-breadcrumb span.active{
   text-decoration: underline;
-}
+} */
 
 .gfam-detail-nav {
   float: right;
@@ -1215,7 +1230,7 @@ textarea:focus {
 .gfam-detail-main-slider img {
   width: 100%;
   height: 500px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 15px;
 }
 
@@ -1751,7 +1766,7 @@ color: #636363;
   position: relative;
 }
 
-.gfam-detail-modal-title {
+.rsl-stock-locator  .gfam-detail-modal-title {
   font-size: 1.6rem;
   font-weight: 700;
   color: #3F3E3E;
@@ -1812,7 +1827,7 @@ color: #636363;
   width: 100%;
 }
 
-.gfam-detail-dropdown-toggle {
+.rsl-stock-locator .gfam-detail-dropdown-toggle {
   width: 100%;
   padding: 15px;
   border: 0;
@@ -2096,9 +2111,18 @@ color: #636363;
   background-repeat: no-repeat;
   border: 0;
 }
+.timepicker_wrap .prev{
+  background: url(../images/up-arrow.png) no-repeat center;
+}
+.timepicker_wrap .next{
+  background: url(../images/down-arrow.png) no-repeat center;
+}
+
+
 
 input.timepicki-input{
   border: 0;
+  padding: 0;
 }
 .timepicker_wrap{
   width: 100%;
@@ -2803,4 +2827,37 @@ ease;
   color: #666;      
   border-color: #ccc;  
   box-shadow: none;  
+}
+
+.gfam-detail-similiar-product .gfam-product-grid.owl-carousel.owl-theme {
+    display: flex;
+}
+.gfam-product-grid .no-result-found-txt {
+  text-align: center;
+  background-color: var(--lightgrey_box_bg_color);
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.gfam-product-grid .no-result-found-txt i {
+  font-size: 30px;
+  color: var(--red_badge_bg_color);
+  margin-bottom: 0.5rem;
+  
+}
+.gfam-product-grid .no-result-found-txt h2.no-stock-available {
+  font-size: 23px;
+  line-height: 32px;
+  font-weight: 500;
+}
+.gfam-product-grid .no-result-found-txt h2.no-stock-available a {
+  color: var(--red_badge_bg_color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.4s all;
+}
+.gfam-product-grid .no-result-found-txt h2.no-stock-available a:hover {
+  color: var(--darkgrey_badge_bg_color);
+  text-decoration: underline;
 }

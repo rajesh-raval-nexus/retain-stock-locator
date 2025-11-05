@@ -16,7 +16,7 @@ foreach ($allListingsData as $listing) {
       <div class="gfam-detail-header">
         <div class="container">
           <div class="row">
-            <div class="col-xl-6 order-xl-1 order-2">
+            <div class="col-xl-7 order-xl-1 order-2">
               <nav class="d-flex align-items-center gap-2 gfam-detail-breadcrumb">
                 <a href="#" class="d-flex align-items-center">
                   <svg class="mb-1" width="19" height="22" viewBox="0 0 19 22" fill="none"
@@ -33,7 +33,7 @@ foreach ($allListingsData as $listing) {
               </nav>
 
             </div>
-            <div class="col-xl-6 order-xl-2 order-1">
+            <div class="col-xl-5 order-xl-2 order-1">
               <div class="gfam-detail-nav">
                 <a href="#openGallery" class="active"><?php esc_html_e('Gallery', 'retain-stock-locator'); ?></a>
                 <a href="#vehicleFeatures"><?php esc_html_e('Vehicle Features', 'retain-stock-locator'); ?></a>
@@ -163,7 +163,7 @@ foreach ($allListingsData as $listing) {
                     <h2 class="gfam-detail-section-title"><?php esc_html_e('Vehicle', 'retain-stock-locator'); ?> <span><?php esc_html_e('Features', 'retain-stock-locator'); ?></span></h2>
 
                     <div class="row">
-                      <div class="col-lg-3 col-md-6 col-3">
+                      <div class="col-lg-3 col-md-6 col-6">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +183,7 @@ foreach ($allListingsData as $listing) {
                       </div>
 
                       <?php //if (! empty($listing['year'])) : ?>
-                      <div class="col-lg-3 col-md-6 col-3">
+                      <div class="col-lg-3 col-md-6 col-6">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="42" height="44" viewBox="0 0 42 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -214,7 +214,7 @@ foreach ($allListingsData as $listing) {
                       </div>
                        <?php //endif; ?>
 
-                      <div class="col-lg-3 col-md-6 col-3">
+                      <div class="col-lg-3 col-md-6 col-6">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -242,7 +242,7 @@ foreach ($allListingsData as $listing) {
                         </div>
                       </div>
 
-                      <div class="col-lg-3 col-md-6 col-3">
+                      <div class="col-lg-3 col-md-6 col-6">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="58" height="45" viewBox="0 0 58 45" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -372,7 +372,7 @@ foreach ($allListingsData as $listing) {
                 <div class="col-12">
                   <div class="gfam-detail-question-box">
                     <div class="row w-100 mx-auto">
-                      <div class="col-lg-9 my-auto">
+                      <div class="col-lg-9 my-auto px-0">
                         <div class="custom-select-wrapper">
                           <div class="custom-select">
                             <span class="selected d-block"><?php esc_html_e( 'Select a question', 'retain-stock-locator' ); ?></span>
@@ -389,7 +389,7 @@ foreach ($allListingsData as $listing) {
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-3 text-end">
+                      <div class="col-lg-3 text-end px-0">
                         <button class="gfam-detail-button my-2 ask-question-btn" data-bs-toggle="modal"
                         data-bs-target="#askQuestionModal"><?php esc_html_e( 'Ask a Question', 'retain-stock-locator' ); ?></button>
                       </div>
