@@ -2686,7 +2686,7 @@ ease;
   text-decoration: underline;
   text-align: end;
   margin-left: auto;
-  display: block;
+  /* display: block; */
   font-size: 14px;
   line-height: normal;
 }
@@ -2803,4 +2803,8 @@ ease;
   color: #666;      
   border-color: #ccc;  
   box-shadow: none;  
+}
+
+.gfam-detail-similiar-product .gfam-product-grid.owl-carousel.owl-theme {
+    display: flex;
 }

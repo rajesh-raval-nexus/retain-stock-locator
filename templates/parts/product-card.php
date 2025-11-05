@@ -17,6 +17,12 @@ $item_specification  = !empty($item['item_specification']) ? $item['item_specifi
 $hours               = !empty($item['hours']) ? (int) $item['hours'] : 'N/A';
 $price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
 
+$detail_page_slug = get_field('detail_page_slug', 'option');
+$detail_page_slug = !empty($detail_page_slug) ? $detail_page_slug : 'listing-detail';
+
+
+$detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number);
+
 ?>
 
 <div class="col-lg-4 col-md-6 my-3">
@@ -64,9 +70,14 @@ $price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
                 <?php endif; ?>
             </div>
 
-            <a class="gfam-btn" href="<?php echo esc_url(site_url('/listing-detail/?stock_number=' . $stock_number)); ?>">
-                See Details
+            <!-- <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
+                <?php //esc_html_e('See Details', 'retain-stock-locator'); ?>
+            </a> -->
+            
+            <a class="gfam-btn" href="<?php echo esc_url(site_url('/vdp/' . $stock_number)); ?>">
+                <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
             </a>
+
         </div>
     </div>
 </div>

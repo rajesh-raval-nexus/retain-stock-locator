@@ -1,5 +1,8 @@
 jQuery(document).ready(function($) {
 
+  $('.btn-message-detail').on('click', function() {
+     jQuery('button.lg-close.lg-icon').click();
+   });
 
   // $('.custom-select .selected').click(function(){
   //   $(this).siblings('.options').slideToggle(200);
@@ -305,10 +308,9 @@ jQuery(document).ready(function($) {
   });
 
 
-
   //Request a Test Drive form js
    // Dropdown logic
-    $('#testDriveDropdownMenu .gfam-detail-dropdown-item').on('click', function() {
+   $('#testDriveDropdownMenu .gfam-detail-dropdown-item').on('click', function() {
       var value = $(this).data('value');
       var text = $(this).text();
       $('#testDriveMakeInput').val(value);
