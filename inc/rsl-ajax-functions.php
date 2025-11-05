@@ -33,7 +33,14 @@ function rsl_get_stock_list_ajax() {
     }
 
     if(empty($allListings)){
-        $no_result_found = "<h2 class='no-stock-available'>". __('No stock available', 'retain-stock-locator')."</h2>";
+        //$no_result_found = "<i class="fa-solid fa-triangle-exclamation"></i><h2 class='no-stock-available'>". __('We don’t have any stock available in this category right now. Contact us for more information.', 'retain-stock-locator')."</h2>";
+        $no_result_found = '<div class="mx-1 no-result-found-txt"><i class="fa-solid fa-triangle-exclamation"></i>
+                            <h2 class="no-stock-available">'
+                            . __('We don’t have any stock available in this category right now.', 'retain-stock-locator') .
+                            ' <a href="/contact" class="contact-link">' . __('Contact us', 'retain-stock-locator') . '</a> ' .
+                            __('for more information.', 'retain-stock-locator') .
+                            '</h2></div>';
+
 
         wp_send_json_success([
             'html'        => $no_result_found,
