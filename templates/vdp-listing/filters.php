@@ -442,7 +442,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
   <!-- Main Content -->
   <div class="gfam-content col-xl-8 position-relative">
     <!-- Loader -->
-    <div id="loader" style="display:none;">
+    <div id="loader">
       <div class="loader-circle"></div>
     </div>
     <!-- Content Header -->

@@ -543,12 +543,7 @@ jQuery(document).ready(function($) {
                     $('.load-more-btn').html(response.data.pagination);
                     reinitCarousel();
                 }
-                $('#loader').fadeOut(500);
-                setTimeout(function() {
-                    $('html, body').stop(true).animate({
-                        scrollTop: $('.gfam-product-grid').offset().top - 100
-                    }, 400);
-                }, 150);
+                $('#loader').fadeOut(500);                
             },
             error: function(xhr, status, error) {
                 $('#loader').fadeOut(500);
@@ -565,6 +560,11 @@ jQuery(document).ready(function($) {
         let page = $(this).data('page');
         let filters = get_selected_filters();
         applyFiltersAndPushState(filters, page);
+        setTimeout(function() {
+            $('html, body').stop(true).animate({
+                scrollTop: $('.gfam-product-grid').offset().top - 100
+            }, 400);
+        }, 300);
     });
 
     /**

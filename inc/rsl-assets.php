@@ -332,16 +332,72 @@ function rsl_assets_is_script_loaded_by_src( $needle ) {
 
 // Dynamic colors function
 function theme_global_color_head() {
+
+    $stock_locator_color_settings = get_field('stock_locator_page_badges_color_settings', 'option');
+
+    // Ensure it's an array before accessing
+    if ( ! is_array( $stock_locator_color_settings ) ) {
+        $stock_locator_color_settings = [];
+    }
+
+    // Safely assign colors with defaults
+    $type_field_bg_color = isset($stock_locator_color_settings['type_field_background_color_on_stock_listing'])
+        ? $stock_locator_color_settings['type_field_background_color_on_stock_listing']
+        : '#92191C';
+
+    $stock_number_bg_color = isset($stock_locator_color_settings['stock_number_field_background_color'])
+        ? $stock_locator_color_settings['stock_number_field_background_color']
+        : '#272727';
+
+    $badges_text_color = isset($stock_locator_color_settings['badges_text_color_on_stock_listing'])
+        ? $stock_locator_color_settings['badges_text_color_on_stock_listing']
+        : '#ffffff';
+
+    $general_color_settings = get_field('general_color_options', 'option');
+
+    $general_color_settings = get_field('general_color_options', 'option');
+
+    // Ensure it's an array before accessing
+    if ( ! is_array( $general_color_settings ) ) {
+        $general_color_settings = [];
+    }
+
+    // Safely assign colors with defaults
+    $button_bg_color = isset($general_color_settings['button_background_color'])
+        ? $general_color_settings['button_background_color']
+        : '#fdbd3d';
+
+    $button_bg_hover_color = isset($general_color_settings['button_background_hover_color'])
+        ? $general_color_settings['button_background_hover_color']
+        : '#92191C';
+
+    $button_text_color = isset($general_color_settings['button_text_color'])
+        ? $general_color_settings['button_text_color']
+        : '#272727';
+
+    $button_text_hover_color = isset($general_color_settings['button_text_hover_color'])
+        ? $general_color_settings['button_text_hover_color']
+        : '#ffffff';
+
+    $grey_box_bg_color = isset($general_color_settings['grey_box_background_color'])
+        ? $general_color_settings['grey_box_background_color']
+        : '#f8f8f8';
+
+    $light_grey_box_bg_color = isset($general_color_settings['light_grey_box_background_color'])
+        ? $general_color_settings['light_grey_box_background_color']
+        : '#f5f5f5';
+
+    
     // Define your color variables
-    $red_badge_bg_color          = '#92191C'; 
-    $red_badge_txt_color         = '#ffffff';
-    $darkgrey_badge_bg_color     = '#272727';
-    $yellow_btn_bg_color         = '#fdbd3d';
-    $yellow_btn_hover_bg_color   = '#92191C';
-    $yellow_btn_txt_color        = '#272727';
-    $yellow_btn_txt_hover_color  = '#ffffff';
-    $grey_box_bg_color           = '#f8f8f8';
-    $lightgrey_box_bg_color      = '#f5f5f5';
+    $red_badge_bg_color          = $type_field_bg_color; 
+    $red_badge_txt_color         = $badges_text_color;
+    $darkgrey_badge_bg_color     = $stock_number_bg_color;
+    $yellow_btn_bg_color         = $button_bg_color;
+    $yellow_btn_hover_bg_color   = $button_bg_hover_color;
+    $yellow_btn_txt_color        = $button_text_color;
+    $yellow_btn_txt_hover_color  = $button_text_hover_color;
+    $grey_box_bg_color           = $grey_box_bg_color;
+    $lightgrey_box_bg_color      = $light_grey_box_bg_color;
 
     echo "
     <style id='theme-global-colors'>
