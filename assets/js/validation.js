@@ -154,7 +154,8 @@ jQuery(document).ready(function($) {
                 'price_to': {
                     number: 'Please enter a valid price.',
                     min: function() {
-                        const fromVal = $('.rsl-price-tabs.active').find('.rsl-price-from').val();
+                        var activePriceTabID = $('.rsl-price-tabs.active').data('bs-target'); 
+                        const fromVal = $(activePriceTabID + ' .rsl-price-from').val() || '';
                         return fromVal
                             ? `Please enter more than $${parseFloat(fromVal).toLocaleString()}.`
                             : 'Please enter a starting price first.';
@@ -462,9 +463,13 @@ jQuery(document).ready(function($) {
     validateCategoryModal();
     validateMakeModelModal();
     validateTypeModal();
-    validatePriceModal();
-    validateYearModal();
-    validateHoursModal();
+    
+    // Delay initialization of validation modals by 2 seconds
+    setTimeout(function() {
+        validatePriceModal();
+        validateYearModal();
+        validateHoursModal();
+    }, 2000); // 2000ms = 2 seconds
 
     /**
      * =======================

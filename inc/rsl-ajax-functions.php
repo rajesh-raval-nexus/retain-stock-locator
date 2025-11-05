@@ -32,12 +32,11 @@ function rsl_get_stock_list_ajax() {
         $allListings = rsl_search($allListings, $filters['keyword']);
     }
 
-    if(empty($allListings)){
-        //$no_result_found = "<i class="fa-solid fa-triangle-exclamation"></i><h2 class='no-stock-available'>". __('We don’t have any stock available in this category right now. Contact us for more information.', 'retain-stock-locator')."</h2>";
+    if(empty($allListings)){        
         $no_result_found = '<div class="mx-1 no-result-found-txt"><i class="fa-solid fa-triangle-exclamation"></i>
                             <h2 class="no-stock-available">'
-                            . __('We don’t have any stock available in this category right now.', 'retain-stock-locator') .
-                            ' <a href="/contact" class="contact-link">' . __('Contact us', 'retain-stock-locator') . '</a> ' .
+                            . __('We don’t have any stock available in this criteria.', 'retain-stock-locator') .
+                            ' </br><a href="/contact" class="contact-link">' . __('Contact us', 'retain-stock-locator') . '</a> ' .
                             __('for more information.', 'retain-stock-locator') .
                             '</h2></div>';
 
