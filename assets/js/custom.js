@@ -182,7 +182,7 @@ function reinitCarousel(){
       margin: 0,
       nav: true,
       dots: false,
-      autoplay: true,
+      autoplay: false,
       autoplayTimeout: 4000,
       autoplayHoverPause: true,
       items: 1,
