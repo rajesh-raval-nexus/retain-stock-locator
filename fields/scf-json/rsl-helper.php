@@ -433,20 +433,15 @@ function is_stock_locator_page() {
         return false;
     }
 
-    // Get permalink for the Stock Locator page
+    // Get permalink for the selected page
     $stock_locator_url = trailingslashit( get_permalink( $page_id ) );
 
     // Get current page URL
-    $current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $current_url  = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-    // Remove query string
-    $current_url_clean = strtok( $current_url, '?' );
+    // Remove query strings and normalize trailing slash
+    $current_url_clean = trailingslashit( strtok( $current_url, '?' ) );
 
-    // Normalize trailing slashes
-    $current_url_clean    = trailingslashit( strtolower( $current_url_clean ) );
-    $stock_locator_url    = trailingslashit( strtolower( $stock_locator_url ) );
-
-    // Check if current URL starts with the stock locator base
-    return str_starts_with( $current_url_clean, $stock_locator_url );
+    // Compare (case-insensitive)
+    return strtolower( $current_url_clean ) === strtolower( $stock_locator_url );
 }
-

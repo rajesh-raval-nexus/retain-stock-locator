@@ -358,7 +358,7 @@ function rsl_build_category_modal_html( $filters ) {
               <div class="col-6 px-1">
                 <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="category"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
-              <div class="col-6 text-end px-1 search-btn-div">
+              <div class="col-6 text-end px-1 search-btn-div search-btn-div">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-search="category-filter-search" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
               </div>
             </div>
@@ -503,7 +503,7 @@ function rsl_build_make_model_modal_html( $filters ) {
               <div class="col-6 px-1">
                 <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="make-model"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
-              <div class="col-6 text-end px-1">
+              <div class="col-6 text-end px-1 search-btn-div">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
               </div>
             </div>
@@ -576,7 +576,7 @@ function rsl_build_type_filter_modal_html( $filters, $modal_id = 'popupTypeDeskt
               <div class="col-6 px-1">
                 <a href="#" class="clear-btn" data-bs-dismiss="modal" data-type="type"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
               </div>
-              <div class="col-6 text-end px-1">
+              <div class="col-6 text-end px-1 search-btn-div">
                 <button class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
               </div>
             </div>
@@ -687,7 +687,7 @@ function rsl_build_price_filter_modal_html( $prices, $modal_id = 'popupRangeDesk
                 <div class="col-6 px-1">
                   <a href="javascript:void(0);" class="clear-btn" data-bs-dismiss="modal" data-type="price-range"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                 </div>
-                <div class="col-6 text-end px-1">
+                <div class="col-6 text-end px-1 search-btn-div">
                   <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal">
                     <?php esc_html_e( 'Search', 'retain-stock-locator' ); ?>
                   </button>
@@ -797,7 +797,7 @@ function rsl_build_year_filter_modal_html( $years, $modal_id = 'popupYearDesktop
                         <div class="col-6 px-1">
                             <a href="javascript:void(0);" class="clear-btn rsl-clear-year" data-bs-dismiss="modal" data-type="year-range"><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                         </div>
-                        <div class="col-6 text-end px-1">
+                        <div class="col-6 text-end px-1 search-btn-div">
                             <button type="submit" class="gfam-btn w-auto rsl-apply-filter" data-bs-dismiss="modal" ><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
                         </div>
                     </div>
@@ -904,7 +904,7 @@ function rsl_build_hours_filter_modal_html( $hours, $modal_id = 'popupHourDeskto
                         <div class="col-6 px-1">
                             <a href="javascript:void(0);" class="clear-btn rsl-clear-hour" data-bs-dismiss="modal" data-type="hours-range" ><?php esc_html_e( 'Clear', 'retain-stock-locator' ); ?></a>
                         </div>
-                        <div class="col-6 text-end px-1">
+                        <div class="col-6 text-end px-1 search-btn-div">
                             <button class="gfam-btn w-auto rsl-apply-filter"  data-bs-dismiss="modal"><?php esc_html_e( 'Search', 'retain-stock-locator' ); ?></button>
                         </div>
                     </div>
