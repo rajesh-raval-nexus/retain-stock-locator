@@ -265,9 +265,9 @@ function rsl_sort($listings, $sortKey) {
 
             // Year
             case 'year_asc':
-                return intval($a['year']) <=> intval($b['year']);
-            case 'year_desc':
                 return intval($b['year']) <=> intval($a['year']);
+            case 'year_desc':
+                return intval($a['year']) <=> intval($b['year']);
 
             // KMs
             case 'kms_asc':
@@ -418,3 +418,48 @@ if ( ! function_exists( 'enable_svg_uploads' ) ) {
     }
     add_filter( 'upload_mimes', 'enable_svg_uploads' );
 }
+
+/**
+ * Check if the current page is the Stock Locator page
+ *
+ * @return bool
+ */
+function is_stock_locator_page() {
+    // Get selected Stock Locator page ID from ACF Options
+    $page_id = get_field('select_stock_locator_page', 'option');
+
+    // Bail early if not set
+    if ( ! $page_id ) {
+        return false;
+    }
+
+    // Get permalink for the selected page
+    $stock_locator_url = trailingslashit( get_permalink( $page_id ) );
+
+    // Get current page URL
+    $current_url  = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    // Remove query strings and normalize trailing slash
+    $current_url_clean = trailingslashit( strtok( $current_url, '?' ) );
+
+    // Compare (case-insensitive)
+    return strtolower( $current_url_clean ) === strtolower( $stock_locator_url );
+}
+
+
+
+function gfam_add_listing_detail_rewrite_rule() {
+    add_rewrite_rule(
+        '^listing-detail/([^/]+)/?',
+        'index.php?pagename=listing-detail&stock_number=$matches[1]',
+        'top'
+    );
+}
+add_action('init', 'gfam_add_listing_detail_rewrite_rule');
+
+// Register query var so WordPress recognizes it
+function gfam_add_stock_number_query_var($vars) {
+    $vars[] = 'stock_number';
+    return $vars;
+}
+add_filter('query_vars', 'gfam_add_stock_number_query_var');

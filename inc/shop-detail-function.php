@@ -66,7 +66,8 @@ function handle_request_call_back_submit() {
     // Send Email to Admin
     // -----------------------------
     $admin_message = strtr($admin_content, $replacements);
-    $to_admin = get_option('admin_email');
+    $to_admin_default = get_option('admin_email');
+    $to_admin = $template_data['email_receiver_request_a_call_back'] ?? $to_admin_default;
     $headers = ['Content-Type: text/html; charset=UTF-8'];
 
     $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
@@ -177,7 +178,8 @@ function handle_request_video_submit() {
     // -----------------------------
     // Send Admin Email
     // -----------------------------
-    $to_admin = get_option('admin_email');
+    $to_admin_default = get_option('admin_email');
+    $to_admin = $template_data['email_receiver_video_walkthrough'] ?? $to_admin_default;
     $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
 
     // -----------------------------
@@ -273,7 +275,8 @@ function handle_ask_question_form_submit() {
     $user_message  = strtr($user_content, $replacements);
 
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $to_admin = get_option('admin_email');
+    $to_admin_default = get_option('admin_email');
+    $to_admin = $template_data['email_receiver_ask_question'] ?? $to_admin_default;
 
     // -----------------------------
     // Send emails
@@ -368,7 +371,8 @@ function handle_test_drive_request_submit() {
     // Send Emails
     // ==============================
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $admin_email = get_option('admin_email');
+    $to_admin_default = get_option('admin_email');
+    $to_admin = $template_data['email_receiver_test_drive'] ?? $to_admin_default;
 
     // Send to Admin
     wp_mail($admin_email, $admin_subject, $admin_message, $headers);
@@ -448,7 +452,8 @@ function handle_contact_us_request_submit() {
     $user_message  = strtr($user_content, $replacements);
 
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $to_admin = get_option('admin_email');
+    $to_admin_default = get_option('admin_email');
+    $to_admin = $template_data['email_receiver_contact_us'] ?? $to_admin_default;
 
     // -----------------------------
     // Send emails

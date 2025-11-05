@@ -28,7 +28,7 @@
 
         <?php if ( $title ): ?>
             <h2 class="mb-3 text-lg-start text-center">
-                <?php echo $title; // supports HTML ?>
+                <span class="fw-bold text-dark"><?php echo $title; ?></span>
             </h2>
         <?php endif; ?>
 

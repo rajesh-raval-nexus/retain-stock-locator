@@ -96,21 +96,104 @@ jQuery(document).ready(function ($) {
     });
   }
 
-  $('.gfam-detail-comments-content').each(function(){
-    let content = $(this).find('.readmore-text');
-    let button = $(this).find('.readmore-toggle');
-    let fullHeight = content.prop('scrollHeight');
-    let collapsed = true;
+  // $('.gfam-detail-comments-content').each(function(){
+  //   let content = $(this).find('.readmore-text');
+  //   let button = $(this).find('.readmore-toggle');
+  //   let fullHeight = content.prop('scrollHeight');
+  //   let collapsed = true;
 
-    if(fullHeight <= 80){ button.hide(); return; }
+  //   if(fullHeight <= 80){ button.hide(); return; }
 
-    button.on('click', function(e){
-      e.preventDefault();
-      content.animate({ maxHeight: collapsed ? fullHeight : 80 }, 400);
-      $(this).text(collapsed ? 'Show less' : 'Show more');
-      collapsed = !collapsed;
+  //   button.on('click', function(e){
+  //     e.preventDefault();
+  //     content.animate({ maxHeight: collapsed ? fullHeight : 80 }, 400);
+  //     $(this).text(collapsed ? 'Show less' : 'Show more');
+  //     collapsed = !collapsed;
+  //   });
+  // });
+
+  // 
+  const COLLAPSED_HEIGHT = 80;
+
+  // unified handler for each wrapper
+  $('.gfam-detail-comments-content').each(function() {
+    const $wrapper = $(this);
+
+    // find the content paragraph (your markup uses .readmore-text)
+    const $content = $wrapper.find('.readmore-text').first();
+    if (!$content.length) return;
+
+    // ensure only one toggle exists (either .toggle-btn or .gfam-show-toggle)
+    let $toggle = $wrapper.find('.toggle-btn, .gfam-show-toggle').first();
+    if (!$toggle.length) {
+      $toggle = $('<button type="button" class="gfam-show-toggle d-block mt-3">Show more</button>');
+      $wrapper.append($toggle);
+    }
+
+    // function to setup/hide toggle after layout is settled
+    function setupToggle() {
+      // force a reflow to get an accurate height
+      const fullHeight = $content[0].scrollHeight;
+
+      // if content is short, hide toggle and reset styles
+      if (fullHeight <= COLLAPSED_HEIGHT + 1) {
+        $toggle.hide();
+        $content.css({
+          'max-height': '',
+          'overflow': '',
+          'transition': ''
+        });
+        $content.removeClass('expanded');
+        return;
+      }
+
+      // show toggle and set initial collapsed state
+      $toggle.show();
+      if (!$content.hasClass('expanded')) {
+        $content.css({
+          'overflow': 'hidden',
+          'max-height': COLLAPSED_HEIGHT + 'px',
+          'transition': 'max-height 0.35s ease'
+        });
+        $toggle.text('Show more');
+      } else {
+        // if already expanded (rare on load), ensure full height
+        $content.css('max-height', fullHeight + 'px');
+        $toggle.text('Show less');
+      }
+    }
+
+    // run setup on next animation frame (ensures scrollHeight is correct)
+    requestAnimationFrame(setupToggle);
+
+    // also run setup again after images/fonts load (in case description contains images)
+    $(window).on('load', function() {
+      requestAnimationFrame(setupToggle);
     });
+
+    // click handler
+    $toggle.off('click.gfamReadmore').on('click.gfamReadmore', function(e) {
+      e.preventDefault();
+      const isExpanded = $content.hasClass('expanded');
+
+      if (isExpanded) {
+        // collapse
+        $content.removeClass('expanded');
+        $content.css('max-height', COLLAPSED_HEIGHT + 'px');
+        $toggle.text('Show more');
+      } else {
+        // expand to full scrollHeight
+        const fullHeight = $content[0].scrollHeight;
+        $content.addClass('expanded');
+        $content.css('max-height', fullHeight + 'px');
+        $toggle.text('Show less');
+      }
+    });
+
+    // If content changes dynamically later, you can re-run setupToggle(); 
+    // (e.g. after AJAX update)
   });
+  // 
 });
 
 function reinitSeeMoreLess(){

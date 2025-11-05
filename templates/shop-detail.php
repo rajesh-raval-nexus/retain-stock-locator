@@ -1,7 +1,9 @@
 <?php
 global $xmlPath;
 
-$stock_number = isset($_GET['stock_number']) ? sanitize_text_field($_GET['stock_number']) : '';
+//$stock_number = isset($_GET['stock_number']) ? sanitize_text_field($_GET['stock_number']) : '';
+
+$stock_number = get_query_var('stock_number');
 
 if ($stock_number) {
 
@@ -11,7 +13,7 @@ $vehicle_seach = RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
 
 foreach ($allListingsData as $listing) {
 
-  if ($listing['stock_number'] === $stock_number) { ?>
+  if ($listing['stock_number'] === $stock_number) { ?>  
       <!-- Header -->
       <div class="gfam-detail-header">
         <div class="container">
@@ -29,7 +31,10 @@ foreach ($allListingsData as $listing) {
                 <span> > </span>
                 <a href="#"><?php esc_html_e('Stock Locator', 'retain-stock-locator'); ?></a>
                 <span> > </span>
-                <span class="active"><?php echo $listing['item_specification']; ?></span>
+                <span class="active">
+                    <?php //echo $listing['item_specification']; ?>
+                    <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
+                  </span>
               </nav>
 
             </div>
@@ -48,9 +53,7 @@ foreach ($allListingsData as $listing) {
       <div class="gfam-detail-main-title">
         <div class="container">
           <h1 class="gfam-detail-title">
-            <?php  if ( isset($listing['item_specification']) ) {
-                  echo esc_html( $listing['item_specification'] );
-              } ?>
+            <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
           </h1>
           <div class="gfam-detail-price-section d-xl-none d-flex">
             <?php if (! empty($listing['price'])) { ?>  
@@ -151,7 +154,8 @@ foreach ($allListingsData as $listing) {
                 <div id="shared-caption" class="custom-caption" style="display: none;">
                   <div class="text-center mt-4">
                     <button class="btn btn-warning me-2"><?php esc_html_e('Call', 'retain-stock-locator'); ?></button>
-                    <button class="btn btn-warning"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button>
+                    <!-- <button class="btn btn-warning"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button> -->
+                    <button class="btn btn-warning btn-message-detail" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button>
                   </div>
                 </div>
               </div>
@@ -273,8 +277,10 @@ foreach ($allListingsData as $listing) {
                     </h2>
 
                     <div class="gfam-detail-comments-content">
-                      <p class="readmore-text"><?php echo wp_kses_post( $listing['description'] ); ?></p>
-                      <a href="javascript:void(0);" class="toggle-btn d-block mt-3">Show more</a>
+                      <p class="readmore-text">
+                        <?php echo wp_kses_post($listing['description']); ?>
+                      </p>
+                      <button type="button" class="gfam-show-toggle mt-3">Show more</button>
                     </div>
 
                   </div>
@@ -322,7 +328,7 @@ foreach ($allListingsData as $listing) {
                       <?php if (! empty($listing['price'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Price', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['price']); ?></div>
+                          <div class="gfam-detail-detail-value"><?php echo '$' . esc_html($listing['price']); ?></div>
                         </div>
                       <?php endif; ?>
 
@@ -422,12 +428,14 @@ foreach ($allListingsData as $listing) {
                         <h2 class="gfam-detail-section-title text-center"><?php esc_html_e('Similar Listings', 'retain-stock-locator'); ?> <span><?php esc_html_e('You Might Like', 'retain-stock-locator'); ?></span></h2>
                     <?php endif; ?>
                     <!-- Product Grid -->
-                    <div class="gfam-product-grid owl-carousel owl-theme">
+                    <div class="gfam-product-grid row owl-carousel owl-theme">
                       <?php foreach ($matchingListings as $listingItem) : 
                           $price = $listingItem['price'];
                           $hours = $listingItem['hours'];
+
+                          $product_title = $listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model'];
                         ?>
-                        <div class="gfam-product-card item">
+                        <div class="gfam-product-card item col-lg-4 col-md-6 my-3">
                           <div class="gfam-product-image">
                             <div class="owl-carousel gfam-carousel">
                               <?php foreach ($listingItem['images'] as $image) : ?>
@@ -453,24 +461,27 @@ foreach ($allListingsData as $listing) {
                                   <div class="gfam-odometer-icon">
                                       <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
                                   </div>
-                                  <?php if (!empty($hours)) : ?>
-                                      <div class="gfam-odometer-info">
-                                          <span class="gfam-odometer-label">Odometer</span>
-                                          <span class="gfam-odometer-value"><?php echo number_format($hours, 0, '.', ','); ?> kms</span>
-                                      </div>
-                                  <?php endif; ?>
+                                  <div class="gfam-odometer-info">
+                                    <span class="gfam-odometer-label">Odometer</span>
+                                    <?php if (!empty($hours)) { ?>
+                                      <span class="gfam-odometer-value"><?php echo number_format($hours, 0, '.', ','); ?> kms</span>
+                                    <?php }else{ ?>
+                                        <span class="gfam-odometer-value">N/A</span>
+                                    <?php } ?>
+                                  </div>
                               </div>
 
-                              <?php if (!empty($price)) : ?>
-                                  <div class="gfam-price-info">
+                              <div class="gfam-price-info">
+                                    <?php if (!empty($price)) { ?>
                                       <div class="gfam-price mb-0"><?php echo "$" . number_format($price, 0, '.', ','); ?></div>
+                                      <?php }else{ ?>
+                                        <div class="gfam-price mb-0">N/A</div>
+                                      <?php } ?>
                                   </div>
-                              <?php endif; ?>
                             </div>
 
-                            <!-- <button class="gfam-btn">See Details</button> -->
-                            <a class="gfam-btn" href="<?php echo site_url('/listing-detail/?stock_number=' . $listingItem['stock_number']); ?>">
-                              <?php esc_html_e( 'See Details', 'retain-stock-locator' ); ?>
+                            <a class="gfam-btn" href="<?php echo esc_url(site_url('/vdp/' . $stock_number)); ?>">
+                                <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
                             </a>
                           </div>
                         </div>
@@ -533,7 +544,7 @@ foreach ($allListingsData as $listing) {
                             </div>
 
                             <div class="col-12 mt-3">
-                              <button type="submit" class="btn gfam-detail-submit w-100"><?php esc_html_e('LET’S CHAT', 'retain-stock-locator'); ?></button>
+                              <button type="submit" class="btn gfam-detail-submit w-100"><?php esc_html_e('Submit', 'retain-stock-locator'); ?></button>
                             </div>
                           </form>
 
@@ -644,7 +655,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Request a Video', 'retain-stock-locator'); ?></button>
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Submit', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
               <div id="reqVideoFrmResponse" style="margin-top:10px;"></div>
@@ -735,7 +746,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Request a Video', 'retain-stock-locator'); ?></button>
+                  <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Submit', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
 
@@ -880,7 +891,7 @@ foreach ($allListingsData as $listing) {
 <script>
   jQuery(document).ready(function($) {
     // Smooth scroll helper
-    function smoothScroll(target, offset = 100, speed = 600) {
+    function smoothScroll(target, offset = 150, speed = 600) {
       if ($(target).length) {
         $('html, body').animate({
           scrollTop: $(target).offset().top - offset

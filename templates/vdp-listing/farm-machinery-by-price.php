@@ -25,7 +25,7 @@
     <div class="container gfam-why-choose-section my-5 p-lg-5 p-3 bg-white">
         <?php if ( $title ) : ?>
             <h2 class="mb-3 text-lg-start text-center d-lg-block d-flex flex-column">
-                <?php echo wp_kses_post( $title ); // supports HTML ?>
+                <span class="fw-bold text-dark"><?php echo wp_kses_post( $title ); ?></span>
             </h2>
         <?php endif; ?>
 

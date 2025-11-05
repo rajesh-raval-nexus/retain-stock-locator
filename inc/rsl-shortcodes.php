@@ -331,7 +331,7 @@ function rsl_build_category_modal_html( $filters ) {
                       $j = 0;
                       foreach ( $subtypes as $sub => $subCount ) :
                           $j++;
-                          $sub_id = 'sub' . $i . '-' . $j;
+                          $sub_id = 'subcat' . $i . '-' . $j;
                           ?>
                           <div class="accordion-item">
                             <h2 class="accordion-header">

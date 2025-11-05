@@ -319,10 +319,10 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<span class=\"fw-bold text-dark\">FARM MACHINERY<\/span> <span class=\"fw-bold text-danger\">BY PRICE<\/span>",
+                    "default_value": "FARM MACHINERY BY PRICE",
                     "allow_in_bindings": 0,
                     "tabs": "all",
-                    "toolbar": "basic",
+                    "toolbar": "full",
                     "media_upload": 0,
                     "delay": 0
                 },
@@ -496,10 +496,10 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<span class=\"fw-bold text-dark\">FARM MACHINERY<\/span> <span class=\"fw-bold text-danger\">BY BRAND<\/span>",
+                    "default_value": "FARM MACHINERY BY BRAND",
                     "allow_in_bindings": 0,
                     "tabs": "all",
-                    "toolbar": "basic",
+                    "toolbar": "full",
                     "media_upload": 0,
                     "delay": 0
                 },
@@ -665,11 +665,11 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<span class=\"fw-bold text-dark\">WHY<\/span> <span class=\"fw-bold text-danger\">CHOOSE US??<\/span>",
+                    "default_value": "WHY CHOOSE US?",
                     "allow_in_bindings": 0,
                     "tabs": "all",
                     "toolbar": "full",
-                    "media_upload": 1,
+                    "media_upload": 0,
                     "delay": 0
                 },
                 {
@@ -779,7 +779,7 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
+            "return_format": "url",
             "library": "all",
             "min_width": "",
             "min_height": "",
@@ -808,8 +808,28 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_690b1cf6b0e2a",
+                    "label": "Email Receiver – Request a Call Back",
+                    "name": "email_receiver_request_a_call_back",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
                     "key": "field_6901f5dfb7502",
-                    "label": "Request a Call Back - Subject Name",
+                    "label": "Request a Call Back - Subject Name for Admin",
                     "name": "request_a_call_back_subject_name",
                     "aria-label": "",
                     "type": "text",
@@ -830,7 +850,7 @@
                 },
                 {
                     "key": "field_6901ec534690d",
-                    "label": "Request a Call Back - Email Content",
+                    "label": "Request a Call Back - Email Content for Admin",
                     "name": "request_a_call_back_email_content",
                     "aria-label": "",
                     "type": "wysiwyg",
@@ -910,8 +930,28 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_690b1d14b0e2b",
+                    "label": "Email Receiver – Video Walkthrough",
+                    "name": "email_receiver_video_walkthrough",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
                     "key": "field_6901fd2b0a0dc",
-                    "label": "Video Walkthrough - Subject Name",
+                    "label": "Video Walkthrough - Subject Name for Admin",
                     "name": "video_walkthrough_subject_name",
                     "aria-label": "",
                     "type": "text",
@@ -932,7 +972,7 @@
                 },
                 {
                     "key": "field_6901fd2b0a0dd",
-                    "label": "Video Walkthrough - Email Content",
+                    "label": "Video Walkthrough - Email Content for Admin",
                     "name": "video_walkthrough_email_content",
                     "aria-label": "",
                     "type": "wysiwyg",
@@ -1012,8 +1052,28 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_690b1d3db0e2d",
+                    "label": "Email Receiver – Ask Question",
+                    "name": "email_receiver_ask_question",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
                     "key": "field_6908a9024305b",
-                    "label": "Ask Question - Subject Name",
+                    "label": "Ask Question - Subject Name for Admin",
                     "name": "ask_question_subject_name",
                     "aria-label": "",
                     "type": "text",
@@ -1034,7 +1094,7 @@
                 },
                 {
                     "key": "field_6908a9024305c",
-                    "label": "Ask Question - Email Content",
+                    "label": "Ask Question - Email Content for Admin",
                     "name": "ask_question_email_content",
                     "aria-label": "",
                     "type": "wysiwyg",
@@ -1114,8 +1174,28 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_690b1d47b0e2e",
+                    "label": "Email Receiver – Test Drive",
+                    "name": "email_receiver_test_drive",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
                     "key": "field_6908aacfda8e3",
-                    "label": "Test Drive - Subject Name",
+                    "label": "Test Drive - Subject Name for Admin",
                     "name": "test_drive_subject_name",
                     "aria-label": "",
                     "type": "text",
@@ -1136,7 +1216,7 @@
                 },
                 {
                     "key": "field_6908aacfda8e4",
-                    "label": "Test Drive - Email Content",
+                    "label": "Test Drive - Email Content for Admin",
                     "name": "test_drive_email_content",
                     "aria-label": "",
                     "type": "wysiwyg",
@@ -1216,8 +1296,28 @@
             "layout": "block",
             "sub_fields": [
                 {
+                    "key": "field_690b1d59b0e2f",
+                    "label": "Email Receiver – Contact Us",
+                    "name": "email_receiver_contact_us",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
                     "key": "field_690a096757abc",
-                    "label": "Contact Us - Subject Name",
+                    "label": "Contact Us - Subject Name for Admin",
                     "name": "contact_us_subject_name",
                     "aria-label": "",
                     "type": "text",
@@ -1238,7 +1338,7 @@
                 },
                 {
                     "key": "field_690a096757abd",
-                    "label": "Contact Us - Email Content",
+                    "label": "Contact Us - Email Content for Admin",
                     "name": "contact_us_email_content",
                     "aria-label": "",
                     "type": "wysiwyg",
@@ -1300,6 +1400,249 @@
                     "delay": 0
                 }
             ]
+        },
+        {
+            "key": "field_690b3c76d0267",
+            "label": "Detail Page Settings",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_690b5d028ebfc",
+            "label": "Detail Page Slug",
+            "name": "detail_page_slug",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_690b3fc36c062",
+            "label": "Detail Data Sections",
+            "name": "detail_data_sections",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_690b3d20d0268",
+                    "label": "Vehicle Features Title",
+                    "name": "vehicle_features_title",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Vehicle Features",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_690b3d4ed0269",
+                    "label": "Dealer Comments Title",
+                    "name": "dealer_comments_title",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Dealer Comments",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_690b3d5ed026a",
+                    "label": "Vehicle Details Title",
+                    "name": "vehicle_details_title",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Vehicle Details",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 0,
+                    "delay": 0
+                }
+            ]
+        },
+        {
+            "key": "field_690b3dced2acc",
+            "label": "Easy Steps to Own Your Vehicle",
+            "name": "easy_steps_to_own_your_vehicle",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_690b3de5d2acd",
+                    "label": "Steps Vehicle Title",
+                    "name": "steps_vehicle_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Easy Steps to Own Your Vehicle",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690b3eb6d2ace",
+                    "label": "Video Walkaround Title",
+                    "name": "video_walkaround_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Video Walkaround",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690b3ec2d2acf",
+                    "label": "Video Walkaround Sub Title",
+                    "name": "video_walkaround_sub_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690b3ed7d2ad0",
+                    "label": "Test Drive Title",
+                    "name": "test_drive_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Test Drive",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690b3ee5d2ad1",
+                    "label": "Test Drive Sub Title",
+                    "name": "test_drive_sub_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -1320,5 +1663,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762268588
+    "modified": 1762352409
 }
