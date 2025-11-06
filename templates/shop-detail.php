@@ -479,8 +479,14 @@ foreach ($allListingsData as $listing) {
                                       <?php } ?>
                                   </div>
                             </div>
-
-                            <a class="gfam-btn" href="<?php echo esc_url(site_url('/vdp/' . $stock_number)); ?>">
+                            <?php
+                              $detail_page = get_field('select_stock_locator_detail_page', 'option');
+                              if ($detail_page) {
+                                  $detail_page_slug = $detail_page->post_name;
+                                  $detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number . '/');
+                              }
+                            ?>
+                            <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
                                 <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
                             </a>
                           </div>

@@ -65,7 +65,7 @@
             "append": ""
         },
         {
-            "key": "field_6909f400461a8",
+            "key": "field_690c3ec5cce54",
             "label": "Select Stock Locator Page",
             "name": "select_stock_locator_page",
             "aria-label": "",
@@ -81,7 +81,9 @@
             "post_type": [
                 "page"
             ],
-            "post_status": "",
+            "post_status": [
+                "publish"
+            ],
             "taxonomy": "",
             "return_format": "object",
             "multiple": 0,
@@ -257,6 +259,347 @@
             "ui": 1
         },
         {
+            "key": "field_68f10510377d6",
+            "label": "Do you want to show Why Choose Us Section?",
+            "name": "do_you_want_to_show_why_choose_us_section",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_68f10515377d7",
+            "label": "After how many stock list you want to show?",
+            "name": "after_how_many_stock_list_you_want_to_show_why_choose_us",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Put numbers in a range of 3,6,9 and so on.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f10510377d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "80",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 3,
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68ff7336cd72e",
+            "label": "Why Choose Us Section",
+            "name": "why_choose_us_section",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Put numbers in a range of 3,6,9 and so on.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f10510377d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "sub_fields": [
+                {
+                    "key": "field_68ff7350cd72f",
+                    "label": "Why Choose Us Section Title",
+                    "name": "why_choose_us_section_title",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "WHY <span style=\"color: #92191c;\">CHOOSE US?<\/span>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_68ff7395cd730",
+                    "label": "Why Choose Us Data",
+                    "name": "why_choose_us_data",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 3,
+                    "collapsed": "",
+                    "button_label": "Add Row",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_68ff73a5cd731",
+                            "label": "Icon",
+                            "name": "icon",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "allow_in_bindings": 0,
+                            "preview_size": "medium",
+                            "parent_repeater": "field_68ff7395cd730"
+                        },
+                        {
+                            "key": "field_68ff73b2cd732",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Here WHY CHOOSE Title",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_68ff7395cd730"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_68f1048583435",
+            "label": "Do you want to show Machinery By Brand Section",
+            "name": "do_you_want_to_show_machinery_by_brand_section",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_68f1048983436",
+            "label": "After how many stock list you want to show?",
+            "name": "after_how_many_stock_list_you_want_to_show_brand",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Put numbers in a range of 3,6,9 and so on.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1048583435",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "80",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 6,
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68ff710686406",
+            "label": "Machinery Brand Section",
+            "name": "machinery_brand_section",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1048583435",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "sub_fields": [
+                {
+                    "key": "field_68ff714b86407",
+                    "label": "Machinery Brand Section Title",
+                    "name": "machinery_brand_section_title",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "FARM MACHINERY <span style=\"color: #92191c;\">BY BRAND<\/span>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_68ff718586408",
+                    "label": "Machinery Brands",
+                    "name": "machinery_brands",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Row",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_68ff71a686409",
+                            "label": "Logo",
+                            "name": "logo",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "allow_in_bindings": 0,
+                            "preview_size": "medium",
+                            "parent_repeater": "field_68ff718586408"
+                        },
+                        {
+                            "key": "field_68ff71b88640a",
+                            "label": "URL",
+                            "name": "url",
+                            "aria-label": "",
+                            "type": "url",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "parent_repeater": "field_68ff718586408"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "key": "field_68f102b592a7a",
             "label": "Do you want to show Machinery Price Filter",
             "name": "do_you_want_to_show_machinery_price_filter",
@@ -346,7 +689,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "FARM MACHINERY BY PRICE",
+                    "default_value": "FARM MACHINERY <span style=\"color: #92191c;\">BY PRICE<\/span>",
                     "allow_in_bindings": 0,
                     "tabs": "all",
                     "toolbar": "full",
@@ -428,347 +771,6 @@
                             "prepend": "",
                             "append": "",
                             "parent_repeater": "field_68ff6dbbad81a"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_68f1048583435",
-            "label": "Do you want to show Machinery By Brand Section",
-            "name": "do_you_want_to_show_machinery_by_brand_section",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "20",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 1,
-            "allow_in_bindings": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
-        },
-        {
-            "key": "field_68f1048983436",
-            "label": "After how many stock list you want to show?",
-            "name": "after_how_many_stock_list_you_want_to_show_brand",
-            "aria-label": "",
-            "type": "number",
-            "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_68f1048583435",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "80",
-                "class": "",
-                "id": ""
-            },
-            "default_value": 18,
-            "min": "",
-            "max": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "step": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_68ff710686406",
-            "label": "Machinery Brand Section",
-            "name": "machinery_brand_section",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_68f1048583435",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "row",
-            "sub_fields": [
-                {
-                    "key": "field_68ff714b86407",
-                    "label": "Machinery Brand Section Title",
-                    "name": "machinery_brand_section_title",
-                    "aria-label": "",
-                    "type": "wysiwyg",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "FARM MACHINERY BY BRAND",
-                    "allow_in_bindings": 0,
-                    "tabs": "all",
-                    "toolbar": "full",
-                    "media_upload": 0,
-                    "delay": 0
-                },
-                {
-                    "key": "field_68ff718586408",
-                    "label": "Machinery Brands",
-                    "name": "machinery_brands",
-                    "aria-label": "",
-                    "type": "repeater",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "pagination": 0,
-                    "min": 0,
-                    "max": 0,
-                    "collapsed": "",
-                    "button_label": "Add Row",
-                    "rows_per_page": 20,
-                    "sub_fields": [
-                        {
-                            "key": "field_68ff71a686409",
-                            "label": "Logo",
-                            "name": "logo",
-                            "aria-label": "",
-                            "type": "image",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "array",
-                            "library": "all",
-                            "min_width": "",
-                            "min_height": "",
-                            "min_size": "",
-                            "max_width": "",
-                            "max_height": "",
-                            "max_size": "",
-                            "mime_types": "",
-                            "allow_in_bindings": 0,
-                            "preview_size": "medium",
-                            "parent_repeater": "field_68ff718586408"
-                        },
-                        {
-                            "key": "field_68ff71b88640a",
-                            "label": "URL",
-                            "name": "url",
-                            "aria-label": "",
-                            "type": "url",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "allow_in_bindings": 0,
-                            "placeholder": "",
-                            "parent_repeater": "field_68ff718586408"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "key": "field_68f10510377d6",
-            "label": "Do you want to show Why Choose Us Section?",
-            "name": "do_you_want_to_show_why_choose_us_section",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "20",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 1,
-            "allow_in_bindings": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
-        },
-        {
-            "key": "field_68f10515377d7",
-            "label": "After how many stock list you want to show?",
-            "name": "after_how_many_stock_list_you_want_to_show_why_choose_us",
-            "aria-label": "",
-            "type": "number",
-            "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_68f10510377d6",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "80",
-                "class": "",
-                "id": ""
-            },
-            "default_value": 21,
-            "min": "",
-            "max": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "step": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_68ff7336cd72e",
-            "label": "Why Choose Us Section",
-            "name": "why_choose_us_section",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_68f10510377d6",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "row",
-            "sub_fields": [
-                {
-                    "key": "field_68ff7350cd72f",
-                    "label": "Why Choose Us Section Title",
-                    "name": "why_choose_us_section_title",
-                    "aria-label": "",
-                    "type": "wysiwyg",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "WHY CHOOSE US?",
-                    "allow_in_bindings": 0,
-                    "tabs": "all",
-                    "toolbar": "full",
-                    "media_upload": 0,
-                    "delay": 0
-                },
-                {
-                    "key": "field_68ff7395cd730",
-                    "label": "Why Choose Us Data",
-                    "name": "why_choose_us_data",
-                    "aria-label": "",
-                    "type": "repeater",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "layout": "table",
-                    "pagination": 0,
-                    "min": 0,
-                    "max": 3,
-                    "collapsed": "",
-                    "button_label": "Add Row",
-                    "rows_per_page": 20,
-                    "sub_fields": [
-                        {
-                            "key": "field_68ff73a5cd731",
-                            "label": "Icon",
-                            "name": "icon",
-                            "aria-label": "",
-                            "type": "image",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "array",
-                            "library": "all",
-                            "min_width": "",
-                            "min_height": "",
-                            "min_size": "",
-                            "max_width": "",
-                            "max_height": "",
-                            "max_size": "",
-                            "mime_types": "",
-                            "allow_in_bindings": 0,
-                            "preview_size": "medium",
-                            "parent_repeater": "field_68ff7395cd730"
-                        },
-                        {
-                            "key": "field_68ff73b2cd732",
-                            "label": "Title",
-                            "name": "title",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "allow_in_bindings": 0,
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": "",
-                            "parent_repeater": "field_68ff7395cd730"
                         }
                     ]
                 }
@@ -868,7 +870,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "New Call Back Request - GFAM",
+                    "default_value": "New Call-Back Request Received – GFAM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -910,7 +912,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank You for Your Call Back Request",
+                    "default_value": "Thank You for Your Call-Back Request – GFAM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -943,7 +945,7 @@
         {
             "key": "field_6901fd2b0a0db",
             "label": "Video Walkthrough Email Template",
-            "name": "video_walkthrough_email_template",
+            "name": "New_Video_Walkthrough_Request_-_GAFM",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -1032,7 +1034,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank you for your request",
+                    "default_value": "We’ve Received Your Video Walkthrough Request - GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1112,7 +1114,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "New Question Submission",
+                    "default_value": "New Customer Question About Vehicle – GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1154,7 +1156,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "Thank you for your question",
+                    "default_value": "We’ve Received Your Question About the Vehicle - GAFM",
                     "maxlength": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
@@ -1307,27 +1309,9 @@
             ]
         },
         {
-            "key": "field_690b1c5dd8d9f",
-            "label": "Appearance",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
-            "key": "field_690b2190d8da4",
-            "label": "Stock Locator Page Badges Color Settings",
-            "name": "stock_locator_page_badges_color_settings",
+            "key": "field_690a096757abb",
+            "label": "Contact Us Popup Email Template",
+            "name": "contact_us_popup_email_template",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -1341,9 +1325,6 @@
             "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_690b1c82d8da0",
-                    "label": "Type Field background color on stock listing",
-                    "name": "type_field_background_color_on_stock_listing",
                     "key": "field_690b1d59b0e2f",
                     "label": "Email Receiver – Contact Us",
                     "name": "email_receiver_contact_us",
@@ -1368,6 +1349,146 @@
                     "label": "Contact Us - Subject Name for Admin",
                     "name": "contact_us_subject_name",
                     "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Contact Us Submission",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690a096757abd",
+                    "label": "Contact Us - Email Content for Admin",
+                    "name": "contact_us_email_content",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "<table style=\"margin: 0; padding: 0; border-collapse: collapse; border-spacing: 0;\" width=\"100%\" bgcolor=\"#f5f5f5\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 20px;\" align=\"center\">\r\n<table style=\"max-width: 600px; width: 100%; border-radius: 8px; margin: 0 auto; border-collapse: collapse;\" bgcolor=\"#ffffff\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 30px 20px; text-align: center;\" bgcolor=\"#92191C\">\r\n<div style=\"background-color: #fff; padding: 10px; display: inline-block; border-radius: 10px;\"><img style=\"max-width: 120px; height: auto; display: block; margin: 0 auto;\" src=\"{logo_url}\" alt=\"Logo\" \/><\/div>\r\n<h1 style=\"color: #fff; margin: 15px 0 0 0; font-family: Arial, sans-serif; font-size: 24px;\">New Question Submission<\/h1>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"padding: 40px 30px; color: #333; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;\">Hi Admin,\r\n\r\nA new question has been submitted via the Ask a Question form. Here are the details:\r\n<table style=\"border-left: 4px solid #FDBD3D; border-radius: 4px; margin-top: 20px; border-collapse: collapse;\" width=\"100%\" bgcolor=\"#f9f9f9\">\r\n<tbody>\r\n<tr>\r\n<td><strong>Name:<\/strong> {first_name} {last_name}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Email:<\/strong> {email}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Phone:<\/strong> {phone}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Post Code:<\/strong> {post_code}<\/td>\r\n<\/tr>\r\n<tr>\r\n<td><strong>Question:<\/strong> {question}<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"color: #ffffff; padding: 20px; text-align: center; font-size: 12px; font-family: Arial, sans-serif;\" bgcolor=\"#333333\">© {year} {site_name}. All rights reserved.<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                },
+                {
+                    "key": "field_690a096757abe",
+                    "label": "Contact Us - Subject Name for User",
+                    "name": "contact_us_subject_name_for_user",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Thank you for your Contact",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690a096757abf",
+                    "label": "Contact Us - Email Content for User",
+                    "name": "contact_us_email_content_for_user",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "<table style=\"margin: 0; padding: 0; border-collapse: collapse; border-spacing: 0;\" width=\"100%\" bgcolor=\"#f5f5f5\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 20px;\" align=\"center\">\r\n<table style=\"max-width: 600px; width: 100%; border-radius: 8px; margin: 0 auto; border-collapse: collapse;\" bgcolor=\"#ffffff\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 30px 20px; text-align: center;\" bgcolor=\"#92191C\">\r\n<div style=\"background-color: #fff; padding: 10px; display: inline-block; border-radius: 10px;\"><img style=\"max-width: 120px; height: auto; display: block; margin: 0 auto;\" src=\"{logo_url}\" alt=\"Logo\" \/><\/div>\r\n<h1 style=\"color: #fff; margin: 15px 0 0 0; font-family: Arial, sans-serif; font-size: 24px;\">Thank You for Your Question<\/h1>\r\n<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"padding: 40px 30px; color: #333; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;\">Hi {first_name},\r\n\r\nThank you for reaching out with your question. Our team has received your inquiry and will get back to you shortly.\r\n\r\nWe appreciate your interest in {site_name}. If you have any urgent questions, feel free to contact us directly.\r\n\r\nBest regards,\r\n<strong>The {site_name} Team<\/strong><\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"color: #ffffff; padding: 20px; text-align: center; font-size: 12px; font-family: Arial, sans-serif;\" bgcolor=\"#333333\">© {year} {site_name}. All rights reserved.<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
+                }
+            ]
+        },
+        {
+            "key": "field_690b3c76d0267",
+            "label": "Appearance",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_690c3ff9d0a5a",
+            "label": "Stock Locator Page Badges Color Settings",
+            "name": "stock_locator_page_badges_color_settings",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_690c4015d0a5b",
+                    "label": "Email Receiver – Contact Us",
+                    "name": "email_receiver_contact_us",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_690c405ad0a5c",
+                    "label": "Contact Us - Subject Name for Admin",
+                    "name": "contact_us_subject_name",
+                    "aria-label": "",
                     "type": "color_picker",
                     "instructions": "",
                     "required": 0,
@@ -1383,10 +1504,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b1ddbd8da3",
-                    "label": "Stock Number Field Background Color",
-                    "name": "stock_number_field_background_color",
-                    "key": "field_690a096757abd",
+                    "key": "field_690c4087d0a5d",
                     "label": "Contact Us - Email Content for Admin",
                     "name": "contact_us_email_content",
                     "aria-label": "",
@@ -1405,7 +1523,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b1d85d8da2",
+                    "key": "field_690c409cd0a5e",
                     "label": "Badges Text Color on stock listing",
                     "name": "badges_text_color_on_stock_listing",
                     "aria-label": "",
@@ -1426,7 +1544,7 @@
             ]
         },
         {
-            "key": "field_690b24a9da2fb",
+            "key": "field_690c413150529",
             "label": "General Options For Stock Locator and VDP Page",
             "name": "general_color_options",
             "aria-label": "",
@@ -1442,7 +1560,7 @@
             "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_690b2243bb53b",
+                    "key": "field_690c414d5052a",
                     "label": "Button Background Color",
                     "name": "button_background_color",
                     "aria-label": "",
@@ -1461,7 +1579,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b2273bb53c",
+                    "key": "field_690c41825052b",
                     "label": "Button Background Hover Color",
                     "name": "button_background_hover_color",
                     "aria-label": "",
@@ -1480,7 +1598,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b228fbb53d",
+                    "key": "field_690c41975052c",
                     "label": "Button Text Color",
                     "name": "button_text_color",
                     "aria-label": "",
@@ -1499,7 +1617,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b22afbb53e",
+                    "key": "field_690c41ad5052d",
                     "label": "Button Text Hover Color",
                     "name": "button_text_hover_color",
                     "aria-label": "",
@@ -1518,7 +1636,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b22c8bb53f",
+                    "key": "field_690c41c55052e",
                     "label": "Stock Locator Listing Grey Box Background Color",
                     "name": "grey_box_background_color",
                     "aria-label": "",
@@ -1537,7 +1655,7 @@
                     "allow_in_bindings": 0
                 },
                 {
-                    "key": "field_690b234ebb540",
+                    "key": "field_690c41d65052f",
                     "label": "VDP Page Light Grey Box Background Color",
                     "name": "light_grey_box_background_color",
                     "aria-label": "",
@@ -1558,7 +1676,7 @@
             ]
         },
         {
-            "key": "field_690b3c76d0267",
+            "key": "field_690c3fdcd0a59",
             "label": "Detail Page Settings",
             "name": "",
             "aria-label": "",
@@ -1577,11 +1695,11 @@
         },
         {
             "key": "field_690b5d028ebfc",
-            "label": "Detail Page Slug",
-            "name": "detail_page_slug",
+            "label": "Select Stock Locator Detail Page",
+            "name": "select_stock_locator_detail_page",
             "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "type": "post_object",
+            "instructions": "If you change this page link, please go to Settings → Permalinks and click Save Changes once to refresh the URLs",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1589,12 +1707,20 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
-            "maxlength": "",
+            "post_type": [
+                "page"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
             "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
         },
         {
             "key": "field_690b3fc36c062",
@@ -1819,5 +1945,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762352409
+    "modified": 1762411966
 }

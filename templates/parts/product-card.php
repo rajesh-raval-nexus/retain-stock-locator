@@ -17,11 +17,12 @@ $item_specification  = !empty($item['item_specification']) ? $item['item_specifi
 $hours               = !empty($item['hours']) ? (int) $item['hours'] : 'N/A';
 $price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
 
-$detail_page_slug = get_field('detail_page_slug', 'option');
-$detail_page_slug = !empty($detail_page_slug) ? $detail_page_slug : 'listing-detail';
+$detail_page = get_field('select_stock_locator_detail_page', 'option');
 
-
-$detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number);
+if ($detail_page) {
+    $detail_page_slug = $detail_page->post_name;
+    $detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number . '/');
+}
 
 ?>
 
@@ -70,14 +71,10 @@ $detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number);
                 <?php endif; ?>
             </div>
 
-            <!-- <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
-                <?php //esc_html_e('See Details', 'retain-stock-locator'); ?>
-            </a> -->
-            
-            <a class="gfam-btn" href="<?php echo esc_url(site_url('/vdp/' . $stock_number)); ?>">
+            <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
                 <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
             </a>
-
+            
         </div>
     </div>
 </div>

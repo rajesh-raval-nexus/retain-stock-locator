@@ -450,14 +450,31 @@ function is_stock_locator_page() {
     return str_starts_with( $current_url_clean, $stock_locator_url );
 }
 
+// function gfam_add_listing_detail_rewrite_rule() {
+//     add_rewrite_rule(
+//         '^vdp/([^/]+)/?',
+//         'index.php?pagename=vdpd&stock_number=$matches[1]',
+//         'top'
+//     );
+// }
+// add_action('init', 'gfam_add_listing_detail_rewrite_rule');
+
 function gfam_add_listing_detail_rewrite_rule() {
-    add_rewrite_rule(
-        '^vdp/([^/]+)/?',
-        'index.php?pagename=vdp&stock_number=$matches[1]',
-        'top'
-    );
+    $detail_page = get_field('select_stock_locator_detail_page', 'option');
+
+    if ($detail_page) {
+        $detail_page_slug = $detail_page->post_name;
+
+        add_rewrite_rule(
+            '^' . $detail_page_slug . '/([^/]+)/?',
+            'index.php?pagename=' . $detail_page_slug . '&stock_number=$matches[1]',
+            'top'
+        );
+    }
 }
 add_action('init', 'gfam_add_listing_detail_rewrite_rule');
+
+
 
 // Register query var so WordPress recognizes it
 function gfam_add_stock_number_query_var($vars) {
