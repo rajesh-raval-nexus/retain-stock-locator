@@ -452,8 +452,8 @@ function is_stock_locator_page() {
 
 function gfam_add_listing_detail_rewrite_rule() {
     add_rewrite_rule(
-        '^listing-detail/([^/]+)/?',
-        'index.php?pagename=listing-detail&stock_number=$matches[1]',
+        '^vdp/([^/]+)/?',
+        'index.php?pagename=vdp&stock_number=$matches[1]',
         'top'
     );
 }

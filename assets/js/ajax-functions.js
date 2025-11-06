@@ -562,7 +562,7 @@ jQuery(document).ready(function($) {
         applyFiltersAndPushState(filters, page);
         setTimeout(function() {
             $('html, body').stop(true).animate({
-                scrollTop: $('.gfam-product-grid').offset().top - 100
+                scrollTop: $('.gfam-product-grid').offset().top - 300
             }, 400);
         }, 300);
     });
