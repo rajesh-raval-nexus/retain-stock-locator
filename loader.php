@@ -48,6 +48,7 @@ function rsl_add_rewrite_rules() {
     // Get the selected page ID from ACF Options
     $page_id = get_field('select_stock_locator_page', 'option');
 
+
     // Only proceed if a valid page is selected
     if (empty($page_id) || !is_numeric($page_id)) {
         return;

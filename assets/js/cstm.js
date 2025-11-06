@@ -367,7 +367,7 @@ jQuery(document).ready(function($) {
         $.ajax({
           url: gfam_ajax_obj.ajax_url,
           type: 'POST',
-          data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce,
+          data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce,
           success: function(response) {
             if (response.success) {
               $('#gfamDetailResponse').html('<p style="color:green;">' + response.data + '</p>');

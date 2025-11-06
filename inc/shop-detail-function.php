@@ -66,8 +66,14 @@ function handle_request_call_back_submit() {
     // Send Email to Admin
     // -----------------------------
     $admin_message = strtr($admin_content, $replacements);
-    $to_admin_default = get_option('admin_email');
-    $to_admin = $template_data['email_receiver_request_a_call_back'] ?? $to_admin_default;
+    
+    $email_receiver = $template_data['email_receiver_request_a_call_back'];
+    if($email_receiver != ''){
+        $to_admin = $template_data['email_receiver_request_a_call_back'];
+    }else{
+        $to_admin = get_option('admin_email');
+    }
+
     $headers = ['Content-Type: text/html; charset=UTF-8'];
 
     $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
@@ -178,8 +184,15 @@ function handle_request_video_submit() {
     // -----------------------------
     // Send Admin Email
     // -----------------------------
-    $to_admin_default = get_option('admin_email');
-    $to_admin = $template_data['email_receiver_video_walkthrough'] ?? $to_admin_default;
+    
+    $email_receiver = $template_data['email_receiver_video_walkthrough'];
+
+    if($email_receiver != ''){
+        $to_admin = $template_data['email_receiver_video_walkthrough'];
+    }else{
+        $to_admin = get_option('admin_email');
+    }
+
     $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
 
     // -----------------------------
@@ -275,8 +288,13 @@ function handle_ask_question_form_submit() {
     $user_message  = strtr($user_content, $replacements);
 
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $to_admin_default = get_option('admin_email');
-    $to_admin = $template_data['email_receiver_ask_question'] ?? $to_admin_default;
+
+    $email_receiver = $template_data['email_receiver_ask_question'];
+    if($email_receiver != ''){
+        $to_admin = $template_data['email_receiver_ask_question'];
+    }else{
+        $to_admin = get_option('admin_email');
+    }
 
     // -----------------------------
     // Send emails
@@ -338,6 +356,8 @@ function handle_test_drive_request_submit() {
     // ==============================
     // Get ACF email template group fields
     // ==============================
+
+    
     $email_template_group = get_field('test_drive_email_template', 'option');
 
     $admin_subject = $email_template_group['test_drive_subject_name'] ?? 'New Test Drive Request - GFAM';
@@ -371,8 +391,13 @@ function handle_test_drive_request_submit() {
     // Send Emails
     // ==============================
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $to_admin_default = get_option('admin_email');
-    $to_admin = $template_data['email_receiver_test_drive'] ?? $to_admin_default;
+    
+    $email_receiver = $email_template_group['email_receiver_test_drive'];
+    if($email_receiver != ''){
+        $to_admin = $email_template_group['email_receiver_test_drive'];
+    }else{
+        $to_admin = get_option('admin_email');
+    }
 
     // Send to Admin
     wp_mail($admin_email, $admin_subject, $admin_message, $headers);
@@ -410,13 +435,13 @@ function handle_contact_us_request_submit() {
     // -----------------------------
     // Get ACF Email Templates
     // -----------------------------
-    $template_data = get_field('ask_question_email_template', 'option');
+    $template_data = get_field('contact_us_popup_email_template', 'option');
 
-    $admin_subject = $template_data['ask_question_subject_name'] ?? 'Contact Submission';
-    $admin_content = $template_data['ask_question_email_content'] ?? '';
+    $admin_subject = $template_data['contact_us_subject_name'] ?? 'Contact Submission';
+    $admin_content = $template_data['contact_us_email_content'] ?? '';
 
-    $user_subject  = $template_data['ask_question_subject_name_for_user'] ?? 'Thank you for your Submit';
-    $user_content  = $template_data['ask_question_email_content_for_user'] ?? '';
+    $user_subject  = $template_data['contact_us_subject_name_for_user'] ?? 'Thank you for your Submit';
+    $user_content  = $template_data['contact_us_email_content_for_user'] ?? '';
 
     if (empty($admin_content)) {
         $admin_content = '<p>No admin email template found in backend.</p>';
@@ -452,8 +477,13 @@ function handle_contact_us_request_submit() {
     $user_message  = strtr($user_content, $replacements);
 
     $headers = ['Content-Type: text/html; charset=UTF-8'];
-    $to_admin_default = get_option('admin_email');
-    $to_admin = $template_data['email_receiver_contact_us'] ?? $to_admin_default;
+    
+    $email_receiver = $template_data['email_receiver_contact_us'];
+    if($email_receiver != ''){
+        $to_admin = $template_data['email_receiver_contact_us'];
+    }else{
+        $to_admin = get_option('admin_email');
+    }
 
     // -----------------------------
     // Send emails

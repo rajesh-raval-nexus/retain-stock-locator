@@ -450,15 +450,6 @@ function is_stock_locator_page() {
     return str_starts_with( $current_url_clean, $stock_locator_url );
 }
 
-// function gfam_add_listing_detail_rewrite_rule() {
-//     add_rewrite_rule(
-//         '^vdp/([^/]+)/?',
-//         'index.php?pagename=vdpd&stock_number=$matches[1]',
-//         'top'
-//     );
-// }
-// add_action('init', 'gfam_add_listing_detail_rewrite_rule');
-
 function gfam_add_listing_detail_rewrite_rule() {
     $detail_page = get_field('select_stock_locator_detail_page', 'option');
 
@@ -474,11 +465,57 @@ function gfam_add_listing_detail_rewrite_rule() {
 }
 add_action('init', 'gfam_add_listing_detail_rewrite_rule');
 
-
-
 // Register query var so WordPress recognizes it
 function gfam_add_stock_number_query_var($vars) {
     $vars[] = 'stock_number';
     return $vars;
 }
 add_filter('query_vars', 'gfam_add_stock_number_query_var');
+
+//Auto-flush rewrite rules when ACF option "select_stock_locator_detail_page" changes
+add_action('acf/save_post', 'gfam_schedule_rewrite_check_after_acf_option_save', 20);
+function gfam_schedule_rewrite_check_after_acf_option_save($post_id) {
+    // Only run for the ACF Options page
+    if ($post_id !== 'options') {
+        return;
+    }
+
+    // Get the selected detail page
+    $detail_page = get_field('select_stock_locator_detail_page', 'option');
+
+    if ($detail_page) {
+        // Handle both Post Object and URL return types
+        if (is_object($detail_page) && isset($detail_page->post_name)) {
+            $detail_slug = $detail_page->post_name;
+        } else {
+            $detail_slug = basename(parse_url($detail_page, PHP_URL_PATH));
+        }
+
+        // If a valid slug exists, store it as an option flag
+        if (!empty($detail_slug)) {
+            update_option('gfam_pending_flush', $detail_slug);
+        }
+    }
+}
+
+// Run this on the next init (or admin_init) to flush rewrite rules only once
+add_action('admin_init', 'gfam_maybe_flush_rewrite_rules');
+add_action('init', 'gfam_maybe_flush_rewrite_rules');
+function gfam_maybe_flush_rewrite_rules() {
+    $pending_flush = get_option('gfam_pending_flush');
+
+    if (!empty($pending_flush)) {
+        flush_rewrite_rules();
+        delete_option('gfam_pending_flush');
+    }
+}
+
+
+add_action('admin_notices', function() {
+    if (get_transient('gfam_rewrite_flushed')) {
+        echo '<div class="notice notice-success is-dismissible"><p><strong>Permalinks refreshed automatically after ACF options update.</strong></p></div>';
+        delete_transient('gfam_rewrite_flushed');
+    }
+}); 
+
+

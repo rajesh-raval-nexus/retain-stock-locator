@@ -1529,11 +1529,31 @@ textarea:focus {
   font-weight: 400;
   color: #727272;
   line-height: 1.5em;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;   
-  overflow: hidden;
   transition: all 0.4s ease-in-out;
+}
+
+/* readmore-readless css */
+.gfam-detail-comments-content .add-read-more.show-less-content .second-section,
+.gfam-detail-comments-content .add-read-more.show-less-content .read-less {
+  display: none;
+}
+
+.gfam-detail-comments-content .add-read-more.show-more-content .read-more {
+  display: none;
+}
+
+.gfam-detail-comments-content .add-read-more .read-more,
+.gfam-detail-comments-content .add-read-more .read-less {
+  font-weight: bold;
+  margin-left: 2px;
+  color: #727272;
+  cursor: pointer;
+}
+
+.gfam-detail-comments-content .add-read-more{
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .gfam-detail-comments-content p.expanded {

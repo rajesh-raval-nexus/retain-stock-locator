@@ -538,7 +538,7 @@ jQuery(document).ready(function($) {
             },
             success: function(response) {
                 if (response.success) {
-                    $('.gfam-product-grid').html(response.data.html);
+                    $('.rsl-stock-locator .gfam-product-grid').html(response.data.html);
                     $('.ajax-pagination').remove();
                     $('.load-more-btn').html(response.data.pagination);
                     reinitCarousel();

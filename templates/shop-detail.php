@@ -1,8 +1,6 @@
 <?php
 global $xmlPath;
 
-//$stock_number = isset($_GET['stock_number']) ? sanitize_text_field($_GET['stock_number']) : '';
-
 $stock_number = get_query_var('stock_number');
 
 if ($stock_number) {
@@ -10,6 +8,9 @@ if ($stock_number) {
 $allListingsData = rsl_parse_listings($xmlPath);
 
 $vehicle_seach = RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+
+$detail_data_sections = get_field('detail_data_sections', 'option');
+$easy_steps_to_own_your_vehicle = get_field('easy_steps_to_own_your_vehicle', 'option');
 
 foreach ($allListingsData as $listing) {
 
@@ -32,7 +33,6 @@ foreach ($allListingsData as $listing) {
                 <a href="#"><?php esc_html_e('Stock Locator', 'retain-stock-locator'); ?></a>
                 <span> > </span>
                 <span class="active">
-                    <?php //echo $listing['item_specification']; ?>
                     <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
                   </span>
               </nav>
@@ -154,7 +154,6 @@ foreach ($allListingsData as $listing) {
                 <div id="shared-caption" class="custom-caption" style="display: none;">
                   <div class="text-center mt-4">
                     <button class="btn btn-warning me-2"><?php esc_html_e('Call', 'retain-stock-locator'); ?></button>
-                    <!-- <button class="btn btn-warning"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button> -->
                     <button class="btn btn-warning btn-message-detail" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button>
                   </div>
                 </div>
@@ -164,7 +163,9 @@ foreach ($allListingsData as $listing) {
               <div id="vehicleFeatures" class="row mt-lg-5 mt-4">
                 <div class="col-12">
                   <div class="gfam-detail-vehicle-features">
-                    <h2 class="gfam-detail-section-title"><?php esc_html_e('Vehicle', 'retain-stock-locator'); ?> <span><?php esc_html_e('Features', 'retain-stock-locator'); ?></span></h2>
+                    <h2 class="gfam-detail-section-title">
+                      <?php echo $detail_data_sections['vehicle_features_title'] ?? ''; ?>
+                    </h2>
 
                     <div class="row">
                       <div class="col-lg-3 col-md-6 col-6">
@@ -186,7 +187,6 @@ foreach ($allListingsData as $listing) {
                         </div>
                       </div>
 
-                      <?php //if (! empty($listing['year'])) : ?>
                       <div class="col-lg-3 col-md-6 col-6">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
@@ -270,20 +270,18 @@ foreach ($allListingsData as $listing) {
               <!-- Dealer Comments Section -->
               <div id="dealerComments" class="row mt-lg-5 mt-4">
                 <div class="col-12">
-                  <div class="gfam-detail-dealer-comments">
-                    <h2 class="gfam-detail-section-title">
-                      <?php esc_html_e('Dealer', 'retain-stock-locator'); ?>
-                      <span><?php esc_html_e('Comments', 'retain-stock-locator'); ?></span>
-                    </h2>
+                  <?php if($listing['description'] != ''){?>
+                    <div class="gfam-detail-dealer-comments">
+                      <h2 class="gfam-detail-section-title">
+                        <?php echo $detail_data_sections['dealer_comments_title'] ?? ''; ?>
+                      </h2>
 
-                    <div class="gfam-detail-comments-content">
-                      <p class="readmore-text">
-                        <?php echo wp_kses_post($listing['description']); ?>
-                      </p>
-                      <button type="button" class="gfam-show-toggle mt-3">Show more</button>
+                      <div class="gfam-detail-comments-content">
+                        <p class="add-read-more show-less-content"><?php echo wp_kses_post($listing['description']); ?></p>
+                      </div>
                     </div>
+                  <?php } ?>
 
-                  </div>
                 </div>
               </div>
 
@@ -292,8 +290,7 @@ foreach ($allListingsData as $listing) {
                 <div class="col-12">
                   <div class="gfam-detail-vehicle-details">
                     <h2 class="gfam-detail-section-title">
-                      <?php esc_html_e('Vehicle', 'retain-stock-locator'); ?>
-                      <span><?php esc_html_e('Details', 'retain-stock-locator'); ?></span>
+                      <?php echo $detail_data_sections['vehicle_details_title'] ?? ''; ?>
                     </h2>
                     <div class="gfam-detail-details-table">
                             
@@ -371,38 +368,47 @@ foreach ($allListingsData as $listing) {
                 </div>
               </div>
 
-
-
               <!-- Ask question section -->
-              <div class="row mt-lg-5 mt-4">
-                <div class="col-12">
-                  <div class="gfam-detail-question-box">
-                    <div class="row w-100 mx-auto">
-                      <div class="col-lg-9 my-auto px-0">
-                        <div class="custom-select-wrapper">
-                          <div class="custom-select">
-                            <span class="selected d-block"><?php esc_html_e( 'Select a question', 'retain-stock-locator' ); ?></span>
-                            <div class="custom-arrow">
-                              <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878" />
-                              </svg>
+               <?php
+                $ask_question_section = get_field('ask_question_section','option');
+
+                if ($ask_question_section && !empty($ask_question_section['ask_question_lists'])): ?>
+                  <div class="row mt-lg-5 mt-4">
+                    <div class="col-12">
+                      <div class="gfam-detail-question-box">
+                        <div class="row w-100 mx-auto">
+                          <div class="col-lg-9 my-auto px-0">
+                            <div class="custom-select-wrapper">
+                              <div class="custom-select">
+                                  <span class="selected d-block"><?php esc_html_e( 'Select a question', 'retain-stock-locator' ); ?></span>
+                                  <div class="custom-arrow">
+                                    <svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878" />
+                                    </svg>
+                                  </div>
+                                  <ul class="options">
+                                        <?php foreach ($ask_question_section['ask_question_lists'] as $index => $item): 
+                                            $question = $item['question'];
+                                            $data_value = 'q' . ($index + 1);
+                                            ?>
+                                            <li data-value="<?php echo esc_attr($data_value); ?>">
+                                                <?php echo esc_html($question); ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 text-end px-0">
+                                <button class="gfam-detail-button my-2 ask-question-btn" data-bs-toggle="modal"
+                                data-bs-target="#askQuestionModal"><?php esc_html_e( 'Ask a Question', 'retain-stock-locator' ); ?></button>
+                              </div>
                             </div>
-                            <ul class="options">
-                              <li data-value="q1"><?php esc_html_e( 'Do you have any similar cars available?', 'retain-stock-locator' ); ?></li>
-                              <li data-value="q2"><?php esc_html_e( 'How do I book a test drive?', 'retain-stock-locator' ); ?></li>
-                              <li data-value="q3"><?php esc_html_e( 'What documents do I need?', 'retain-stock-locator' ); ?></li>
-                            </ul>
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-3 text-end px-0">
-                        <button class="gfam-detail-button my-2 ask-question-btn" data-bs-toggle="modal"
-                        data-bs-target="#askQuestionModal"><?php esc_html_e( 'Ask a Question', 'retain-stock-locator' ); ?></button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  <?php endif; ?>
+
               <?php
                 $allListings = rsl_parse_listings($xmlPath);
                 $similardata = trim($listing['make']);
@@ -451,9 +457,7 @@ foreach ($allListingsData as $listing) {
                               <span class="gfam-badge gfam-badge-code"><?php echo esc_html($listingItem['stock_number']); ?></span>
                             </div>
                             <h3 class="gfam-product-title"><?php echo esc_html($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']); ?></h3>
-                            <!-- <p class="gfam-product-subtitle">
-                                        Trailing Dry Fertiliser Spreaders
-                                      </p> -->
+                            
                             <p class="gfam-product-subtitle"><?php echo esc_html($listingItem['type']); ?></p>
 
                             <div class="gfam-product-details">
@@ -564,15 +568,15 @@ foreach ($allListingsData as $listing) {
 
                 <!-- Easy Steps Section -->
                 <div class="gfam-detail-steps-section d-none d-xl-block">
-                  <h3 class="gfam-detail-steps-title"><?php esc_html_e('Easy Steps to Own Your Vehicle', 'retain-stock-locator'); ?></h3>
+                  <h3 class="gfam-detail-steps-title"><?php echo $easy_steps_to_own_your_vehicle['steps_vehicle_title'] ?? ''; ?></h3>
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
                       <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
                     </div>
                     <div class="gfam-detail-step-content">
-                      <h4><?php esc_html_e('Video Walkaround', 'retain-stock-locator'); ?> </h4>
-                      <p><?php esc_html_e('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'retain-stock-locator'); ?></p>
+                      <h4><?php echo $easy_steps_to_own_your_vehicle['video_walkaround_title'] ?? ''; ?></h4>
+                      <p><?php echo $easy_steps_to_own_your_vehicle['video_walkaround_sub_title'] ?? ''; ?></p>
                       <a href="#" class="gfam-detail-step-link" data-bs-toggle="modal"
                         data-bs-target="#gfamDetailModal"><?php esc_html_e('Send Message >>', 'retain-stock-locator'); ?></a>
                     </div>
@@ -583,8 +587,8 @@ foreach ($allListingsData as $listing) {
                       <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
                     </div>
                     <div class="gfam-detail-step-content">
-                      <h4><?php esc_html_e('Test Drive', 'retain-stock-locator'); ?></h4>
-                      <p><?php esc_html_e('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'retain-stock-locator'); ?></p>
+                      <h4><?php echo $easy_steps_to_own_your_vehicle['test_drive_title'] ?? ''; ?></h4>
+                      <p><?php echo $easy_steps_to_own_your_vehicle['test_drive_sub_title'] ?? ''; ?></p>
                       <a href="#" class="gfam-detail-step-link" data-bs-toggle="modal"
                         data-bs-target="#gfamtestdriverModal"><?php esc_html_e('Send Message >>', 'retain-stock-locator'); ?></a>
                     </div>
@@ -647,11 +651,11 @@ foreach ($allListingsData as $listing) {
                 <div class="gfam-detail-form-group">
                   <div class="gfam-detail-dropdown-modal">
                     <button type="button" class="gfam-detail-dropdown-toggle" id="reqVideoDropdown">
-                      <span class="gfam-detail-dropdown-text"><?php esc_html_e('Make', 'retain-stock-locator'); ?></span>
-                      <svg class=" gfam-detail-dropdown-arrow" width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878"></path>
-                              </svg>
-                      <!-- <i class="fas fa-chevron-down gfam-detail-dropdown-arrow"></i> -->
+                          <span class="gfam-detail-dropdown-text"><?php esc_html_e('Make', 'retain-stock-locator'); ?></span>
+                          <svg class=" gfam-detail-dropdown-arrow" width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878"></path>
+                          </svg>
+                      
                     </button>
                     <div class="gfam-detail-dropdown-menu" id="reqVideoDropdownMenu">
                       <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
@@ -1042,6 +1046,27 @@ foreach ($allListingsData as $listing) {
       const dropdownInput = dropdown.querySelectorAll('input[name="make"]'); // NodeList
       const dropdownItems = dropdown.querySelectorAll('.gfam-detail-dropdown-item');
 
+      // Auto-select if only one dropdown item exists
+      if (dropdownItems.length === 1) {
+        //One item → auto-select it
+        const item = dropdownItems[0];
+        item.classList.add('selected');
+        dropdownText.textContent = item.textContent;
+        dropdownText.style.color = '#333';
+
+        dropdownInput.forEach(input => {
+          input.value = item.getAttribute('data-value');
+        });
+      } else if (dropdownItems.length === 0) {
+        // No items → clear text and input
+        dropdownText.textContent = 'Select an option';
+        dropdownText.style.color = '#999';
+
+        dropdownInput.forEach(input => {
+          input.value = '';
+        });
+      }
+
       const closeDropdown = () => {
         dropdown.classList.remove('active');
         dropdownMenu.classList.remove('show');
@@ -1194,4 +1219,73 @@ foreach ($allListingsData as $listing) {
         this.textContent = text.classList.contains('expanded') ? 'Show less' : 'Show more';
       });
     });
+
+ jQuery(document).ready(function ($) {
+    function AddReadMore() {
+      var carLmt = 300;
+      var readMoreTxt = " ...read more";
+      var readLessTxt = " read less";
+
+      $(".add-read-more").each(function () {
+        var content = $(this).html().trim(); // use .html() to keep tags
+
+        // Skip if already processed
+        if ($(this).find(".second-section").length) return;
+
+        // Create a temporary element to handle text length safely
+        var tempDiv = $("<div>").html(content);
+        var fullText = tempDiv.text();
+
+        if (fullText.length > carLmt) {
+          // Find the position in HTML where to split without breaking tags
+          var visibleHTML = "";
+          var hiddenHTML = "";
+          var currentLength = 0;
+
+          tempDiv.contents().each(function () {
+            if (currentLength >= carLmt) {
+              hiddenHTML += $("<div>").append($(this).clone()).html();
+              return;
+            }
+
+            var nodeText = $(this).text();
+            if (currentLength + nodeText.length <= carLmt) {
+              visibleHTML += $("<div>").append($(this).clone()).html();
+              currentLength += nodeText.length;
+            } else {
+              // Split inside this text node
+              var remaining = carLmt - currentLength;
+              if (this.nodeType === 3) {
+                // text node
+                visibleHTML += this.nodeValue.substring(0, remaining);
+                hiddenHTML += this.nodeValue.substring(remaining);
+              } else {
+                visibleHTML += $("<div>").append($(this).clone()).html();
+              }
+              currentLength = carLmt;
+            }
+          });
+
+          var finalHTML =
+            "<span class='first-section'>" +
+            visibleHTML +
+            "</span><span class='second-section'>" +
+            hiddenHTML +
+            "</span><span class='read-more' title='Click to Show More'>" +
+            readMoreTxt +
+            "</span><span class='read-less' title='Click to Show Less'>" +
+            readLessTxt +
+            "</span>";
+
+          $(this).html(finalHTML);
+        }
+      });
+
+      $(document).on("click", ".read-more,.read-less", function () {
+        $(this).closest(".add-read-more").toggleClass("show-less-content show-more-content");
+      });
+    }
+
+    AddReadMore();
+  });   
 </script>
