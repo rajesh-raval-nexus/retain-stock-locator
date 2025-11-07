@@ -350,10 +350,16 @@ textarea:focus {
   border: none;
   font-weight: bold;
 }
-
+.gfam-detail-toggle-btn.gfam-detail-callback-btn.collapsed::after {
+  margin-left: 5px;
+}
+.gfam-detail-toggle-btn.gfam-detail-callback-btn::after {
+  margin-left: 4px !important;
+}
 /* Content Area */
 .gfam-content {
   flex: 1;
+  height: fit-content;
 }
 
 .gfam-page-title {
@@ -1061,7 +1067,7 @@ max-width: 50%
     position: sticky;
     top:20px;
     z-index: 9;
-    height: 100vh;
+    height: fit-content;
     overflow-y: auto;
   }
   .gfam-filter-tag {
@@ -1203,7 +1209,7 @@ max-width: 50%
 }
 
 .gfam-detail-content {
-  padding: 40px 0;
+  padding: 15px 0;
 }
 
 .gfam-detail-slider-container {
@@ -1549,10 +1555,12 @@ max-width: 50%
 
 .gfam-detail-comments-content .add-read-more .read-more,
 .gfam-detail-comments-content .add-read-more .read-less {
-  font-weight: bold;
   margin-left: 2px;
   color: #727272;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  text-decoration: underline;
 }
 
 .gfam-detail-comments-content .add-read-more{
@@ -1830,6 +1838,7 @@ color: #636363;
 
 .gfam-detail-form-group {
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .rsl-stock-locator .gfam-detail-form-control {
@@ -1857,7 +1866,7 @@ color: #636363;
   padding: 15px;
   border: 0;
   border-radius: 7px;
-  background-color: var(--red_badge_txt_color);
+  background-color: var(--red_badge_txt_color) !important;
   color: #6c757d;
   font-size: 14px;
   text-align: left;
@@ -1935,7 +1944,7 @@ color: #636363;
   color: #333;
 }
 
-.gfam-detail-request-btn {
+.rsl-stock-locator .gfam-detail-request-btn {
   background-color: var(--red_badge_bg_color);
   border: none;
   border-radius: 8px;
@@ -1948,14 +1957,14 @@ color: #636363;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.gfam-detail-request-btn:hover,
-.gfam-detail-request-btn:focus {
+.rsl-stock-locator .gfam-detail-request-btn:hover,
+.rsl-stock-locator .gfam-detail-request-btn:focus {
   background-color: var(--yellow_btn_bg_color);
   transform: translateY(-2px);
   color: var(--darkgrey_badge_bg_color);
 }
 
-.gfam-detail-request-btn:active {
+.rsl-stock-locator .gfam-detail-request-btn:active {
   transform: translateY(0);
 }
 
@@ -2856,6 +2865,7 @@ ease;
 
 .gfam-detail-similiar-product .gfam-product-grid.owl-carousel.owl-theme {
     display: flex;
+    margin: 0 auto;
 }
 .gfam-product-grid .no-result-found-txt {
   text-align: center;

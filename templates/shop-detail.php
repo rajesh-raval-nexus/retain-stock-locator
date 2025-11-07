@@ -516,9 +516,9 @@ foreach ($allListingsData as $listing) {
                     <div class="gfam-detail-price d-none d-xl-block"><?php echo '$' . $listing['price']; ?></div>
                   <?php } ?>
 
-                  <button class="gfam-detail-contact-btn d-none d-xl-block" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?> </button>
+                  <button class="gfam-detail-contact-btn d-block" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Contact Us', 'retain-stock-locator'); ?> </button>
                   
-                  <div class="accordion gfam-detail-form-accordion d-none d-xl-block" id="gfam-detailAccordion">
+                  <div class="accordion gfam-detail-form-accordion d-block" id="gfam-detailAccordion">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="gfam-detailHeading">
                         <button class="accordion-button collapsed gfam-detail-toggle-btn gfam-detail-callback-btn"
@@ -569,7 +569,7 @@ foreach ($allListingsData as $listing) {
                 </div>
 
                 <!-- Easy Steps Section -->
-                <div class="gfam-detail-steps-section d-none d-xl-block">
+                <div class="gfam-detail-steps-section d-block">
                   <h3 class="gfam-detail-steps-title"><?php echo $easy_steps_to_own_your_vehicle['steps_vehicle_title'] ?? ''; ?></h3>
 
                   <div class="gfam-detail-step-item">
