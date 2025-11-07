@@ -103,12 +103,15 @@ jQuery(document).ready(function($) {
     submitHandler: function(form) {
       // Validation passed, now do AJAX
       var formData = $(form).serialize();
+      var currentPage = window.location.href;
       $('#gfam-response').html('<p>Submitting...</p>');
+      //$('#gfam-response').html('<div class="gfam-loader"><span class="spinner"></span></div>');
+
 
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=request_call_back_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=request_call_back_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
             $('#gfam-response').html('<p style="color:green;">' + response.data + '</p>');
@@ -169,12 +172,13 @@ jQuery(document).ready(function($) {
 
     submitHandler: function(form) {
       var formData = $(form).serialize();
+      var currentPage = window.location.href;
       $('#reqVideoFrmResponse').html('<p>Submitting...</p>');
 
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=request_video_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=request_video_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
             $('#reqVideoFrmResponse').html('<p style="color:green;">' + response.data + '</p>');
@@ -227,12 +231,13 @@ jQuery(document).ready(function($) {
 
     submitHandler: function(form) {
       var formData = $(form).serialize();
+      var currentPage = window.location.href;
       $('#askQuestionResponse').html('<p>Submitting...</p>');
 
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=ask_question_form_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=ask_question_form_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
             $('#askQuestionResponse').html('<p style="color:green;">' + response.data + '</p>');
@@ -283,12 +288,13 @@ jQuery(document).ready(function($) {
 
     submitHandler: function(form) {
       var formData = $(form).serialize();
+      var currentPage = window.location.href;
       $('#contactUsModalResponse').html('<p>Submitting...</p>');
 
       $.ajax({
         url: gfam_ajax_obj.ajax_url,
         type: 'POST',
-        data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce,
+        data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
             $('#contactUsModalResponse').html('<p style="color:green;">' + response.data + '</p>');
@@ -362,12 +368,13 @@ jQuery(document).ready(function($) {
       },
       submitHandler: function(form) {
         var formData = $(form).serialize();
+        var currentPage = window.location.href;
         $('#gfamDetailResponse').html('<p>Submitting...</p>');
 
         $.ajax({
           url: gfam_ajax_obj.ajax_url,
           type: 'POST',
-          data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce,
+          data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
           success: function(response) {
             if (response.success) {
               $('#gfamDetailResponse').html('<p style="color:green;">' + response.data + '</p>');

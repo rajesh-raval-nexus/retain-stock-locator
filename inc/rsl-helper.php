@@ -510,12 +510,156 @@ function gfam_maybe_flush_rewrite_rules() {
     }
 }
 
+add_filter('pre_get_document_title', 'gfam_dynamic_stock_detail_title');
+add_filter('wpseo_title', 'gfam_dynamic_stock_detail_title');
 
-add_action('admin_notices', function() {
-    if (get_transient('gfam_rewrite_flushed')) {
-        echo '<div class="notice notice-success is-dismissible"><p><strong>Permalinks refreshed automatically after ACF options update.</strong></p></div>';
-        delete_transient('gfam_rewrite_flushed');
+function gfam_dynamic_stock_detail_title($title) {
+    global $xmlPath;
+    $stock_number = get_query_var('stock_number');
+
+    if (empty($stock_number)) {
+        return $title;
     }
-}); 
+
+    $allListingsData = rsl_parse_listings($xmlPath);
+    if (empty($allListingsData)) {
+        return $title;
+    }
+
+    foreach ($allListingsData as $listing) {
+        if ($listing['stock_number'] === $stock_number) {
+            return esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'] . ' - ' . get_bloginfo('name'));
+        }
+    }
+
+    return $title;
+}
+
+add_action('wp_head', 'gfam_force_dynamic_meta_for_stock_detail', 20);
+function gfam_force_dynamic_meta_for_stock_detail() {
+    global $xmlPath;
+
+    $stock_number = get_query_var('stock_number');
+    if (empty($stock_number)) {
+        return;
+    }
+
+    $allListingsData = rsl_parse_listings($xmlPath);
+    if (empty($allListingsData)) {
+        return;
+    }
+
+    foreach ($allListingsData as $listing) {
+        if ($listing['stock_number'] === $stock_number) {
+            $title = $listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'];
+            $meta_title = esc_html($title);
+            $meta_desc  = esc_attr('Explore full specifications, features, and availability of ' . $title . '. Contact us today to book a test drive or get more details.');
+
+            // Output meta only once — after SEO plugins finish
+            echo "\n<!-- Dynamic SEO Meta -->\n";
+            echo '<meta name="title" content="' . $meta_title . '">' . "\n";
+            echo '<meta name="description" content="' . $meta_desc . '">' . "\n";
+            echo '<meta property="og:title" content="' . $meta_title . '">' . "\n";
+            echo '<meta property="og:description" content="' . $meta_desc . '">' . "\n";
+            echo '<meta name="twitter:title" content="' . $meta_title . '">' . "\n";
+            echo '<meta name="twitter:description" content="' . $meta_desc . '">' . "\n";
+            echo "<!-- End Dynamic SEO Meta -->\n";
+
+            break;
+        }
+    }
+}
+
+
+
+/* site map link generate in the Yoast SEO */
+
+// Register a custom VDP sitemap with Yoast
+add_action('init', function() {
+    $vdp_page_id = get_field('select_stock_locator_page', 'option');
+
+    if ($vdp_page_id) {
+        $vdp_page = get_post($vdp_page_id);
+        if ($vdp_page && !empty($vdp_page->post_name)) {
+            $slug = $vdp_page->post_name;
+
+            // Create dynamic rewrite rule like "stock-locator.xml"
+            add_rewrite_rule($slug . '\.xml$', 'index.php?vdp_sitemap=1', 'top');
+        }
+    }
+});
+
+add_filter('query_vars', function($vars) {
+    $vars[] = 'vdp_sitemap';
+    return $vars;
+});
+
+add_action('template_redirect', function() {
+    if (get_query_var('vdp_sitemap')) {
+        gfam_output_vdp_sitemap();
+        exit;
+    }
+});
+
+// Add dynamic sitemap link into Yoast main sitemap index
+add_filter('wpseo_sitemap_index', function($sitemap_index) {
+    $vdp_page_id = get_field('select_stock_locator_page', 'option');
+    if ($vdp_page_id) {
+        $vdp_page = get_post($vdp_page_id);
+        if ($vdp_page && !empty($vdp_page->post_name)) {
+            $slug = $vdp_page->post_name;
+            $home_url = home_url();
+            $sitemap_index .= '<sitemap>';
+            $sitemap_index .= '<loc>' . esc_url($home_url . '/' . $slug . '.xml') . '</loc>';
+            $sitemap_index .= '<lastmod>' . esc_html(date('c')) . '</lastmod>';
+            $sitemap_index .= '</sitemap>';
+        }
+    }
+    return $sitemap_index;
+});
+
+
+function gfam_output_vdp_sitemap() {
+    global $xmlPath;
+
+    header('Content-Type: application/xml; charset=UTF-8');
+
+    // Get the VDP detail page from ACF options
+    $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
+
+    if (empty($vdp_detail_page) || !is_object($vdp_detail_page)) {
+        echo '<?xml version="1.0" encoding="UTF-8"?>';
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+        exit;
+    }
+
+    $vdp_page_url = get_permalink($vdp_detail_page->ID);
+    $allListingsData = rsl_parse_listings($xmlPath);
+    $today = date('c');
+
+    // Output XML header with Yoast XSL
+    echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    echo '<?xml-stylesheet type="text/xsl" href="' . esc_url(home_url('/main-sitemap.xsl')) . '"?>' . "\n";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+    if (!empty($allListingsData)) {
+        foreach ($allListingsData as $listing) {
+            if (!empty($listing['stock_number'])) {
+                $url = trailingslashit($vdp_page_url) . $listing['stock_number'] . '/';
+                echo "  <url>\n";
+                echo '    <loc>' . esc_url($url) . "</loc>\n";
+                echo '    <lastmod>' . esc_html($today) . "</lastmod>\n";
+                echo "  </url>\n";
+            }
+        }
+    }
+
+    echo '</urlset>';
+}
+
+
+
+
+
 
 

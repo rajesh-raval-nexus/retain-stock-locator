@@ -42,7 +42,9 @@ foreach ($allListingsData as $listing) {
               <div class="gfam-detail-nav">
                 <a href="#openGallery" class="active"><?php esc_html_e('Gallery', 'retain-stock-locator'); ?></a>
                 <a href="#vehicleFeatures"><?php esc_html_e('Vehicle Features', 'retain-stock-locator'); ?></a>
-                <a href="#dealerComments"><?php esc_html_e('Dealer Comments', 'retain-stock-locator'); ?></a>
+                <?php if($listing['description'] != ''){?>
+                  <a href="#dealerComments"><?php esc_html_e('Dealer Comments', 'retain-stock-locator'); ?></a>
+                 <?php } ?> 
               </div>
             </div>
           </div>
@@ -268,22 +270,22 @@ foreach ($allListingsData as $listing) {
               </div>
 
               <!-- Dealer Comments Section -->
-              <div id="dealerComments" class="row mt-lg-5 mt-4">
-                <div class="col-12">
-                  <?php if($listing['description'] != ''){?>
-                    <div class="gfam-detail-dealer-comments">
-                      <h2 class="gfam-detail-section-title">
-                        <?php echo $detail_data_sections['dealer_comments_title'] ?? ''; ?>
-                      </h2>
+              <?php if($listing['description'] != ''){?>
+                  <div id="dealerComments" class="row mt-lg-5 mt-4">
+                    <div class="col-12">
+                        <div class="gfam-detail-dealer-comments">
+                          <h2 class="gfam-detail-section-title">
+                            <?php echo $detail_data_sections['dealer_comments_title'] ?? ''; ?>
+                          </h2>
 
-                      <div class="gfam-detail-comments-content">
-                        <p class="add-read-more show-less-content"><?php echo wp_kses_post($listing['description']); ?></p>
+                          <div class="gfam-detail-comments-content">
+                            <p class="add-read-more show-less-content"><?php echo wp_kses_post($listing['description']); ?></p>
+                          </div>
+                        </div>
+                        
                       </div>
-                    </div>
-                  <?php } ?>
-
                 </div>
-              </div>
+              <?php } ?>
 
               <!-- Vehicle Details Section -->
               <div id="vehicleDetails" class="row mt-lg-5 mt-4">
@@ -1223,71 +1225,108 @@ foreach ($allListingsData as $listing) {
     });
 
  jQuery(document).ready(function ($) {
-    function AddReadMore() {
-      var carLmt = 300;
-      var readMoreTxt = " ...read more";
-      var readLessTxt = " read less";
+  function AddReadMore() {
+    var carLmt = 300;
+    var readMoreTxt = " read more";
+    var readLessTxt = " read less";
 
-      $(".add-read-more").each(function () {
-        var content = $(this).html().trim(); // use .html() to keep tags
+    $(".add-read-more").each(function () {
+      var content = $(this).html().trim();
 
-        // Skip if already processed
-        if ($(this).find(".second-section").length) return;
+      // Skip if already processed
+      if ($(this).find(".second-section").length) return;
 
-        // Create a temporary element to handle text length safely
-        var tempDiv = $("<div>").html(content);
-        var fullText = tempDiv.text();
+      var tempDiv = $("<div>").html(content);
+      var fullText = tempDiv.text();
 
-        if (fullText.length > carLmt) {
-          // Find the position in HTML where to split without breaking tags
-          var visibleHTML = "";
-          var hiddenHTML = "";
-          var currentLength = 0;
+      if (fullText.length > carLmt) {
+        var visibleHTML = "";
+        var hiddenHTML = "";
+        var currentLength = 0;
 
-          tempDiv.contents().each(function () {
-            if (currentLength >= carLmt) {
-              hiddenHTML += $("<div>").append($(this).clone()).html();
-              return;
-            }
+        tempDiv.contents().each(function () {
+          if (currentLength >= carLmt) {
+            hiddenHTML += $("<div>").append($(this).clone()).html();
+            return;
+          }
 
-            var nodeText = $(this).text();
-            if (currentLength + nodeText.length <= carLmt) {
-              visibleHTML += $("<div>").append($(this).clone()).html();
-              currentLength += nodeText.length;
+          var nodeText = $(this).text();
+          if (currentLength + nodeText.length <= carLmt) {
+            visibleHTML += $("<div>").append($(this).clone()).html();
+            currentLength += nodeText.length;
+          } else {
+            var remaining = carLmt - currentLength;
+            if (this.nodeType === 3) {
+              visibleHTML += this.nodeValue.substring(0, remaining);
+              hiddenHTML += this.nodeValue.substring(remaining);
             } else {
-              // Split inside this text node
-              var remaining = carLmt - currentLength;
-              if (this.nodeType === 3) {
-                // text node
-                visibleHTML += this.nodeValue.substring(0, remaining);
-                hiddenHTML += this.nodeValue.substring(remaining);
-              } else {
-                visibleHTML += $("<div>").append($(this).clone()).html();
-              }
-              currentLength = carLmt;
+              visibleHTML += $("<div>").append($(this).clone()).html();
             }
-          });
+            currentLength = carLmt;
+          }
+        });
 
-          var finalHTML =
-            "<span class='first-section'>" +
-            visibleHTML +
-            "</span><span class='second-section'>" +
-            hiddenHTML +
-            "</span><span class='read-more' title='Click to Show More'>" +
-            readMoreTxt +
-            "</span><span class='read-less' title='Click to Show Less'>" +
-            readLessTxt +
-            "</span>";
+        var finalHTML =
+          "<span class='first-section'>" +
+          visibleHTML +
+          "</span><span class='second-section'>" +
+          hiddenHTML +
+          "</span><span class='read-more' title='Click to Show More'>" +
+          readMoreTxt +
+          "</span><span class='read-less' title='Click to Show Less'>" +
+          readLessTxt +
+          "</span>";
 
-          $(this).html(finalHTML);
-        }
-      });
+        $(this).html(finalHTML);
+      }
+    });
 
-      $(document).on("click", ".read-more,.read-less", function () {
-        $(this).closest(".add-read-more").toggleClass("show-less-content show-more-content");
-      });
-    }
+    // Toggle content
+    $(document).on("click", ".read-more, .read-less", function () {
+      var container = $(this).closest(".add-read-more");
+      container.toggleClass("show-less-content show-more-content");
 
-    AddReadMore();
-  });   
+      // Toggle visibility
+      if (container.hasClass("show-more-content")) {
+        container.find(".read-more").hide();
+        container.find(".read-less").css("display", "block");
+      } else {
+        container.find(".read-more").css("display", "block");
+        container.find(".read-less").hide();
+      }
+    });
+
+    // Initial state setup
+    $(".add-read-more").each(function () {
+      $(this).find(".read-more").css("display", "block");
+      $(this).find(".read-less").hide();
+    });
+  }
+
+  AddReadMore();
+});
+
 </script>
+
+<style>
+/* .gfam-loader {
+  color: #333;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gfam-loader .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #92191C;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+} */
+</style>

@@ -16,6 +16,8 @@ function handle_request_call_back_submit() {
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
     $trade_in   = isset($_POST['trade_in']) ? 'Yes' : 'No';
 
+    $page_url = esc_url_raw($_POST['page_url'] ?? '');
+
     if (empty($first_name) || empty($last_name) || empty($email)) {
         wp_send_json_error('Please fill all required fields.');
     }
@@ -60,6 +62,7 @@ function handle_request_call_back_submit() {
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
+        '{page_url}'   => esc_url($page_url),
     ];
 
     // -----------------------------
@@ -124,6 +127,8 @@ function handle_request_video_submit() {
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
     $make       = sanitize_text_field($_POST['make'] ?? '');
 
+    $page_url = esc_url_raw($_POST['page_url'] ?? '');
+
     if (empty($first_name) || empty($last_name) || empty($email)) {
         wp_send_json_error('Please fill all required fields.');
     }
@@ -168,6 +173,7 @@ function handle_request_video_submit() {
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
+        '{page_url}'   => esc_url($page_url),
     ];
 
     // -----------------------------
@@ -237,6 +243,8 @@ function handle_ask_question_form_submit() {
     $question   = sanitize_textarea_field($_POST['ask_question_fm_val'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
 
+    $page_url = esc_url_raw($_POST['page_url'] ?? '');
+
     if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($post_code)) {
         wp_send_json_error('Please fill all required fields.');
     }
@@ -279,6 +287,7 @@ function handle_ask_question_form_submit() {
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
+        '{page_url}'   => esc_url($page_url),
     ];
 
     // -----------------------------
@@ -339,6 +348,8 @@ function handle_test_drive_request_submit() {
     $preferred_date = sanitize_text_field($_POST['preferred_date'] ?? '');
     $preferred_time = sanitize_text_field($_POST['preferred_time'] ?? '');
 
+    $page_url = esc_url_raw($_POST['page_url'] ?? '');
+
     // Validate required fields
     if (
         empty($first_name) || empty($last_name) || empty($email) ||
@@ -382,6 +393,7 @@ function handle_test_drive_request_submit() {
         '{site_url}'       => home_url(),
         '{logo_url}'       => esc_url($logo_url),
         '{year}'           => date('Y'),
+        '{page_url}'   => esc_url($page_url),
     ];
 
     $admin_message = str_replace(array_keys($placeholders), array_values($placeholders), $admin_message);
@@ -399,16 +411,28 @@ function handle_test_drive_request_submit() {
         $to_admin = get_option('admin_email');
     }
 
-    // Send to Admin
-    wp_mail($admin_email, $admin_subject, $admin_message, $headers);
+    // -----------------------------
+    // Send emails
+    // -----------------------------
+    $admin_sent = wp_mail($to_admin, $admin_subject, $admin_message, $headers);
 
-    // Send to User
-    wp_mail($email, $user_subject, $user_message, $headers);
+    if (!empty($email)) {
+        $user_sent = wp_mail($email, $user_subject, $user_message, $headers);
+        if (!$user_sent) {
+            error_log('User email failed to send to: ' . $email);
+        }
+    }
 
-    // ==============================
-    // Return success response
-    // ==============================
-    wp_send_json_success('Thank you! Your test drive request has been sent successfully.');
+    // -----------------------------
+    // Final response
+    // -----------------------------
+    if ($admin_sent) {
+        wp_send_json_success('Thank you! Your question has been sent successfully.');
+    } else {
+        wp_send_json_error('Failed to send email. Please try again.');
+    }
+
+
     wp_die();
 }
 
@@ -427,6 +451,8 @@ function handle_contact_us_request_submit() {
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+
+    $page_url = esc_url_raw($_POST['page_url'] ?? '');
     
     if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
         wp_send_json_error('Please fill all required fields.');
@@ -467,6 +493,7 @@ function handle_contact_us_request_submit() {
         '{comments}'   => nl2br(esc_html($comments)),
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
+        '{page_url}'   => esc_url($page_url),
         
     ];
 
