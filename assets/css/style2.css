@@ -464,6 +464,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+    min-height: 298px;
 }
 
 .gfam-product-year {
@@ -668,6 +669,8 @@ textarea:focus {
   gap: 5px;
   border-right: 2px solid var(--yellow_btn_bg_color);
   padding-right: 11px;
+	flex: 0 0 50%;
+max-width: 50%
 }
 
 .gfam-odometer-info {
@@ -691,6 +694,8 @@ textarea:focus {
 
 .gfam-product-card .gfam-price-info {
   text-align: right;
+flex: 0 0 50%;
+max-width: 50%
 }
 
 .gfam-product-card .gfam-price {
@@ -1298,7 +1303,7 @@ textarea:focus {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
-  /* margin: 17px 0; */
+  margin: 17px 0;
 }
 
 .rsl-stock-locator .gfam-detail-price-estimate {
@@ -2880,4 +2885,11 @@ ease;
 .gfam-product-grid .no-result-found-txt h2.no-stock-available a:hover {
   color: var(--darkgrey_badge_bg_color);
   text-decoration: underline;
+}
+
+.rsl-stock-locator .page-header {
+    display: none;
+}
+.rsl-stock-locator .page-content {
+    margin-top: 40px;
 }

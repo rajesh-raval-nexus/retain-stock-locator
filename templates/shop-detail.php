@@ -441,16 +441,17 @@ foreach ($allListingsData as $listing) {
 
                           $product_title = $listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model'];
                         ?>
-                        <div class="gfam-product-card item col-lg-4 col-md-6 my-3">
-                          <div class="gfam-product-image">
-                            <div class="owl-carousel gfam-carousel">
-                              <?php foreach ($listingItem['images'] as $image) : ?>
-                                <div class="item">
-                                  <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($listingItem['make'] . ' ' . $listingItem['model']); ?>" />
-                                </div>
-                              <?php endforeach; ?>
-                            </div>
-                          </div>
+                         <div class="item col-lg-4 col-md-6 my-3">
+							              <div class="gfam-product-card">
+                              <div class="gfam-product-image">
+                                    <div class="owl-carousel gfam-carousel">
+                                      <?php foreach ($listingItem['images'] as $image) : ?>
+                                      <div class="item">
+                                        <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($listingItem['make'] . ' ' . $listingItem['model']); ?>" />
+                                      </div>
+                                      <?php endforeach; ?>
+                                      </div>
+                              </div>
                           <div class="gfam-product-info">
                             <div class="gfam-product-badges mb-4">
                               <span class="gfam-badge gfam-badge-new">NEW</span>
@@ -493,6 +494,7 @@ foreach ($allListingsData as $listing) {
                             <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
                                 <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
                             </a>
+                          </div>
                           </div>
                         </div>
                       <?php endforeach; ?>

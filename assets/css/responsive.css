@@ -12,21 +12,21 @@
   /* .gfam-show-toggle{
     display: block !important;
   } */
-  .modal-dialog.modal-fullscreen-sm-down {
+  .rsl-stock-locator .modal-dialog.modal-fullscreen-sm-down {
     height: 100%;
     margin: 0;
     max-width: 100%;
   }
 
-  .modal-content {
+  .rsl-stock-locator .modal-content {
     height: 100%;
     border-radius: 12px 12px 0 0;
   }
 
-  .modal-body {
+  .rsl-stock-locator  .modal-body {
     overflow-y: auto;
   }
-  .gfam-btn-fixed {
+  .rsl-stock-locator .gfam-btn-fixed {
       position: fixed;
       bottom: 0;
       left: 0;
@@ -46,16 +46,16 @@
     transition: opacity 0.05s ease-in-out;
         margin: 0;
     }
-    .modal-body {
+    .rsl-stock-locator .modal-body {
       padding-bottom: 20px !important; 
     }
-    .gfam-detail-modal-body {
+    .rsl-stock-locator  .gfam-detail-modal-body {
       padding: 30px 20px;
     }
-    .gfam-search-input{
+    .rsl-stock-locator  .gfam-search-input{
       width: 86%;
     }
-    .dropdown-menu{
+    .rsl-stock-locator  .dropdown-menu{
       z-index: 2;
       opacity: 1;
       display: block;
@@ -63,7 +63,7 @@
       background: transparent;
       padding: 0 !important;
     }
-    .dropdown-item{
+    .rsl-stock-locator  .dropdown-item{
       margin: 10px 0;
       font-size: 16px;
     }
@@ -71,24 +71,24 @@
       font-size: 25px;
       line-height: normal;
     }
-    .brandlist-section{
+    .rsl-stock-locator  .brandlist-section{
       margin: 30px 10px;
       padding: 20px;
     }
-    .brandlist-section .gfam-title{
+    .rsl-stock-locator  .brandlist-section .gfam-title{
       font-size: 25px;
       line-height: normal;
     }
-    .gfam-sort-btn, .gfam-sort-dropdown{
+    .rsl-stock-locator  .gfam-sort-btn,  .rsl-stock-locator  .gfam-sort-dropdown{
       font-size: 16px;
       min-width: 100%;
     }
   
-    .gfam-detail-header .container{
+    .rsl-stock-locator  .gfam-detail-header .container{
       background-color: transparent;
       padding: 0;
     }
-    .gfam-detail-header .container::before{
+    .rsl-stock-locator  .gfam-detail-header .container::before{
       content: '';
       width: 100%;
       background-color: var(--red_badge_bg_color);
@@ -99,10 +99,10 @@
       height: 40px;
       z-index: -1;
     }
-    .gfam-detail-nav a{
+    .rsl-stock-locator  .gfam-detail-nav a{
       font-size: 12px;
     }
-    .gfam-detail-nav{
+    .rsl-stock-locator  .gfam-detail-nav{
       float: none;
       text-align: center;
       height: 40px;
@@ -111,7 +111,7 @@
       justify-content: center;
       background-color: var(--red_badge_bg_color);
     }
-    .gfam-detail-breadcrumb, .gfam-detail-breadcrumb a, .gfam-detail-breadcrumb path{
+    .rsl-stock-locator  .gfam-detail-breadcrumb,  .rsl-stock-locator  .gfam-detail-breadcrumb a,  .rsl-stock-locator  .gfam-detail-breadcrumb path{
       color: var(--darkgrey_badge_bg_color);
       fill: var(--darkgrey_badge_bg_color);
       font-size: 12px;
@@ -127,7 +127,7 @@
       line-height: 29px;
       text-align: center;
     }
-    .gfam-detail-price-section{
+    .rsl-stock-locator .gfam-detail-price-section{
       display: flex;
       gap: 7px;
       align-items: baseline;
@@ -138,26 +138,26 @@
       font-size: 16px;
       line-height: normal;
     }
-    .gfam-detail-modal-header {
+    .rsl-stock-locator  .gfam-detail-modal-header {
       padding: 20px 22px 0;
     }
-    .gfam-product-grid .no-result-found-txt h2.no-stock-available {
+    .rsl-stock-locator  .gfam-product-grid .no-result-found-txt h2.no-stock-available {
       font-size: 18px;
       line-height: 26px;
     }
-    .gfam-detail-price-estimate{
+    .rsl-stock-locator  .gfam-detail-price-estimate{
       padding: 6px 12px;
       font-size: 10px;
       margin-bottom: 0;
     }
-    .gfam-detail-content{
+    .rsl-stock-locator  .gfam-detail-content{
       padding: 10px 0;
     }
-    .gfam-detail-main-slider img{
+    .rsl-stock-locator  .gfam-detail-main-slider img{
       height: 230px;
       /* object-fit: contain; */
     }
-    .gfam-detail-image-counter{
+    .rsl-stock-locator  .gfam-detail-image-counter{
       padding: 5px 12px;
       top: 7px;
       left: 7px;
@@ -177,281 +177,679 @@
       height: 100px;
       /* object-fit: contain; */
     }
-    .gfam-detail-slider-container .owl-nav button,
-    .gfam-product-grid>.owl-nav button{
+    .rsl-stock-locator  .gfam-detail-slider-container .owl-nav button,
+    .rsl-stock-locator  .gfam-product-grid>.owl-nav button{
       width: 30px !important;
       height: 30px !important;
     }
-    .gfam-detail-slider-container .gfam-detail-thumb-slider .owl-nav .owl-prev{
+    .rsl-stock-locator  .gfam-detail-slider-container .gfam-detail-thumb-slider .owl-nav .owl-prev{
       left: 5px !important;
     }
-    .gfam-detail-slider-container .gfam-detail-thumb-slider .owl-nav .owl-next{
+    .rsl-stock-locator  .gfam-detail-slider-container .gfam-detail-thumb-slider .owl-nav .owl-next{
       right: 5px !important;
     }
-    .gfam-detail-section-title{
+    .rsl-stock-locator .gfam-detail-section-title{
       font-size: 25px;
       margin-bottom: 20px;
     }
-    .gfam-detail-vehicle-features,
-    .gfam-detail-dealer-comments, .gfam-detail-vehicle-details{
+    .rsl-stock-locator  .gfam-detail-vehicle-features,
+    .rsl-stock-locator  .gfam-detail-dealer-comments,  .rsl-stock-locator  .gfam-detail-vehicle-details{
       padding: 30px 20px;
     }
+
     .rsl-stock-locator .gfam-detail-feature-content h5,
+
     .rsl-stock-locator .gfam-detail-feature-content p{
-      font-size: 14px;
+
+      font-size: 16px;
+
       margin: 0;
+
     }
-    .gfam-detail-feature-item{
+
+	.rsl-stock-locator .gfam-detail-feature-content h5 {
+
+		margin: 0 0 8px 0;
+
+	}
+
+   .rsl-stock-locator  .gfam-detail-feature-item{
+
       padding: 0;
+
     }
-    .gfam-detail-feature-icon{
+
+    .rsl-stock-locator .gfam-detail-feature-icon{
+
       margin-bottom: 10px;
+
     }
-    .gfam-detail-feature-icon svg{
+
+   .rsl-stock-locator  .gfam-detail-feature-icon svg{
+
       width: 33px;
+
     }
-    .gfam-detail-feature-icon svg.availability-icon{
+
+    .rsl-stock-locator .gfam-detail-feature-icon svg.availability-icon{
+
       width: 25px;
+
     }
-    .gfam-detail-comments-content p{
+
+   .rsl-stock-locator  .gfam-detail-comments-content p{
+
       font-size: 16px;
+
     }
+
     .rsl-stock-locator .gfam-detail-detail-row{
+
       padding: 4px 0;
+
     }
-    .custom-select {
+
+   .rsl-stock-locator .custom-select {
+
       font-size: 15px;
-      padding: 9px 14px 9px 15px;
+
+      padding: 11px 14px 11px 15px;
+
+	           width: 97%;
+
     }
+
     .rsl-stock-locator .gfam-detail-button {
+
       padding: 8px 16px;
+
       margin-bottom: 0 !important;
+
     }
-    .gfam-detail-detail-label,
-    .gfam-detail-detail-value{
+
+   .rsl-stock-locator  .gfam-detail-detail-label,
+
+   .rsl-stock-locator .gfam-detail-detail-value{
+
       font-size: 14px;
+
     }
-    .gfam-detail-detail-label{
+
+   .rsl-stock-locator .gfam-detail-detail-label{
+
       width: 50%;
+
     }
-    .gfam-detail-button{
-      width: 100%;
+
+	   .rsl-stock-locator .gfam-detail-button {
+
+		width: 100%;
+
+		font-size: 14px;
+
+		padding: 10px 16px;
+
+		margin-top: 0 !important;
+
+	}
+
+    .rsl-stock-locator .gfam-detail-question-box .accordion-button{
+
       font-size: 14px;
-      padding: 10px 16px;
-    }
-    .gfam-detail-question-box .accordion-button{
-      font-size: 14px;
+
       padding: 14px;
+
     }
-    .sticky-section{
+
+   .rsl-stock-locator .sticky-section{
+
       position: relative;
+
       height: auto;
+
     }
-    .gfam-detail-similiar-product{
+
+    .rsl-stock-locator .gfam-detail-similiar-product{
+
       border-radius: 14px;
+
       background: #F5F5F5;
+
       padding: 30px;
+
     }
-    .lg-prev {
+
+    .rsl-stock-locator .lg-prev {
+
       left: 10px;
+
       width: 30px;
+
       height: 30px;
+
       padding: 0;
+
     }
-    .lg-next {
+
+    .rsl-stock-locator .lg-next {
+
       right: 10px;
+
       width: 30px;
+
       height: 30px;
+
       padding: 0;
+
     }
-    .custom-caption .btn-warning {
+
+   .rsl-stock-locator .custom-caption .btn-warning {
+
       font-size: 16px;
+
       font-weight: 700;
+
       line-height: 29.6px;
+
       padding: 5px 20px;
+
       min-width: 150px;
+
       margin: 10px 0;
+
   }
-  .gfam-filter-section{
+
+ .rsl-stock-locator .gfam-filter-section{
+
     border-bottom: 0;
+
   }
+
   .sidebar-modal .modal-content{
+
     box-shadow: none !important;
+
     border-radius: 0 !important;
+
     height: 100vh;
+
   }
+
   .sidebar-modal .modal-body{
+
     max-height: calc(100% - 85px);
+
   }
+
   #gfampopupRangeMobile .category-body,
+
   #gfampopupYearMobile .category-body,
+
   #gfampopupHourMobile .category-body{
+
     padding: 15px !important;
+
   }
+
   .sidebar-modal .nav-tabs{
+
     gap: 5px;
+
   }
+
   button[data-bs-dismiss="modal"]{
+
     position: absolute;
+
     top: 12px;
+
     right: 20px;
+
     background-size: 12px;
+
   }
-  .gfam-filter-header{
+
+  .rsl-stock-locator .gfam-filter-header{
+
     justify-content: center;
+
   }
+
   .sidebar-modal .modal-header{
+
     background-color: var(--red_badge_bg_color);
+
     color: var(--red_badge_txt_color);
+
     padding: 12px 15px;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     font-weight: 700;
+
     font-size: 18px;
+
     line-height: 28px;
+
   }
+
   .modal .btn-close{
+
     --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+
     padding: 5px;
+
     opacity: 1;
+
   }
+
   .subcategory-body .back-btn svg path{
+
     fill: var(--yellow_btn_bg_color);
+
   }
-  .sidebar-modal .gfam-btn-fixed a.clear-btn{
+
+ .rsl-stock-locator  .sidebar-modal .gfam-btn-fixed a.clear-btn{
+
       padding: 10px;
+
       width: 100%;
+
       height: 50px;
+
       border: 1px solid #FDBD3D;
+
       border-radius: 5px;
+
       font-weight: 700;
+
       font-size: 14px;
+
       line-height: 26px;
+
       display: block;
+
       text-align: center;
+
       text-decoration: none;
+
   }
-  .sidebar-modal .gfam-btn-fixed a.clear-btn:hover{
+
+  .rsl-stock-locator .sidebar-modal .gfam-btn-fixed a.clear-btn:hover{
+
     background-color: #FDBD3D;
+
   }
-  .sidebar-modal .gfam-btn-fixed .gfam-btn{
+
+  .rsl-stock-locator .sidebar-modal .gfam-btn-fixed .gfam-btn{
+
     width: 100%!important;
+
     height: 50px;
+
     font-weight: 700;
+
       font-size: 14px;
+
       line-height: 26px;
+
       position: inherit !important;
+
   }
-  .sidebar-modal .modal-footer .search-btn-div {
+
+  .rsl-stock-locator .sidebar-modal .modal-footer .search-btn-div {
+
     text-align-last: center !important;
+
   }
-  .sidebar-modal .gfam-search-input{
+
+  .rsl-stock-locator .sidebar-modal .gfam-search-input{
+
     width: 83% !important;
+
   }
+
 }
+
+
 
 /* Small Devices (portrait tablets and large phones, 576px and up) */
+
 @media (min-width: 576px) and (max-width: 767.98px) {
+
   /* Your CSS for large phones / small tablets */
+
   /* .gfam-searchbar .gfam-search-btn svg{
+
     width: 30px;
+
     height: 30px;
+
   }
+
   .rsl-stock-locator .mobile-filter-btn {
+
     padding: 0 10px;
+
   } */
+
 }
+
+
 
 @media only screen and (max-width: 767px){
-.gfam-detail-feature-item {
-  padding: 7px 10px;
+
+	.rsl-stock-locator .gfam-detail-vehicle-features .row {
+
+		row-gap: 15px;
+
+	}
+
+	.gfam-detail-feature-item {
+
+	  padding: 7px 10px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-feature-content p {
+
+	  word-break: auto-phrase;
+
+	 font-size: 15px;
+
+	}
+
+	.gfam-searchbar .gfam-search-btn svg{
+
+	  width: 30px;
+
+	  height: 30px;
+
+	}
+
+	.rsl-stock-locator .mobile-filter-btn {
+
+	  padding: 0 10px;
+
+	}
+
+	.gfam-product-details {
+
+	  justify-content: start;
+
+	  gap: 23px;
+
+	}
+
+	.rsl-stock-locator .gfam-why-choose-section {
+
+	  padding-left: 30px !important;
+
+	  padding-right: 30px !important;
+
+	}
+
+	.rsl-stock-locator .gfam-why-choose-section .gfam-features .gfam-feature-item img {
+
+	  margin: 0 !important;
+
+	}
+
+	.rsl-stock-locator .gfam-why-choose-section .row > .col-md-4 {
+
+	  width: 100%;
+
+	}
+
+	.gfam-price-btn {
+
+	  padding: 7px 20px!important;
+
+	}
+
+	.load-more-btn ul.ajax-pagination {
+
+	  gap: 13px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-comments-content p {
+
+	  font-size: 16px;
+
+	}
+
+	.rsl-stock-locator .custom-select {
+
+		width: 100%;
+
+		margin-bottom: 8px;
+
+	}
+
 }
-.rsl-stock-locator .gfam-detail-feature-content p {
-  word-break: auto-phrase;
-}
-.gfam-searchbar .gfam-search-btn svg{
-  width: 30px;
-  height: 30px;
-}
-.rsl-stock-locator .mobile-filter-btn {
-  padding: 0 10px;
-}
-.gfam-product-details {
-  justify-content: start;
-  gap: 23px;
-}
-.rsl-stock-locator .gfam-why-choose-section {
-  padding-left: 30px !important;
-  padding-right: 30px !important;
-}
-.rsl-stock-locator .gfam-why-choose-section .gfam-features .gfam-feature-item img {
-  margin: 0 !important;
-}
-.rsl-stock-locator .gfam-why-choose-section .row > .col-md-4 {
-  width: 100%;
-}
-.gfam-price-btn {
-  padding: 7px 20px!important;
-}
-.load-more-btn ul.ajax-pagination {
-  gap: 13px;
-}
-.rsl-stock-locator .gfam-detail-comments-content p {
-  font-size: 16px;
-}
-}
+
+
 
 /* Medium Devices (landscape tablets, 768px and up) */
+
 @media (min-width: 768px) and (max-width: 991.98px) {
+
   /* Your CSS for tablets */
+
 }
+
+
 
 /* Large Devices (laptops/desktops, 992px and up) */
+
 @media (min-width: 992px) and (max-width: 1199.98px) {
+
+	.rsl-stock-locator .gfam-why-choose-section {
+
+		padding-left: 30px !important;
+
+		padding-right: 18px !important;
+
+	}
+
   .gfam-detail-thumb-slider img{
+
     height: 150px;
+
   }
+
   .gfam-detail-main-slider img{
+
     height: 350px;
+
     /* object-fit: contain; */
+
   }
+
 }
+
+
 
 /* Extra Large Devices (large desktops, 1200px and up) */
+
 @media (min-width: 1200px) and (max-width: 1399.98px) {
-  .gfam-detail-contact-btn, .gfam-detail-callback-btn{
-    font-size: 18px;
-    line-height: normal;
-  }
-  .gfam-detail-title{
-    font-size: 2rem;
-  }
-  .gfam-detail-image-counter,
-  .gfam-detail-gallery-btn,
-  .gfam-detail-form-box .gfam-detail-title{
+
+	.lg-outer .lg-content {
+
+		width: 600px;
+
+	}
+
+	.custom-caption {
+
+    position: fixed;
+
+		bottom: 60px;
+
+	}
+
+	.custom-caption .btn-warning {
+
+		font-size: 20px;
+
+		line-height: 26.6px;
+
+		padding: 13px 30px;
+
+		min-width: 290px;
+
+	}
+
+	.rsl-stock-locator .gfam-why-choose-section h2 {
+
+		font-size: 33px;
+
+		line-height: 37px;
+
+	}
+
+	.rsl-stock-locator .sidebar-modal .nav-tabs .nav-link {
+
+		font-size: 19px;
+
+		padding: 9px 15px;
+
+	}
+
+	  .gfam-detail-contact-btn, .gfam-detail-callback-btn{
+
+		font-size: 18px;
+
+		line-height: normal;
+
+	  }
+
+	  .rsl-stock-locator .gfam-detail-title{
+
+    	font-size: 1.9rem;
+
+ 	 }
+
+	.rsl-stock-locator .gfam-detail-contact-btn, .rsl-stock-locator .gfam-detail-callback-btn {
+
+		padding: 9px 30px;
+
+		font-size: 22px;
+
+		line-height: 38px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-price {
+
+   	 	font-size: 1.8rem;
+
+	}
+
+  .rsl-stock-locator .gfam-detail-image-counter,
+
+  .rsl-stock-locator .gfam-detail-gallery-btn,
+
+  .rsl-stock-locator .gfam-detail-form-box .gfam-detail-title{
+
     font-size: 22px;
+
   }
-  .gfam-detail-steps-title{
+
+ .rsl-stock-locator .gfam-detail-steps-title{
+
     font-size: 1.3rem;
+
   }
-  .gfam-detail-step-content h4,
-  .gfam-detail-submit{
+
+   .rsl-stock-locator .gfam-detail-step-content h4,
+
+   .rsl-stock-locator .gfam-detail-submit{
+
+    font-size: 1.1rem;
+
+  }
+
+  .rsl-stock-locator .gfam-detail-step-content p, .rsl-stock-locator .gfam-detail-step-link{
+
     font-size: 1rem;
+
   }
-  .gfam-detail-step-content p,.gfam-detail-step-link{
-    font-size: 14px;
-  }
-  .rsl-stock-locator .gfam-detail-section-title{
-    font-size: 1.8rem;
-  }
-  .gfam-product-details{
+
+  .rsl-stock-locator .gfam-detail-section-title {
+
+    font-size: 1.7rem;
+
+		margin-bottom: 19px;
+
+	}
+
+	.gfam-detail-content {
+
+		padding: 20px 0;
+
+	}
+  .rsl-stock-locator .gfam-product-details{
+
     justify-content: center;
+
     gap: 10px;
+
   }
+
+	.rsl-stock-locator .gfam-detail-feature-content p {
+
+    	font-size: 1.1rem;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-comments-content p {
+
+		font-size: 18px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-detail-label, .rsl-stock-locator .gfam-detail-detail-value {
+
+		font-size: 18px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-detail-row {
+
+		padding: 10px 0;
+
+	}
+
+	.custom-select {
+
+		font-size: 18px;
+
+		padding: 10px 40px 12px 15px;
+
+	}
+
+	.rsl-stock-locator .gfam-detail-button {
+
+		padding: 10px 16px;
+
+		font-size: 18px;
+
+	}
+
 }
 
+
+
 /* Extra Extra Large Devices (very large screens, 1400px and up) */
-@media (min-width: 1400px) {
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+
   
+
 }
