@@ -273,7 +273,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
 </div>
 <?php } ?>
 <!-- Sort Modal (Mobile Only) -->
-<div class="modal fade modal-slide-up" id="mobileSortModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-slide-up" data-bs-dismiss="modal" id="mobileSortModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
     <div class="modal-content">
       <div class="modal-header gfam-filter-header">

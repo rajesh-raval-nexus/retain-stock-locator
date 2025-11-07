@@ -557,15 +557,31 @@ jQuery(document).ready(function($) {
      */
     $(document).on('click', '.ajax-pagination .page-number, .ajax-pagination .prev-page, .ajax-pagination .next-page', function() {
         if ($(this).hasClass('disabled') || $(this).hasClass('current')) return;
+
         let page = $(this).data('page');
         let filters = get_selected_filters();
         applyFiltersAndPushState(filters, page);
+
+        // Wait slightly longer to ensure AJAX content is loaded
         setTimeout(function() {
-            $('html, body').stop(true).animate({
-                scrollTop: $('.gfam-product-grid').offset().top - 300
-            }, 400);
-        }, 300);
+            // Make sure the target exists
+            let $target = $('.gfam-breadcrumb');
+            if ($target.length) {
+                // Calculate actual visible header height (sticky/fixed headers)
+                let headerHeight = $('header:visible').outerHeight(true) || 0;
+
+                // Calculate exact scroll position
+                let scrollTarget = $target.offset().top - headerHeight - 50; // add small 20px buffer
+
+                // Animate scroll
+                $('html, body').stop(true).animate({
+                    scrollTop: scrollTarget
+                }, 500);
+            }
+        }, 600); // increased delay for safety
     });
+
+
 
     /**
      * Sorting click

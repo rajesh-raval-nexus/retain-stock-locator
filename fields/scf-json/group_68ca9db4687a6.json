@@ -27,7 +27,7 @@
             "aria-label": "",
             "type": "text",
             "instructions": "Add full url of xml file with https or http. i.e: https:\/\/retainmedia.com.au\/stock-locator\/stock-data\/stock-data.xml",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -48,7 +48,7 @@
             "aria-label": "",
             "type": "number",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -71,7 +71,7 @@
             "aria-label": "",
             "type": "post_object",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -286,7 +286,7 @@
             "aria-label": "",
             "type": "number",
             "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
+            "required": 1,
             "conditional_logic": [
                 [
                     {
@@ -458,7 +458,7 @@
             "aria-label": "",
             "type": "number",
             "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
+            "required": 1,
             "conditional_logic": [
                 [
                     {
@@ -627,7 +627,7 @@
             "aria-label": "",
             "type": "number",
             "instructions": "Put numbers in a range of 3,6,9 and so on.",
-            "required": 0,
+            "required": 1,
             "conditional_logic": [
                 [
                     {
@@ -801,7 +801,7 @@
             "aria-label": "",
             "type": "image",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -863,7 +863,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -884,7 +884,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -905,7 +905,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -926,7 +926,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -985,7 +985,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1006,7 +1006,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1027,7 +1027,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1048,7 +1048,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1107,7 +1107,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1128,7 +1128,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1149,7 +1149,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1170,7 +1170,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1229,7 +1229,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1250,7 +1250,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1271,7 +1271,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1292,7 +1292,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1351,7 +1351,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1372,7 +1372,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1393,7 +1393,7 @@
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1414,7 +1414,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1680,7 +1680,7 @@
             "aria-label": "",
             "type": "post_object",
             "instructions": "If you change this page link, please go to Settings → Permalinks and click Save Changes once to refresh the URLs",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -1725,7 +1725,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1746,7 +1746,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1767,7 +1767,7 @@
                     "aria-label": "",
                     "type": "wysiwyg",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "",
@@ -1989,5 +1989,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762436483
+    "modified": 1762497045
 }
