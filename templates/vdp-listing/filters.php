@@ -499,12 +499,12 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item stock-sorting-cls" data-val="kms_low_high" href="javascript:void(0);">
+                  <a class="dropdown-item stock-sorting-cls" data-val="kms_asc" href="javascript:void(0);">
                     KMs (Low - High)
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item stock-sorting-cls" data-val="kms_high_low" href="javascript:void(0);">
+                  <a class="dropdown-item stock-sorting-cls" data-val="kms_desc" href="javascript:void(0);">
                     KMs (High - Low)
                   </a>
                 </li>
