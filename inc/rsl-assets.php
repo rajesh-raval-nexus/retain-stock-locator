@@ -279,7 +279,7 @@ function rsl_assets_enqueue_frontend() {
                     'current_page_url' => $current_page_url,
                     'home_url' => home_url('/'),
                     'stock_page_url' => get_permalink($stock_locator_page_id),
-                    'stock_page_title' => get_the_title($stock_locator_page_id),
+                    'stock_page_title' => get_post_field('post_title', $stock_locator_page_id),
                     'site_title' => get_bloginfo('name'),
                 ],
                 $filter_data

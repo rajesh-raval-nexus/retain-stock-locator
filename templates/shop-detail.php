@@ -37,7 +37,7 @@ foreach ($allListingsData as $listing) {
                     $page_id    = intval($stock_locator_page);
                     $page_url   = get_permalink($page_id);
                      
-                    $page_title = $wpdb->get_var( $wpdb->prepare("SELECT post_title FROM $wpdb->posts WHERE ID = %d", $page_id) );
+                    $page_title = get_post_field('post_title', $page_id);
                       echo '<span> > </span>';
                       echo '<a href="' . esc_url($page_url) . '">' . $page_title . '</a>';
                     if($listingType){
