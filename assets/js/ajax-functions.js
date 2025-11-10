@@ -631,6 +631,7 @@ jQuery(document).ready(function($) {
                     $('.ajax-pagination').remove();
                     $('.load-more-btn').html(response.data.pagination);
                     reinitCarousel();
+                    reinitSeeMoreLess();
                 }
                 $('#loader').fadeOut(500);                
             },

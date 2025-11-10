@@ -657,16 +657,9 @@ function gfam_output_vdp_sitemap() {
     echo '</urlset>';
 }
 
-add_filter('the_title', function($title) {
-    if (get_query_var('stock_number')) {
-        return ''; // Remove the title text
-    }
-    return $title;
-});
-
-add_filter('the_title', function($title) {
-    if (function_exists('is_stock_locator_page') && is_stock_locator_page()) {
-        return '';
-    }
-    return $title;
-});
+function gfam_generate_slug_preserve_case($text) {
+    // Replace only forward slashes with hyphens
+    $text = str_replace('/', '-', $text);
+    $text = trim($text);
+    return $text;
+}
