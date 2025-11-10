@@ -657,9 +657,16 @@ function gfam_output_vdp_sitemap() {
     echo '</urlset>';
 }
 
+add_filter('the_title', function($title) {
+    if (get_query_var('stock_number')) {
+        return ''; // Remove the title text
+    }
+    return $title;
+});
 
-
-
-
-
-
+add_filter('the_title', function($title) {
+    if (function_exists('is_stock_locator_page') && is_stock_locator_page()) {
+        return '';
+    }
+    return $title;
+});

@@ -29,8 +29,24 @@ foreach ($allListingsData as $listing) {
                       fill="#fff" />
                   </svg>
                 </a>
-                <span> > </span>
-                <a href="#"><?php esc_html_e('Stock Locator', 'retain-stock-locator'); ?></a>
+                <?php
+                  $stock_locator_page = get_field('select_stock_locator_page', 'option');
+                  $listingType = $listing['type'];
+                  if ($stock_locator_page) {
+                    global $wpdb;
+                    $page_id    = intval($stock_locator_page);
+                    $page_url   = get_permalink($page_id);
+                     
+                    $page_title = $wpdb->get_var( $wpdb->prepare("SELECT post_title FROM $wpdb->posts WHERE ID = %d", $page_id) );
+                      echo '<span> > </span>';
+                      echo '<a href="' . esc_url($page_url) . '">' . $page_title . '</a>';
+                    if($listingType){
+                      echo '<span> > </span>';
+                      echo esc_html($listingType);
+                    }  
+                  }
+                  ?>
+                
                 <span> > </span>
                 <span class="active">
                     <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
@@ -155,7 +171,7 @@ foreach ($allListingsData as $listing) {
 
                 <div id="shared-caption" class="custom-caption" style="display: none;">
                   <div class="text-center mt-4">
-                    <button class="btn btn-warning me-2"><?php esc_html_e('Call', 'retain-stock-locator'); ?></button>
+                    <button onclick="window.location.href='tel:+03 5231 5136'" class="btn btn-warning me-2"><?php esc_html_e('Call', 'retain-stock-locator'); ?></button>
                     <button class="btn btn-warning btn-message-detail" data-bs-toggle="modal" data-bs-target="#contactUsfmModal"><?php esc_html_e('Message', 'retain-stock-locator'); ?></button>
                   </div>
                 </div>
