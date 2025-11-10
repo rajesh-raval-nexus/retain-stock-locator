@@ -21,7 +21,7 @@ foreach ($allListingsData as $listing) {
           <div class="row">
             <div class="col-xl-7 order-xl-1 order-2">
               <nav class="d-flex align-items-center gap-2 gfam-detail-breadcrumb">
-                <a href="#" class="d-flex align-items-center">
+                <a href="<?php echo home_url(); ?>" class="d-flex align-items-center">
                   <svg class="mb-1" width="19" height="22" viewBox="0 0 19 22" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -39,10 +39,11 @@ foreach ($allListingsData as $listing) {
                      
                     $page_title = get_post_field('post_title', $page_id);
                       echo '<span> > </span>';
-                      echo '<a href="' . esc_url($page_url) . '">' . $page_title . '</a>';
+                      echo '<a href="' . esc_url($page_url) . '">' . esc_html($page_title) . '</a>';
                     if($listingType){
                       echo '<span> > </span>';
-                      echo esc_html($listingType);
+                      $listingType_slug = gfam_generate_slug_preserve_case($listingType);
+                      echo '<a href="' . esc_url(trailingslashit($page_url) . $listingType_slug) . '">' . esc_html($listingType) . '</a>';
                     }  
                   }
                   ?>
