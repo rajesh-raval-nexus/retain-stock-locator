@@ -262,10 +262,10 @@ function rsl_assets_enqueue_frontend() {
         $filter_data = rsl_get_filter_data_for_localization();
 
         // Get selected Stock Locator page ID from ACF Options
-        $page_id = get_field('select_stock_locator_page', 'option');
+        $stock_locator_page_id = get_field('select_stock_locator_page', 'option');
 
         // Fallback URL in case page isn't selected
-        $current_page_url = $page_id ? get_the_permalink($page_id) : '';
+        $current_page_url = $stock_locator_page_id ? get_the_permalink($stock_locator_page_id) : '';
 
         // Pass admin-ajax URL + other variables to JS
         wp_localize_script(
@@ -277,6 +277,10 @@ function rsl_assets_enqueue_frontend() {
                     'nonce' => wp_create_nonce( 'rsl_ajax_nonce' ),
                     'vdp_per_page' => get_field('vdp_per_page', 'option'),
                     'current_page_url' => $current_page_url,
+                    'home_url' => home_url('/'),
+                    'stock_page_url' => get_permalink($stock_locator_page_id),
+                    'stock_page_title' => get_the_title($stock_locator_page_id),
+                    'site_title' => get_bloginfo('name'),
                 ],
                 $filter_data
             )

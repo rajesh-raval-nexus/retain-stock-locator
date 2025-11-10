@@ -449,7 +449,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
     <div class="gfam-content-header mb-3">
       <div class="row align-items-center gfam-header-row justify-content-between">
         <!-- Title -->
-        <div class="col-md-3 my-2">
+        <div class="col-md-6 my-2">
           <h1 class="gfam-title fw-bold mb-0">Farm Trailers For Sale</h1>
         </div>
 
@@ -490,12 +490,12 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="year_asc" href="javascript:void(0);">
-                    Year (Youngest - Oldest)
+                    Year (Newest - Oldest)
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="year_desc" href="javascript:void(0);">
-                    Year (Oldest - Youngest)
+                    Year (Oldest - Newest)
                   </a>
                 </li>
                 <li>

@@ -33,7 +33,9 @@ if ($detail_page) {
                 <?php if (!empty($product_images)) :
                     foreach ($product_images as $image) : ?>
                         <div class="item">
-                            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($product_title); ?>" />
+                            <a href="<?php echo $detail_url; ?>">
+                                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($product_title); ?>" />
+                            </a>
                         </div>
                     <?php endforeach;
                 endif; ?>
@@ -49,8 +51,8 @@ if ($detail_page) {
                     <span class="gfam-badge gfam-badge-code"><?php echo esc_html($stock_number); ?></span>
                 <?php endif; ?>
             </div>
-
-            <h3 class="gfam-product-title"><?php echo esc_html($product_title); ?></h3>
+            
+            <a href="<?php echo $detail_url; ?>"><h3 class="gfam-product-title"><?php echo esc_html($product_title); ?></h3></a>            
             <p class="gfam-product-subtitle"><?php echo esc_html($item_specification); ?></p>
 
             <div class="gfam-product-details">

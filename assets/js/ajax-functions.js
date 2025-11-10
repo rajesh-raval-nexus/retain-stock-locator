@@ -335,8 +335,8 @@ jQuery(document).ready(function($) {
             console.warn('History API not available', e);
         }
 
-        // updateBreadcrumbs(filters);
-        // updateTitle(filters);
+        updateBreadcrumbs(filters);
+        updateTitle(filters);
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -344,68 +344,126 @@ jQuery(document).ready(function($) {
      * Update breadcrumbs DOM based on filters
      */
     function updateBreadcrumbs(filters) {
+        // return;
         filters = filters || {};
-        const $crumb = $('.gfam-breadcrumb');
+        const $crumb = $('.gfam-breadcrumb nav');
         if (!$crumb.length) return;
 
-        const baseLabel = getBaseLabel();
-        const items = [];
-        items.push({ label: baseLabel, filters: {} });
+        const baseURL = rsl_ajax_obj.home_url; // Define in your theme or localize_script
+        const stockURL = rsl_ajax_obj.stock_page_url; // Pass from PHP using wp_localize_script
+        const stockTitle = rsl_ajax_obj.stock_page_title;
 
-        if (Array.isArray(filters.type) && filters.type.length) {
-            filters.type.forEach(t => {
-                const newFilters = { type: [t] };
-                items.push({ label: t, filters: newFilters });
-            });
-        }
+        // --- Step 1: Start with static crumbs ---
+        let items = [
+            { label: '<svg class="mb-1" width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.4865 22H13.5926C12.7593 22 12.0815 21.164 12.0815 20.1359V12.9631C12.0815 12.7504 11.9403 12.5761 11.7678 12.5761H7.22977C7.05735 12.5761 6.91606 12.7504 6.91606 12.9631V20.1359C6.91606 21.164 6.23834 22 5.40497 22H1.51109C0.677719 22 0 21.164 0 20.1359V10.4402C0 9.46529 0.344847 8.54357 0.948325 7.91433L7.76141 0.788774C8.7672 -0.262925 10.228 -0.262925 11.2338 0.788774L18.0517 7.91728C18.6552 8.54653 19 9.46824 19 10.4431V20.1359C19 21.164 18.3223 22 17.4889 22H17.4865ZM7.22738 11.099H11.7654C12.5988 11.099 13.2765 11.935 13.2765 12.9631V20.1359C13.2765 20.3486 13.4178 20.5229 13.5902 20.5229H17.4841C17.6565 20.5229 17.7978 20.3486 17.7978 20.1359V10.4431C17.7978 9.90251 17.6063 9.39143 17.271 9.04284L10.4531 1.91433C9.89514 1.33235 9.08571 1.33235 8.52773 1.91433L1.71465 9.03988C1.37938 9.38848 1.19019 9.89956 1.19019 10.4402V20.1359C1.19019 20.3486 1.33148 20.5229 1.50391 20.5229H5.39778C5.57021 20.5229 5.7115 20.3486 5.7115 201359V12.9631C5.7115 11.935 6.38921 11.099 7.22259 11.099H7.22738Z" fill="#313131"></path></svg>', url: baseURL },
+            { label: stockTitle, url: stockURL },            
+            { label: 'Farm Machinery For Sale', url: '#' },            
+        ];
 
-        if (Array.isArray(filters.make) && filters.make.length) {
-            filters.make.forEach(mk => {
-                const newFilters = { 
-                    ...(filters.type && { type: filters.type }),
-                    make: [mk] 
-                };
-                items.push({ label: mk, filters: newFilters });
-            });
-        }
+        // --- Step 2: Build dynamic breadcrumb ---
+        let labelParts = [];
 
-        if (Array.isArray(filters.model) && filters.model.length) {
-            filters.model.forEach(md => {
-                const newFilters = {
-                    ...(filters.type && { type: filters.type }),
-                    ...(filters.make && { make: filters.make }),
-                    model: [md]
-                };
-                items.push({ label: md, filters: newFilters });
-            });
-        }
+        // Type (like Tractors, Harvesters)
+        // if (Array.isArray(filters.type) && filters.type.length) {
+        //     const typeLabel = filters.type.join(', ');
+        //     labelParts.push(typeLabel);
+        //     items.push({
+        //         label: `${typeLabel} For Sale`,
+        //         url: buildSEOUrl({ type: filters.type }, 1)
+        //     });
+        // }
 
+        // Make (like John Deere, Mahindra)
+        // if (Array.isArray(filters.make) && filters.make.length) {
+        //     const makeLabel = filters.make.join(', ');
+        //     labelParts.push(makeLabel);
+        //     items.push({
+        //         label: makeLabel,
+        //         url: buildSEOUrl({ type: filters.type, make: filters.make }, 1)
+        //     });
+        // }
+
+        // Model (like 5050E, Swaraj 744)
+        // if (Array.isArray(filters.model) && filters.model.length) {
+        //     const modelLabel = filters.model.join(', ');
+        //     labelParts.push(modelLabel);
+        //     items.push({
+        //         label: modelLabel,
+        //         url: buildSEOUrl({ 
+        //             type: filters.type, 
+        //             make: filters.make, 
+        //             model: filters.model 
+        //         }, 1)
+        //     });
+        // }
+
+        // Category (New / Used / Certified)
         if (Array.isArray(filters.categories) && filters.categories.length) {
-            filters.categories.forEach(cat => {
-                const newFilters = {
-                    ...(filters.type && { type: filters.type }),
-                    ...(filters.make && { make: filters.make }),
-                    ...(filters.model && { model: filters.model }),
-                    categories: [cat]
-                };
-                items.push({ label: cat, filters: newFilters });
-            });
+
+            let catLabel = '';
+
+            if (filters.categories.length === 1) {
+                // Only one category
+                catLabel = filters.categories[0];
+            } else if (filters.categories.length === 2) {
+                // Two categories → join with comma
+                catLabel = filters.categories.join(', ');
+            } else {
+                // More than two → show first two and add "& more"
+                const shown = filters.categories.slice(0, 2).join(', ');
+                catLabel = shown + ' & more';
+            }
+
+            items[2] = {
+                label: catLabel+' For Sale',
+                url: buildSEOUrl({
+                    // type: filters.type,
+                    // make: filters.make,
+                    // model: filters.model,
+                    categories: filters.categories
+                }, 1)
+            }
+
+            // items.push({
+            //     label: catLabel,
+            //     url: buildSEOUrl({
+            //         // type: filters.type,
+            //         // make: filters.make,
+            //         // model: filters.model,
+            //         categories: filters.categories
+            //     }, 1)
+            // });
         }
 
-        if (filters.price_from || filters.price_to) {
-            const label = 'Price: ' + (filters.price_from || 'Any') + ' - ' + (filters.price_to || 'Any');
-            items.push({ label: label, filters: filters });
-        }
+        // Price
+        // if (filters.price_from || filters.price_to) {
+        //     const priceLabel = `₹${filters.price_from || 'Any'} - ₹${filters.price_to || 'Any'}`;
+        //     labelParts.push(priceLabel);
+        //     items.push({
+        //         label: `Price: ${priceLabel}`,
+        //         url: buildSEOUrl(filters, 1)
+        //     });
+        // }
 
-        if (filters.keyword) {
-            items.push({ label: 'Search: ' + filters.keyword, filters: filters });
-        }
+        // // Keyword Search
+        // if (filters.keyword) {
+        //     const keywordLabel = `Search: ${filters.keyword}`;
+        //     labelParts.push(keywordLabel);
+        //     items.push({
+        //         label: keywordLabel,
+        //         url: buildSEOUrl(filters, 1)
+        //     });
+        // }
 
-        const html = items.map((it, idx) => {
-            const href = buildSEOUrl(it.filters, 1);
-            return '<a href="' + href + '" class="rsl-crumb-link" data-crumb-index="' + idx + '">' + it.label + '</a>';
-        }).join(' <span class="crumb-sep">/</span> ');
+        // --- Step 3: Build HTML ---
+        const html = items.map((it, idx) => {            
+            if (idx === items.length - 1) {
+                return `<span class="active">${it.label}</span>`;
+            }
+            return `<a href="${it.url}" class="rsl-crumb-link" data-crumb-index="${idx}">${it.label}</a>`;
+        }).join('<span> > </span>');
 
+        // --- Step 4: Render ---
         $crumb.html(html);
     }
 
@@ -437,27 +495,58 @@ jQuery(document).ready(function($) {
      */
     function updateTitle(filters) {
         filters = filters || {};
-        let titleParts = [];
-        
-        if (Array.isArray(filters.make) && filters.make.length) {
-            titleParts.push(filters.make.join(' '));
-        }
-        if (Array.isArray(filters.model) && filters.model.length) {
-            titleParts.push(filters.model.join(' '));
-        }
-        if (Array.isArray(filters.categories) && filters.categories.length) {
-            titleParts.push(filters.categories.join(' '));
-        }
-        if (Array.isArray(filters.type) && filters.type.length) {
-            titleParts.push(filters.type.join(' '));
-        }
-        if (filters.price_to) titleParts.push('under $' + filters.price_to);
-        if (filters.keyword) titleParts.push(filters.keyword);
+        const siteTitle = rsl_ajax_obj.site_title || '';
 
-        const base = 'Cars for Sale';
-        const title = titleParts.length ? titleParts.join(' - ') + ' | ' + base : base;
-        $('h1').text(titleParts.length ? titleParts.join(' - ') : base);
-        document.title = title;
+        let parts = [];
+
+        // Type (e.g., Tractors, Harvesters)
+        // if (Array.isArray(filters.type) && filters.type.length) {
+        //     parts.push(filters.type.join(' '));
+        // }
+
+        // Make (e.g., John Deere)
+        // if (Array.isArray(filters.make) && filters.make.length) {
+        //     parts.push(filters.make.join(' '));
+        // }
+
+        // Model (e.g., 5050E)
+        // if (Array.isArray(filters.model) && filters.model.length) {
+        //     parts.push(filters.model.join(' '));
+        // }
+
+        // Categories (e.g., Used, New)
+        if (Array.isArray(filters.categories) && filters.categories.length) {
+            let catLabel = '';
+            if (filters.categories.length === 1) {
+                catLabel = filters.categories[0];
+            } else if (filters.categories.length === 2) {
+                catLabel = filters.categories.join(', ');
+            } else {
+                catLabel = filters.categories.slice(0, 2).join(', ') + ' & more';
+            }
+            parts.push(catLabel);
+        }
+
+        // Price filter
+        // if (filters.price_to) {
+        //     parts.push('Under ₹' + filters.price_to);
+        // }
+
+        // Keyword search
+        // if (filters.keyword) {
+        //     parts.push(filters.keyword);
+        // }
+
+        // --- Base logic ---
+        const baseLabel = 'For Sale';
+        const joined = parts.length ? parts.join(' ') : 'Farm Machinery';
+
+        // Final readable title
+        const fullTitle = `${joined} ${baseLabel} — ${siteTitle}`;
+
+        // --- Update DOM ---
+        $('h1').text(`${joined} ${baseLabel}`);
+        document.title = fullTitle;
     }
 
     /**
@@ -880,8 +969,8 @@ jQuery(document).ready(function($) {
     window.addEventListener('popstate', function(e) {
         const parsed = parseFiltersFromURL();
         applyFiltersToUI(parsed.filters);
-        // updateBreadcrumbs(parsed.filters);
-        // updateTitle(parsed.filters);
+        updateBreadcrumbs(parsed.filters);
+        updateTitle(parsed.filters);
         rsl_fetch_listings({ page: parsed.page, per_page: rsl_ajax_obj.vdp_per_page, filters: parsed.filters });
     });
 
@@ -895,8 +984,8 @@ jQuery(document).ready(function($) {
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
             const filters = get_selected_filters();
-            // updateBreadcrumbs(filters);
-            // updateTitle(filters);
+            updateBreadcrumbs(filters);
+            updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
     })();
