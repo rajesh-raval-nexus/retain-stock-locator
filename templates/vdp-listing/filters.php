@@ -35,7 +35,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             d="M7.2503 3.74988C7.05139 3.74988 6.86063 3.8289 6.71997 3.96955C6.57932 4.11021 6.5003 4.30097 6.5003 4.49988C6.5003 4.6988 6.57932 4.88956 6.71997 5.03021C6.86063 5.17087 7.05139 5.24988 7.2503 5.24988C7.44922 5.24988 7.63998 5.17087 7.78063 5.03021C7.92129 4.88956 8.0003 4.6988 8.0003 4.49988C8.0003 4.30097 7.92129 4.11021 7.78063 3.96955C7.63998 3.8289 7.44922 3.74988 7.2503 3.74988ZM5.12781 3.74988C5.28276 3.31073 5.57011 2.93046 5.95025 2.66148C6.3304 2.39249 6.78462 2.24805 7.2503 2.24805C7.71599 2.24805 8.17021 2.39249 8.55035 2.66148C8.9305 2.93046 9.21785 3.31073 9.3728 3.74988H14.7503C14.9492 3.74988 15.14 3.8289 15.2806 3.96955C15.4213 4.11021 15.5003 4.30097 15.5003 4.49988C15.5003 4.6988 15.4213 4.88956 15.2806 5.03021C15.14 5.17087 14.9492 5.24988 14.7503 5.24988H9.3728C9.21785 5.68903 8.9305 6.06931 8.55035 6.33829C8.17021 6.60728 7.71599 6.75172 7.2503 6.75172C6.78462 6.75172 6.3304 6.60728 5.95025 6.33829C5.57011 6.06931 5.28276 5.68903 5.12781 5.24988H4.25031C4.05139 5.24988 3.86063 5.17087 3.71998 5.03021C3.57932 4.88956 3.50031 4.6988 3.50031 4.49988C3.50031 4.30097 3.57932 4.11021 3.71998 3.96955C3.86063 3.8289 4.05139 3.74988 4.25031 3.74988H5.12781ZM11.7503 8.24989C11.5514 8.24989 11.3606 8.3289 11.22 8.46955C11.0793 8.61021 11.0003 8.80097 11.0003 8.99989C11.0003 9.1988 11.0793 9.38956 11.22 9.53021C11.3606 9.67087 11.5514 9.74989 11.7503 9.74989C11.9492 9.74989 12.14 9.67087 12.2806 9.53021C12.4213 9.38956 12.5003 9.1988 12.5003 8.99989C12.5003 8.80097 12.4213 8.61021 12.2806 8.46955C12.14 8.3289 11.9492 8.24989 11.7503 8.24989ZM9.6278 8.24989C9.78276 7.81074 10.0701 7.43046 10.4503 7.16148C10.8304 6.89249 11.2846 6.74805 11.7503 6.74805C12.216 6.74805 12.6702 6.89249 13.0504 7.16148C13.4305 7.43046 13.7179 7.81074 13.8728 8.24989H14.7503C14.9492 8.24989 15.14 8.3289 15.2806 8.46955C15.4213 8.61021 15.5003 8.80097 15.5003 8.99989C15.5003 9.1988 15.4213 9.38956 15.2806 9.53021C15.14 9.67087 14.9492 9.74989 14.7503 9.74989H13.8728C13.7179 10.189 13.4305 10.5693 13.0504 10.8383C12.6702 11.1073 12.216 11.2517 11.7503 11.2517C11.2846 11.2517 10.8304 11.1073 10.4503 10.8383C10.0701 10.5693 9.78276 10.189 9.6278 9.74989H4.25031C4.05139 9.74989 3.86063 9.67087 3.71998 9.53021C3.57932 9.38956 3.50031 9.1988 3.50031 8.99989C3.50031 8.80097 3.57932 8.61021 3.71998 8.46955C3.86063 8.3289 4.05139 8.24989 4.25031 8.24989H9.6278ZM7.2503 12.7499C7.05139 12.7499 6.86063 12.8289 6.71997 12.9696C6.57932 13.1102 6.5003 13.301 6.5003 13.4999C6.5003 13.6988 6.57932 13.8896 6.71997 14.0302C6.86063 14.1709 7.05139 14.2499 7.2503 14.2499C7.44922 14.2499 7.63998 14.1709 7.78063 14.0302C7.92129 13.8896 8.0003 13.6988 8.0003 13.4999C8.0003 13.301 7.92129 13.1102 7.78063 12.9696C7.63998 12.8289 7.44922 12.7499 7.2503 12.7499ZM5.12781 12.7499C5.28276 12.3107 5.57011 11.9305 5.95025 11.6615C6.3304 11.3925 6.78462 11.248 7.2503 11.248C7.71599 11.248 8.17021 11.3925 8.55035 11.6615C8.9305 11.9305 9.21785 12.3107 9.3728 12.7499H14.7503C14.9492 12.7499 15.14 12.8289 15.2806 12.9696C15.4213 13.1102 15.5003 13.301 15.5003 13.4999C15.5003 13.6988 15.4213 13.8896 15.2806 14.0302C15.14 14.1709 14.9492 14.2499 14.7503 14.2499H9.3728C9.21785 14.689 8.9305 15.0693 8.55035 15.3383C8.17021 15.6073 7.71599 15.7517 7.2503 15.7517C6.78462 15.7517 6.3304 15.6073 5.95025 15.3383C5.57011 15.0693 5.28276 14.689 5.12781 14.2499H4.25031C4.05139 14.2499 3.86063 14.1709 3.71998 14.0302C3.57932 13.8896 3.50031 13.6988 3.50031 13.4999C3.50031 13.301 3.57932 13.1102 3.71998 12.9696C3.86063 12.8289 4.05139 12.7499 4.25031 12.7499H5.12781Z"
             fill="#444343" />
         </svg>
-        Filter
+        <?php esc_html_e('Filter', 'retain-stock-locator'); ?>
       </button>
     </div>
     <div class="col-6">
@@ -46,7 +46,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             stroke="#444343" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
 
-        Sort by
+        <?php esc_html_e('Sort by', 'retain-stock-locator'); ?>
       </button>
     </div>
   </div>
@@ -57,7 +57,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
     <div class="modal-content">
       <div class="modal-header gfam-filter-header">
         <span class="gfam-clear-all"></span>
-        <span>Filter</span>
+        <span><?php esc_html_e('Filter', 'retain-stock-locator'); ?></span>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -71,7 +71,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupCategoryMobile">
-                <span>Category</span>
+                <span><?php esc_html_e('Category', 'retain-stock-locator'); ?></span>
                 <button class="gfam-arrow">
                   <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -95,7 +95,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupMakeMobile">
-                <span>Make & Model</span>
+                <span><?php esc_html_e('Make & Model', 'retain-stock-locator'); ?></span>
                 <button class="gfam-arrow">
                   <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -119,7 +119,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <li class="d-block w-100">
               <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
                 data-bs-target="#gfampopupTypeMobile">
-                <span>Type</span>
+                <span><?php esc_html_e('Type', 'retain-stock-locator'); ?></span>
                 <button class="gfam-arrow">
                   <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -142,7 +142,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <?php
              if(!$hide_price_range_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupRangeMobile">
-              <span>Price Range</span>
+              <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
               <button class="gfam-arrow">
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
@@ -157,7 +157,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <!-- <<<<- Mobile Year Section Start ->>>> -->
             <?php if(!$hide_year_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupYearMobile">
-              <span>Year</span>
+              <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
               <button class="gfam-arrow">
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
@@ -172,7 +172,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <!-- <<<<- Mobile Hours Section Start ->>>> -->
             <?php if(!$hide_hours_filter){?>
             <li data-bs-toggle="modal" data-bs-target="#gfampopupHourMobile">
-              <span>Hours</span>
+              <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
               <button class="gfam-arrow">
                 <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
@@ -204,7 +204,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <a href="javascript:void(0);" class="clear-btn" data-bs-dismiss="modal" data-type="category">Clear</a>
           </div>
           <div class="col-6 text-end">
-            <button class="gfam-btn w-auto">Search</button>
+            <button class="gfam-btn w-auto"><?php esc_html_e('Search', 'retain-stock-locator'); ?></button>
           </div>
         </div>
       </div>
@@ -278,7 +278,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
     <div class="modal-content">
       <div class="modal-header gfam-filter-header">
         <span class="">&nbsp;</span>
-        <span>Sort By</span>
+        <span><?php esc_html_e('Sort By', 'retain-stock-locator'); ?></span>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -324,7 +324,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupCategoryDesktop">
-            <span>Category</span>
+            <span><?php esc_html_e('Category', 'retain-stock-locator'); ?></span>
             <button class="gfam-arrow">
               <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -348,7 +348,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupMakeDesktop">
-            <span>Make & Model</span>
+            <span><?php esc_html_e('Make & Model', 'retain-stock-locator'); ?></span>
             <button class="gfam-arrow">
               <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -372,7 +372,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <li class="d-block w-100">
           <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
             data-bs-target="#popupTypeDesktop">
-            <span>Type</span>
+            <span><?php esc_html_e('Type', 'retain-stock-locator'); ?></span>
             <button class="gfam-arrow">
               <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -393,7 +393,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <!-- <<<<- Desktop Price Range Section Start ->>>> -->
         <?php if(!$hide_price_range_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupRangeDesktop">
-          <span>Price Range</span>
+          <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
           <button class="gfam-arrow">
             <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd"
@@ -408,7 +408,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <!-- <<<<- Desktop Year Section Start ->>>> -->
         <?php if(!$hide_year_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupYearDesktop">
-          <span>Year</span>
+          <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
           <button class="gfam-arrow">
             <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd"
@@ -423,7 +423,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
         <!-- <<<<- Desktop Hours Section Start ->>>> -->
         <?php if(!$hide_hours_filter){?>
         <li data-bs-toggle="modal" data-bs-target="#popupHourDesktop">
-          <span>Hours</span>
+          <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
           <button class="gfam-arrow">
             <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd"
@@ -450,77 +450,77 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
       <div class="row align-items-center gfam-header-row justify-content-between">
         <!-- Title -->
         <div class="col-md-6 my-2">
-          <h1 class="gfam-title fw-bold mb-0">Farm Trailers For Sale</h1>
+          <h1 class="gfam-title fw-bold mb-0"><?php esc_html_e('Farm Trailers For Sale', 'retain-stock-locator'); ?></h1>
         </div>
 
         <!-- Sort Dropdown -->
         <div class="col-md-auto my-2 d-flex justify-content-end d-none d-xl-block" id="sortDropdownContainer">
           <div class="gfam-sort d-flex align-items-center">
-            <span class="me-1  d-none d-xl-block">Sort by:</span>
+            <span class="me-1  d-none d-xl-block"><?php esc_html_e('Sort by:', 'retain-stock-locator'); ?></span>
             <div class="dropdown">
               <button class="bg-transparent border-0 dropdown-toggle gfam-sort-btn  d-none d-xl-block" type="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                Relevancy
+                <?php esc_html_e('Relevancy', 'retain-stock-locator'); ?>
               </button>
               <ul class="dropdown-menu">
                 <li class="d-block d-xl-none">
                   <a class="dropdown-item stock-sorting-cls" data-val="relevancy" href="javascript:void(0);">
-                    Relevancy
+                    <?php esc_html_e('Relevancy', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="price_asc" href="javascript:void(0);">
-                    Price (Low - High)
+                    <?php esc_html_e('Price (Low - High)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="price_desc" href="javascript:void(0);">
-                    Price (High - Low)
+                    <?php esc_html_e('Price (High - Low)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="make_model_az" href="javascript:void(0);">
-                    Make / Model (A - Z)
+                    <?php esc_html_e('Make / Model (A - Z)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="make_model_za" href="javascript:void(0);">
-                    Make / Model (Z - A)
+                    <?php esc_html_e('Make / Model (Z - A)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="year_asc" href="javascript:void(0);">
-                    Year (Newest - Oldest)
+                    <?php esc_html_e('Year (Newest - Oldest)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="year_desc" href="javascript:void(0);">
-                    Year (Oldest - Newest)
+                    <?php esc_html_e('Year (Oldest - Newest)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="kms_low_high" href="javascript:void(0);">
-                    KMs (Low - High)
+                    <?php esc_html_e('KMs (Low - High)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="kms_high_low" href="javascript:void(0);">
-                    KMs (High - Low)
+                    <?php esc_html_e('KMs (High - Low)', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="newest" href="javascript:void(0);">
-                    Newest
+                    <?php esc_html_e('Newest', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="oldest" href="javascript:void(0);">
-                    Oldest
+                    <?php esc_html_e('Oldest', 'retain-stock-locator'); ?>
                   </a>
                 </li>
                 <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="latest_update" href="javascript:void(0);">
-                    Latest Update
+                    <?php esc_html_e('Latest Update', 'retain-stock-locator'); ?>
                   </a>
                 </li>
               </ul>

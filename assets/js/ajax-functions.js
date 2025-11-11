@@ -632,6 +632,9 @@ jQuery(document).ready(function($) {
                     $('.load-more-btn').html(response.data.pagination);
                     reinitCarousel();
                     reinitSeeMoreLess();
+                    setTimeout(function() {
+                        reinitSeeMoreLess();
+                    }, 2000);
                 }
                 $('#loader').fadeOut(500);                
             },

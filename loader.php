@@ -20,13 +20,16 @@ rsl_scf_register_hooks();
 rsl_register_shortcodes();
 
 // Check XML path only after plugins_loaded
-add_action( 'plugins_loaded', function() {
+add_action( 'init', function() {
+    if ( ! function_exists('get_field') ) {
+        return; // ACF not active
+    }
+
     global $xmlPath;
 
     $xmlPath = get_field( 'xml_file_url', 'option' );
 
     if ( empty( $xmlPath ) ) {
-        // Admin notice if missing
         add_action( 'admin_notices', function() {
             ?>
             <div class="notice notice-error">
@@ -37,10 +40,9 @@ add_action( 'plugins_loaded', function() {
             </div>
             <?php
         });
-        return;
     }
-
 });
+
 
 // Add rewrite rules
 add_action('init', 'rsl_add_rewrite_rules');
