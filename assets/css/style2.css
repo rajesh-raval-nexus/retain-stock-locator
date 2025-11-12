@@ -1322,15 +1322,15 @@ max-width: 50%
   margin-bottom: 20px;
 }
 
-.rsl-stock-locator .gfam-detail-contact-btn, .rsl-stock-locator .gfam-detail-callback-btn  {
+.rsl-stock-locator .gfam-detail-contact-btn, .rsl-stock-locator .gfam-detail-callback-btn {
   background: var(--yellow_btn_bg_color);
   color: #333;
   border: none;
-  padding: 10px 30px;
+  padding: 15px 30px;
   width: 100%;
   border-radius: 10px !important;
-  font-size: 23px;
-  line-height: 40px;
+  font-size: 18px;
+  line-height: 100%;
   font-weight: 700;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -1366,13 +1366,13 @@ max-width: 50%
 }
 .gfam-detail-steps-section {
   background: #F1EFEF;
-  padding: 30px;
+  padding: 30px 20px;
   border-radius: 14px;
   margin-top: 30px;
 }
 
 .rsl-stock-locator .gfam-detail-steps-title {
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--darkgrey_badge_bg_color);
   margin-bottom: 30px;
@@ -1393,24 +1393,31 @@ max-width: 50%
 }
 
 .rsl-stock-locator .gfam-detail-step-content h4 {
-  font-size: 1.4rem;
+  font-size: 1.14rem;
   font-weight: bold;
   color: var(--darkgrey_badge_bg_color);
-  margin-bottom: 8px;
+  margin-bottom: 2px;
+}
+
+.gfam-detail-step-item:last-child {
+  margin-bottom: 0;
 }
 
 .rsl-stock-locator .gfam-detail-step-content p {
   color: #727272;
-  font-size: 20px;
+  font-size: 1rem;
   line-height: normal;
   margin-bottom: 8px;
   line-height: 22px !important;
 }
-
+.gfam-detail-step-item .gfam-detail-step-icon img {
+  width: 46px;
+  max-width: 100%;
+}
 .rsl-stock-locator .gfam-detail-step-link {
   color: var(--red_badge_bg_color);
   text-decoration: underline;
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 400;
 }
 
@@ -1482,19 +1489,23 @@ max-width: 50%
 /* Vehicle Features Section */
 .gfam-detail-vehicle-features {
   background:var(--lightgrey_box_bg_color);
-  padding: 30px 40px;
+  padding: 30px 26px;
   border-radius: 14px;
 }
 
-.gfam-detail-section-title {
-  font-size:2.5rem;
+.rsl-stock-locator .gfam-detail-section-title {
+  font-size:1.9rem;
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
-  margin-bottom: 30px;
+  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
-.gfam-detail-section-title span {
+.rsl-stock-locator .gfam-detail-similiar-product > h2 {
+  text-align: left !important;
+}
+
+.rsl-stock-locator .gfam-detail-section-title span {
   color: var(--red_badge_bg_color);
 }
 
@@ -1511,7 +1522,7 @@ max-width: 50%
 
 
 .rsl-stock-locator .gfam-detail-feature-content h5 {
-  font-size:20px;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--darkgrey_badge_bg_color);
   margin: 18px 0 8px;
@@ -1519,7 +1530,7 @@ max-width: 50%
 }
 
 .rsl-stock-locator .gfam-detail-feature-content p {
-  font-size:20px;
+  font-size: 1.13rem;
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
   margin-bottom: 0px;
@@ -1536,7 +1547,7 @@ max-width: 50%
 
 .rsl-stock-locator .gfam-detail-comments-content p {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   color: #727272;
   line-height: 1.5em;
