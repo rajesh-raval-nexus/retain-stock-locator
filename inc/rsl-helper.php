@@ -643,6 +643,8 @@ function gfam_output_vdp_sitemap() {
     $allListingsData = rsl_parse_listings($xmlPath);
     $today = date('c');
 
+ 
+
     // Output XML header with Yoast XSL
     echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     echo '<?xml-stylesheet type="text/xsl" href="' . esc_url(home_url('/main-sitemap.xsl')) . '"?>' . "\n";
@@ -651,7 +653,18 @@ function gfam_output_vdp_sitemap() {
     if (!empty($allListingsData)) {
         foreach ($allListingsData as $listing) {
             if (!empty($listing['stock_number'])) {
-                $url = trailingslashit($vdp_page_url) . $listing['stock_number'] . '/';
+
+                   $stock_number = !empty($listing['stock_number'])
+                    ? strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']))
+                    : 'N/A';
+
+                    $slug_title_like = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']. '-' . $stock_number));
+                    $slug_title_like = sanitize_title($slug_title_like);
+
+                    $detail_url = site_url("/{$vdp_page_url}/{$slug_title_like}-{$stock_number}/");
+
+                //$url = trailingslashit($vdp_page_url) .' '. $listing['stock_number'] . '/';
+                $url = trailingslashit($vdp_page_url) .''. $slug_title_like . '/';
                 echo "  <url>\n";
                 echo '    <loc>' . esc_url($url) . "</loc>\n";
                 echo '    <lastmod>' . esc_html($today) . "</lastmod>\n";
