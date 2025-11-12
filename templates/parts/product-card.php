@@ -10,7 +10,7 @@ if ( empty($item) || !is_array($item) ) {
 }
 
 $product_title       = rsl_build_product_name($item);
-$product_images      = $item['images'];
+$product_images      = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $item['images'] : (array) $item['images'][0];
 $listing_type        = !empty($item['listing_type']) ? $item['listing_type'] : 'N/A';
 $stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
 $item_specification  = !empty($item['item_specification']) ? $item['item_specification'] : 'N/A';
@@ -31,10 +31,13 @@ if ($detail_page) {
         <div class="gfam-product-image">
             <div class="owl-carousel gfam-carousel">
                 <?php if (!empty($product_images)) :
-                    foreach ($product_images as $image) : ?>
+                    foreach ($product_images as $image) : 
+                        $static_placeholder_url = RSL_PLUGIN_URL . 'assets/images/sample.png';
+                        $img_url = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $image : $static_placeholder_url;
+                    ?>
                         <div class="item">
                             <a href="<?php echo $detail_url; ?>">
-                                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($product_title); ?>" />
+                                <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($product_title); ?>" />
                             </a>
                         </div>
                     <?php endforeach;

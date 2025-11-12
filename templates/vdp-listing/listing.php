@@ -2,7 +2,7 @@
 <div class="gfam-product-grid row">
     <?php 
         global $xmlPath;
-        $vdpPerPage = get_field('vdp_per_page', 'option');
+        $vdpPerPage = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? get_field('vdp_per_page', 'option') : 9;
         $all_stock_data = rsl_parse_listings( $xmlPath );
         $paginated_listings = rsl_load_more($all_stock_data, 0, $vdpPerPage);
 
