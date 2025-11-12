@@ -14,31 +14,22 @@ jQuery(document).ready(function($) {
         }
     }
 
-    /**
-     * Get the base label for breadcrumbs
-     */
-    function getBaseLabel() {
-        const basePath = getBasePath();        
-        const segments = basePath.split('/').filter(s => s);
-        const pageSlug = segments[segments.length - 1] || 'Home';
-        
-        return pageSlug.replace(/-/g, ' ')
-            .split(' ')
-            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ');
+    function normalizeForSlug(str) {
+        return String(str || '')
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')   // Replace any non-alphanumeric with a hyphen
+            .replace(/^-+|-+$/g, '');      // Trim leading/trailing hyphens
     }
 
     function encodeSegment(segment) {
-        if (!segment) return '';
-        // Replace '/' with a safe alternative (e.g., double dash '-' or a unique token)
-        // Use double dash as example
-        return encodeURIComponent(String(segment).replace(/\//g, '-'));
+        return normalizeForSlug(segment);
     }
 
     function decodeSegment(segment) {
-        if (!segment) return '';
-        // Reverse the replacement of '-' back to '/'
-        return decodeURIComponent(segment).replace(/-/g, '/');
+        // Just return the raw slug — we won’t “reverse” it,
+        // we’ll *match* it to real values via normalization later.
+        return String(segment || '').trim();
     }
 
     /**
@@ -55,28 +46,50 @@ jQuery(document).ready(function($) {
         const queryParts = [];
 
         // Helper: arrays -> path if single, query if multiple
+        // function addToUrl(arr, paramName) {
+        //     if (!arr) return;
+        //     if (!Array.isArray(arr)) return;
+        //     if (arr.length === 1) {
+        //         pathParts.push(encodeSegment(String(arr[0])));
+        //     } else if (arr.length > 1) {
+        //         // multiple → "type=type1&type2&type3"
+        //         let paramStr = encodeURIComponent(paramName) + '=' + encodeURIComponent(arr[0]);
+        //         for (let i = 1; i < arr.length; i++) {
+        //             paramStr += '&' + encodeURIComponent(arr[i]);
+        //         }
+        //         queryParts.push(paramStr);
+        //     }
+        // }
+
         function addToUrl(arr, paramName) {
-            if (!arr) return;
-            if (!Array.isArray(arr)) return;
+            if (!arr || !Array.isArray(arr)) return;
+
+            // Normalize values: lowercase, replace /, space, special chars → '-'
+            function normalizeForSlug(str) {
+                return String(str || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')  // spaces, slashes, symbols → '-'
+                    .replace(/^-+|-+$/g, '');     // trim starting/ending '-'
+            }
+
             if (arr.length === 1) {
-                pathParts.push(encodeSegment(String(arr[0])));
+                // Single value → use it in the path
+                pathParts.push(normalizeForSlug(arr[0]));
             } else if (arr.length > 1) {
-                // multiple → "type=type1&type2&type3"
-                let paramStr = encodeURIComponent(paramName) + '=' + encodeURIComponent(arr[0]);
-                for (let i = 1; i < arr.length; i++) {
-                    paramStr += '&' + encodeURIComponent(arr[i]);
-                }
-                queryParts.push(paramStr);
+                // Multiple values → single key, ampersand-separated
+                const slugValues = arr.map(v => normalizeForSlug(v));
+                const combined = encodeURIComponent(paramName) + '=' + slugValues.join('&');
+                queryParts.push(combined);
             }
         }
+
 
         // 1) add single-value path segments (type / make / model / categories)
         addToUrl(filters.type, 'type');
         addToUrl(filters.make, 'make');
         addToUrl(filters.model, 'model');
         addToUrl(filters.categories, 'categories');
-        
-        console.log(filters)
         
         // 2) if filter_type present -> add /under-2500/ or /above-50000/
         if (filters.filter_type && filters.filter_price) {
@@ -129,11 +142,18 @@ jQuery(document).ready(function($) {
         const search = window.location.search || '';
         const filters = {};
 
-        const basePath = getBasePath(); // '/stock-locator'
+        const basePath = getBasePath(); // e.g. '/stock-locator'
         const filterPath = pathname.replace(basePath, '').replace(/^\/+|\/+$/g, '');
         const segments = filterPath.split('/').filter(s => s && s.trim().length);
 
-        // sets for classification (populated server side via rsl_ajax_obj)
+        // --- New: Build slug lookup maps (from localized data or fallback) ---
+        const slugMap = (rsl_ajax_obj.slugMap || {});        
+        const makeMap = slugMap.makes || {};
+        const modelMap = slugMap.models || {};
+        const catMap   = slugMap.categories || {};
+        const typeMap  = slugMap.types || {};
+
+        // --- Old valid sets (for fallback if slugMap missing) ---
         const validMakes = new Set((rsl_ajax_obj.validMakes || []).map(m => String(m).toLowerCase()));
         const validModels = new Set((rsl_ajax_obj.validModels || []).map(m => String(m).toLowerCase()));
         const validCategories = new Set((rsl_ajax_obj.validCategories || []).map(m => String(m).toLowerCase()));
@@ -146,135 +166,105 @@ jQuery(document).ready(function($) {
 
         let hasPricePath = false;
 
-        // parse path segments
+        // --- New helper: normalize to slug format (universal) ---
+        function normalizeForSlug(str) {
+            return String(str || '')
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        // --- Step 1: Parse path segments ---
         for (const seg of segments) {
-            const decodedRaw = decodeSegment(seg); // use decodeSegment here
-            const decoded = String(decodedRaw).toLowerCase();
+            const raw = decodeSegment(seg);
+            const slug = normalizeForSlug(raw);
 
-            // match /under-2500/ or /above-50000/
-            const m = decoded.match(/^(under|above)[/-](\d+)$/i);
-
+            // Handle /under-2500/ or /above-50000/
+            const m = slug.match(/^(under|above)-(\d+)$/i);
             if (m) {
-                const t = m[1].toLowerCase();
+                const type = m[1].toLowerCase();
                 const val = m[2];
                 hasPricePath = true;
-                filters.filter_type = t;
+                filters.filter_type = type;
                 filters.filter_price = val;
-                if (t === 'under') {
-                    filters.price_to = val;
-                } else {
-                    filters.price_from = val;
-                }
+                if (type === 'under') filters.price_to = val;
+                else filters.price_from = val;
                 continue;
             }
 
-            // classify other segments (case-insensitive comparison)
-            if (validTypes.has(decoded)) {
-                filters.type.push(decodedRaw);
-            } else if (validMakes.has(decoded)) {
-                filters.make.push(decodedRaw);
-            } else if (validModels.has(decoded)) {
-                filters.model.push(decodedRaw);
-            } else if (validCategories.has(decoded)) {
-                filters.categories.push(decodedRaw);
+            // --- Step 2: Match via slugMap or fallback sets ---
+            if (typeMap[slug]) {
+                filters.type.push(typeMap[slug]);
+            } else if (makeMap[slug]) {
+                filters.make.push(makeMap[slug]);
+            } else if (modelMap[slug]) {
+                filters.model.push(modelMap[slug]);
+            } else if (catMap[slug]) {
+                filters.categories.push(catMap[slug]);
+            } else if (validTypes.has(slug)) {
+                filters.type.push(raw);
+            } else if (validMakes.has(slug)) {
+                filters.make.push(raw);
+            } else if (validModels.has(slug)) {
+                filters.model.push(raw);
+            } else if (validCategories.has(slug)) {
+                filters.categories.push(raw);
             } else {
-                console.warn('Unknown segment in URL:', decodedRaw);
+                console.warn('Unknown segment in URL:', seg);
             }
         }
 
-        // Handle query string multi-values (keeps support for weird ?type=New&Demo form)
-            const queryString = search.replace(/^\?/, '');
-            if (queryString) {
-                const parts = queryString.split('&');
-                let lastKey = null;
-                for (const part of parts) {
-                    if (!part) continue;
-                    if (part.includes('=')) {
-                        const [rawKey, rawVal] = part.split('=');
-                        const key = decodeURIComponent(rawKey || '').trim();
-                        const rawValue = rawVal === undefined ? '' : rawVal;
-                        const value = decodeURIComponent(rawValue).trim();
-                        lastKey = key;
-                        // store multi-values as arrays (except special range keys we'll decode later)
-                        if (!filters[key]) filters[key] = [];
-                        if (value !== '') filters[key].push(value);
-                    } else if (lastKey) {
-                        // e.g. ?type=New&Demo (Demo has no key) -> use lastKey
-                        const value = decodeURIComponent(part).trim();
-                        if (!filters[lastKey]) filters[lastKey] = [];
-                        if (value !== '') filters[lastKey].push(value);
-                    }
+        // --- Step 3: Parse query parameters (same as before, just cleaned slightly) ---
+        const queryString = search.replace(/^\?/, '');
+        if (queryString) {
+            const parts = queryString.split('&');
+            let lastKey = null;
+            for (const part of parts) {
+                if (!part) continue;
+                if (part.includes('=')) {
+                    const [rawKey, rawVal] = part.split('=');
+                    const key = decodeURIComponent(rawKey || '').trim();
+                    const value = decodeURIComponent(rawVal || '').trim();
+                    lastKey = key;
+                    if (!filters[key]) filters[key] = [];
+                    if (value !== '') filters[key].push(value);
+                } else if (lastKey) {
+                    const value = decodeURIComponent(part).trim();
+                    if (!filters[lastKey]) filters[lastKey] = [];
+                    if (value !== '') filters[lastKey].push(value);
                 }
             }
+        }
 
-            // decode canonical range query params (price_range/year_range/hours_range)
-            if (params.has('price_range')) {
-                const range = params.get('price_range') || '';
+        // --- Step 4: Handle range parameters ---
+        const rangeKeys = ['price', 'year', 'hours'];
+        for (const key of rangeKeys) {
+            const range = params.get(`${key}_range`);
+            if (range) {
                 const [from, to] = range.split('-').map(s => (s || '').trim());
-                if (from) filters.price_from = from;
-                if (to) filters.price_to = to;
+                if (from) filters[`${key}_from`] = from;
+                if (to) filters[`${key}_to`] = to;
             }
+            if (params.has(`${key}_from`) && !filters[`${key}_from`]) filters[`${key}_from`] = params.get(`${key}_from`);
+            if (params.has(`${key}_to`) && !filters[`${key}_to`]) filters[`${key}_to`] = params.get(`${key}_to`);
+        }
 
-            if (params.has('year_range')) {
-                const range = params.get('year_range') || '';
-                const [from, to] = range.split('-').map(s => (s || '').trim());
-                if (from) filters.year_from = from;
-                if (to) filters.year_to = to;
-            }
+        // --- Step 5: Handle price type from query ---
+        if (!hasPricePath) {
+            if (Array.isArray(filters.filter_type) && filters.filter_type.length)
+                filters.filter_type = String(filters.filter_type[0]);
+            if (Array.isArray(filters.filter_price) && filters.filter_price.length)
+                filters.filter_price = String(filters.filter_price[0]);
+        }
 
-            if (params.has('hours_range')) {
-                const range = params.get('hours_range') || '';
-                const [from, to] = range.split('-').map(s => (s || '').trim());
-                if (from) filters.hours_from = from;
-                if (to) filters.hours_to = to;
-            }
-
-            // also support explicit numeric params (if someone used price_from/price_to directly)
-            if (params.has('price_from') && !filters.price_from) filters.price_from = params.get('price_from');
-            if (params.has('price_to') && !filters.price_to) filters.price_to = params.get('price_to');
-
-            if (params.has('year_from') && !filters.year_from) filters.year_from = params.get('year_from');
-            if (params.has('year_to') && !filters.year_to) filters.year_to = params.get('year_to');
-
-            if (params.has('hours_from') && !filters.hours_from) filters.hours_from = params.get('hours_from');
-            if (params.has('hours_to') && !filters.hours_to) filters.hours_to = params.get('hours_to');
-
-            // If path-based price exists, skip any query-provided filter_type/filter_price to avoid duplicates
-            if (hasPricePath) {
-                if (filters.filter_type && filters.filter_price) {
-                    // already set from path; remove any query-sourced duplicates kept in filters['filter_type'] array
-                    if (Array.isArray(filters.filter_type)) delete filters.filter_type;
-                    if (Array.isArray(filters.filter_price)) delete filters.filter_price;
-                }
-            } else {
-                // if no price in path but filter_type/filter_price in query arrays, normalize them
-                if (Array.isArray(filters.filter_type) && filters.filter_type.length) {
-                    filters.filter_type = String(filters.filter_type[0]);
-                }
-                if (Array.isArray(filters.filter_price) && filters.filter_price.length) {
-                    filters.filter_price = String(filters.filter_price[0]);
-                }
-            }
-
-            // Normalize multi-valued keys left from query parsing:
-            // convert arrays to proper typed filters where applicable
-            ['type', 'make', 'model', 'categories'].forEach(k => {
-                if (filters[k] && filters[k].length === 0) delete filters[k];
-                // if query gave these as arrays via ?make=Abbey&make=Aitchison, we want arrays preserved
-                if (filters[k] && filters[k].length === 1) {
-                    // keep as array with single value (your buildURL expects arrays)
-                }
-            });
-
-        // Final cleanup
+        // --- Step 6: Cleanup empty arrays ---
         ['type', 'make', 'model', 'categories'].forEach(k => {
             if (Array.isArray(filters[k]) && filters[k].length === 0) delete filters[k];
         });
 
-        // return both filters and page as before
+        // --- Step 7: Pagination + misc scalar params ---
         const page = params.has('pg') ? (parseInt(params.get('pg'), 10) || 1) : 1;
-
-        // Scalars from params (keyword, sort)
         if (params.has('keyword')) filters.keyword = params.get('keyword');
         if (params.has('sort')) filters.sort = params.get('sort');
 

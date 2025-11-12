@@ -42,48 +42,61 @@ function rsl_parse_listings( $xmlPath ) {
 function rsl_get_filter_data_for_localization() {
     global $xmlPath;
     
-    $listings = rsl_parse_listings( $xmlPath );
+    $listings = rsl_parse_listings($xmlPath);
 
     $makes = [];
     $models = [];
     $categories = [];
     $types = [];
 
-    foreach ( $listings as $listing ) {
-        if ( !empty($listing['make']) ) {
+    foreach ($listings as $listing) {
+        if (!empty($listing['make'])) {
             $makes[] = $listing['make'];
         }
-        if ( !empty($listing['model']) ) {
+        if (!empty($listing['model'])) {
             $models[] = $listing['model'];
         }
-        // Assuming 'type' and 'subtype' are your categories or categories data
-        if ( !empty($listing['listing_type']) ) {
+        if (!empty($listing['listing_type'])) {
             $types[] = $listing['listing_type'];
         }
-        if ( !empty($listing['subtype']) ) {
+        if (!empty($listing['subtype'])) {
             $categories[] = $listing['type'];
             $categories[] = $listing['subtype'];
         }
     }
 
-    // Unique and sort the arrays to keep them clean and ordered
-    $makes = array_values(array_unique($makes));
+    // Remove duplicates and sort
+    $makes       = array_values(array_unique($makes));
+    $models      = array_values(array_unique($models));
+    $categories  = array_values(array_unique($categories));
+    $types       = array_values(array_unique($types));
+
     sort($makes);
-
-    $models = array_values(array_unique($models));
     sort($models);
-
-    $categories = array_values(array_unique($categories));
     sort($categories);
-
-    $types = array_values(array_unique($types));
     sort($types);
 
+    // Build slug maps (slug => original)
+    $slugify = function($arr) {
+        $map = [];
+        foreach ($arr as $item) {
+            $slug = sanitize_title($item); // WordPress-style slug
+            $map[$slug] = $item;
+        }
+        return $map;
+    };
+
     return [
-        'validMakes'      => $makes,
-        'validModels'     => $models,
-        'validCategories' => $categories,
-        'validTypes'      => $types,
+        'validMakes'        => $makes,
+        'validModels'       => $models,
+        'validCategories'   => $categories,
+        'validTypes'        => $types,
+        'slugMap' => [
+            'makes'       => $slugify($makes),
+            'models'      => $slugify($models),
+            'categories'  => $slugify($categories),
+            'types'       => $slugify($types),
+        ]
     ];
 }
 
