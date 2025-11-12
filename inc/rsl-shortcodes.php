@@ -191,14 +191,30 @@ function rsl_get_xml_hours_filters_cached( $attribute_name, $cache_ttl = 300 ) {
         $data[] = $listing[$attribute_name];
     }
 
+    // $data = array_unique(
+    //     array_filter(
+    //         array_map('trim', $data),
+    //         function($val) {
+    //             return $val !== '' && $val !== null;
+    //         }
+    //     )
+    // );    
+    
     $data = array_unique(
         array_filter(
-            array_map('trim', $data),
+            array_map(
+                function($val) {
+                    // Only trim strings; skip null/arrays/objects
+                    return is_string($val) ? trim($val) : '';
+                },
+                $data
+            ),
             function($val) {
-                return $val !== '' && $val !== null;
+                return $val !== '';
             }
         )
-    );      
+    );
+
 
     if ( ! empty( $data ) && is_array( $data ) ) {
         set_transient( $cache_key, $data, (int) $cache_ttl );
