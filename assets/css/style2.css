@@ -1534,7 +1534,7 @@ max-width: 50%
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
   margin-bottom: 0px;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 /* Dealer Comments Section */
@@ -1844,14 +1844,22 @@ color: #636363;
 }
 
 .gfam-detail-modal-body {
-  padding: 30px 40px;
+  padding: 19px 40px;
+}
+.gfam-detail-form-group .gfam-detail-request-btn {
+  margin-bottom: 15px;
+  margin-top: 8px;
 }
 
-.gfam-detail-form-group {
+/* .gfam-detail-form-group {
   margin-bottom: 20px;
   margin-top: 20px;
-}
+} */
 
+.gfam-detail-form-group {
+  margin-bottom: 15px;
+  margin-top: 6px;
+}
 .rsl-stock-locator .gfam-detail-form-control {
   border: 0;
   border-radius: 7px;
@@ -2913,4 +2921,23 @@ ease;
 }
 .rsl-stock-locator .page-content {
     margin-top: 40px;
+}
+
+.gfam-detail-vehicle-features .gfam-feature-listing {
+  display: flex;
+  justify-content: flex-start;
+  gap: 27px;
+}
+.gfam-detail-vehicle-features .gfam-feature-listing .gfam-detail-feature-item {
+  display: flex;
+  padding: 0;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+}
+.gfam-detail-vehicle-features .gfam-feature-listing .gfam-detail-feature-item svg {
+  width: 27px;
+}
+.rsl-stock-locator .gfam-detail-feature-content h5 {
+  margin-bottom: 4px;
 }

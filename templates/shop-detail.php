@@ -192,8 +192,8 @@ if ($stock_number) {
                       <?php echo $detail_data_sections['vehicle_features_title'] ?? ''; ?>
                     </h2>
 
-                    <div class="row">
-                      <div class="col-lg-3 col-md-6 col-6">
+                    <div class="gfam-feature-listing">
+                      <div class="gfam-feature-listing-box">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -212,7 +212,7 @@ if ($stock_number) {
                         </div>
                       </div>
 
-                      <div class="col-lg-3 col-md-6 col-6">
+                      <div class="gfam-feature-listing-box">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="42" height="44" viewBox="0 0 42 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -243,7 +243,7 @@ if ($stock_number) {
                       </div>
                        <?php //endif; ?>
 
-                      <div class="col-lg-3 col-md-6 col-6">
+                      <div class="gfam-feature-listing-box">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -271,7 +271,7 @@ if ($stock_number) {
                         </div>
                       </div>
 
-                      <div class="col-lg-3 col-md-6 col-6">
+                      <div class="gfam-feature-listing-box">
                         <div class="gfam-detail-feature-item">
                           <div class="gfam-detail-feature-icon">
                             <svg width="40" height="36" viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
