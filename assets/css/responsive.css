@@ -134,6 +134,7 @@ text-transform: math-auto;
    color: var(--darkgrey_badge_bg_color);
    fill: var(--darkgrey_badge_bg_color);
    font-size: 12px;
+   line-height: 17px;
  }
  .rsl-stock-locator  .gfam-detail-breadcrumb{
    justify-content: center;
@@ -244,10 +245,11 @@ text-transform: math-auto;
  .rsl-stock-locator  .gfam-detail-slider-container .gfam-detail-thumb-slider .owl-nav .owl-next{
    right: 5px !important;
  }
- .rsl-stock-locator .gfam-detail-section-title{
-   font-size: 25px;
-   margin-bottom: 2px;
- }
+ .rsl-stock-locator .gfam-detail-section-title {
+  font-size: 22px;
+  line-height: 29px;
+  margin-bottom: 2px;
+}
  .rsl-stock-locator  .gfam-detail-vehicle-features,
  .rsl-stock-locator  .gfam-detail-dealer-comments,  .rsl-stock-locator  .gfam-detail-vehicle-details{
    padding: 30px 20px;
