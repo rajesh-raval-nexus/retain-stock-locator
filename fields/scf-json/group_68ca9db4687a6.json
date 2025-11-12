@@ -1703,6 +1703,29 @@
             "bidirectional_target": []
         },
         {
+            "key": "field_6914597441e7d",
+            "label": "Call Number",
+            "name": "call_number",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "0352315136",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_690b3fc36c062",
             "label": "Detail Data Sections",
             "name": "detail_data_sections",
@@ -1989,5 +2012,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1762523390
+    "modified": 1762941531
 }

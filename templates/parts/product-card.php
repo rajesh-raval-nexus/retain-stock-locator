@@ -12,18 +12,24 @@ if ( empty($item) || !is_array($item) ) {
 $product_title       = rsl_build_product_name($item);
 $product_images      = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $item['images'] : (array) $item['images'][0];
 $listing_type        = !empty($item['listing_type']) ? $item['listing_type'] : 'N/A';
-$stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
+//$stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
+$stock_number = !empty($item['stock_number'])
+    ? strtolower(str_replace(['-', ' ', '_'], '', $item['stock_number']))
+    : 'N/A';
+
 $item_specification  = !empty($item['item_specification']) ? $item['item_specification'] : 'N/A';
 $hours               = !empty($item['hours']) ? (int) $item['hours'] : 'N/A';
 $price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
 
 $detail_page = get_field('select_stock_locator_detail_page', 'option');
 
-if ($detail_page) {
-    $detail_page_slug = $detail_page->post_name;
-    $detail_url = site_url('/' . $detail_page_slug . '/' . $stock_number . '/');
-}
+$detail_page_slug = isset($detail_page->post_name) ? $detail_page->post_name : 'stock-detail';
 
+
+$slug_title = strtolower(trim($item['year'] . '-' . $item['make'] . '-' . $item['model']));
+$slug_title = sanitize_title($slug_title);
+
+$detail_url = site_url("/{$detail_page_slug}/{$slug_title}-{$stock_number}/");
 ?>
 
 <div class="col-lg-4 col-md-6 my-3">

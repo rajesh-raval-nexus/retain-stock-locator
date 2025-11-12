@@ -529,6 +529,8 @@ add_filter('wpseo_title', 'gfam_dynamic_stock_detail_title');
 function gfam_dynamic_stock_detail_title($title) {
     global $xmlPath;
     $stock_number = get_query_var('stock_number');
+    $stock_number_parts = explode('-', $stock_number);
+    $stock_number = strtoupper(end($stock_number_parts));
 
     if (empty($stock_number)) {
         return $title;
@@ -540,7 +542,8 @@ function gfam_dynamic_stock_detail_title($title) {
     }
 
     foreach ($allListingsData as $listing) {
-        if ($listing['stock_number'] === $stock_number) {
+        $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
+        if ($listing_stock === $stock_number) {
             return esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'] . ' - ' . get_bloginfo('name'));
         }
     }
@@ -553,6 +556,8 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     global $xmlPath;
 
     $stock_number = get_query_var('stock_number');
+    $stock_number_parts = explode('-', $stock_number);
+    $stock_number = strtoupper(end($stock_number_parts));
     if (empty($stock_number)) {
         return;
     }
@@ -563,7 +568,8 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     }
 
     foreach ($allListingsData as $listing) {
-        if ($listing['stock_number'] === $stock_number) {
+        $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
+        if ($listing_stock === $stock_number) {
             $title = $listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'];
             $meta_title = esc_html($title);
             $meta_desc  = esc_attr('Explore full specifications, features, and availability of ' . $title . '. Contact us today to book a test drive or get more details.');
@@ -650,6 +656,8 @@ function gfam_output_vdp_sitemap() {
     $allListingsData = rsl_parse_listings($xmlPath);
     $today = date('c');
 
+ 
+
     // Output XML header with Yoast XSL
     echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     echo '<?xml-stylesheet type="text/xsl" href="' . esc_url(home_url('/main-sitemap.xsl')) . '"?>' . "\n";
@@ -658,7 +666,18 @@ function gfam_output_vdp_sitemap() {
     if (!empty($allListingsData)) {
         foreach ($allListingsData as $listing) {
             if (!empty($listing['stock_number'])) {
-                $url = trailingslashit($vdp_page_url) . $listing['stock_number'] . '/';
+
+                   $stock_number = !empty($listing['stock_number'])
+                    ? strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']))
+                    : 'N/A';
+
+                    $slug_title_like = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']. '-' . $stock_number));
+                    $slug_title_like = sanitize_title($slug_title_like);
+
+                    $detail_url = site_url("/{$vdp_page_url}/{$slug_title_like}-{$stock_number}/");
+
+                //$url = trailingslashit($vdp_page_url) .' '. $listing['stock_number'] . '/';
+                $url = trailingslashit($vdp_page_url) .''. $slug_title_like . '/';
                 echo "  <url>\n";
                 echo '    <loc>' . esc_url($url) . "</loc>\n";
                 echo '    <lastmod>' . esc_html($today) . "</lastmod>\n";
