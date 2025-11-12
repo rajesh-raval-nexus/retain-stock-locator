@@ -516,6 +516,8 @@ add_filter('wpseo_title', 'gfam_dynamic_stock_detail_title');
 function gfam_dynamic_stock_detail_title($title) {
     global $xmlPath;
     $stock_number = get_query_var('stock_number');
+    $stock_number_parts = explode('-', $stock_number);
+    $stock_number = strtoupper(end($stock_number_parts));
 
     if (empty($stock_number)) {
         return $title;
@@ -527,7 +529,8 @@ function gfam_dynamic_stock_detail_title($title) {
     }
 
     foreach ($allListingsData as $listing) {
-        if ($listing['stock_number'] === $stock_number) {
+        $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
+        if ($listing_stock === $stock_number) {
             return esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'] . ' - ' . get_bloginfo('name'));
         }
     }
@@ -540,6 +543,8 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     global $xmlPath;
 
     $stock_number = get_query_var('stock_number');
+    $stock_number_parts = explode('-', $stock_number);
+    $stock_number = strtoupper(end($stock_number_parts));
     if (empty($stock_number)) {
         return;
     }
@@ -550,7 +555,8 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     }
 
     foreach ($allListingsData as $listing) {
-        if ($listing['stock_number'] === $stock_number) {
+        $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
+        if ($listing_stock === $stock_number) {
             $title = $listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'];
             $meta_title = esc_html($title);
             $meta_desc  = esc_attr('Explore full specifications, features, and availability of ' . $title . '. Contact us today to book a test drive or get more details.');
