@@ -427,7 +427,7 @@ jQuery(document).ready(function($) {
 
         // Price
         // if (filters.price_from || filters.price_to) {
-        //     const priceLabel = `₹${filters.price_from || 'Any'} - ₹${filters.price_to || 'Any'}`;
+        //     const priceLabel = `$${filters.price_from || 'Any'} - $${filters.price_to || 'Any'}`;
         //     labelParts.push(priceLabel);
         //     items.push({
         //         label: `Price: ${priceLabel}`,
@@ -519,7 +519,7 @@ jQuery(document).ready(function($) {
 
         // Price filter
         // if (filters.price_to) {
-        //     parts.push('Under ₹' + filters.price_to);
+        //     parts.push('Under $' + filters.price_to);
         // }
 
         // Keyword search
@@ -705,8 +705,7 @@ jQuery(document).ready(function($) {
 
         $('.clear-btn').click();
 
-        let filters = get_selected_filters();
-        show_selected_val_on_sidebar(filters);
+        let filters = get_selected_filters();        
 
         filters.price_from = '';
         filters.price_to = '';
@@ -719,6 +718,7 @@ jQuery(document).ready(function($) {
         filters.filter_type = filter_type;
         filters.filter_price = filter_price;
 
+        show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -915,7 +915,7 @@ jQuery(document).ready(function($) {
     }
 
     function show_selected_val_on_sidebar(filters) {
-        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();
+        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-range-options-list, .selected-year-range-options-list, .selected-hours-range-options-list').empty();
 
         if (Array.isArray(filters.categories) && filters.categories.length) {
             filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
@@ -928,6 +928,51 @@ jQuery(document).ready(function($) {
         }
         if (Array.isArray(filters.type) && filters.type.length) {
             filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
+        }
+
+        /** -----------------------------
+         *   PRICE RANGE TAG
+         * ----------------------------- */
+        if ((filters.price_from || filters.price_to)) {
+            let label = '';
+            if (filters.price_from && filters.price_to) {
+                label = '$' + filters.price_from + ' - $' + filters.price_to;
+            } else if (filters.price_from) {                
+                label = 'Above $' + filters.price_from;
+            } else if (filters.price_to) {
+                label = 'Under $' + filters.price_to;
+            }
+            addTag('.selected-price-range-options-list', label, 'price_range', label);
+        }
+
+        /** -----------------------------
+         *   YEAR RANGE TAG
+         * ----------------------------- */
+        if (filters.year_from || filters.year_to) {
+            let label = '';
+            if (filters.year_from && filters.year_to) {
+                label = filters.year_from + ' - ' + filters.year_to;
+            } else if (filters.year_from) {
+                label = 'From ' + filters.year_from;
+            } else if (filters.year_to) {
+                label = 'Up to ' + filters.year_to;
+            }
+            addTag('.selected-year-range-options-list', label, 'year_range', label);
+        }
+
+        /** -----------------------------
+         *   HOURS RANGE TAG
+         * ----------------------------- */
+        if (filters.hours_from || filters.hours_to) {
+            let label = '';
+            if (filters.hours_from && filters.hours_to) {
+                label = filters.hours_from + ' - ' + filters.hours_to + ' hrs';
+            } else if (filters.hours_from) {
+                label = 'Above ' + filters.hours_from + ' hrs';
+            } else if (filters.hours_to) {
+                label = 'Under ' + filters.hours_to + ' hrs';
+            }
+            addTag('.selected-hours-range-options-list', label, 'hours_range', label);
         }
 
         reinitSeeMoreLess();
@@ -949,6 +994,37 @@ jQuery(document).ready(function($) {
             $('.model-listing[value="' + value + '"]').prop('checked', false);
         } else if (key === 'type') {
             $('input[name="type[]"][value="' + value + '"]').prop('checked', false);
+        }
+
+        /** -----------------------------
+         *  PRICE RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'price_range') {            
+            $('select[name="price_from"]').val('').trigger('change');
+            $('select[name="price_to"]').val('').trigger('change');
+            $('input[name="priceFromInput"]').val('');
+            $('input[name="priceToInput"]').val('');
+            $('.block-price-filter').removeClass('active');
+        }
+
+        /** -----------------------------
+         *  YEAR RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'year_range') {
+            $('select[name="year-from"]').val('').trigger('change');
+            $('select[name="year-to"]').val('').trigger('change');
+            $('input[name="yearFromInput"]').val('');
+            $('input[name="yearToInput"]').val('');
+        }
+
+        /** -----------------------------
+         *  HOURS RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'hours_range') {
+            $('select[name="hour-from"]').val('').trigger('change');
+            $('select[name="hour-to"]').val('').trigger('change');
+            $('input[name="hourFromInput"]').val('');
+            $('input[name="hourToInput"]').val('');
         }
 
         tag.remove();
