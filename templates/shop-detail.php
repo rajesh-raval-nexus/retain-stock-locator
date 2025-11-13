@@ -7,13 +7,15 @@ $stock_number_parts = explode('-', $stock_number);
 $stock_number = strtoupper(end($stock_number_parts));
 
 if ($stock_number) {
-  
+
   $allListingsData = rsl_parse_listings($xmlPath);
   
   $vehicle_seach = RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
 
   $detail_data_sections = get_field('detail_data_sections', 'option');
   $easy_steps_to_own_your_vehicle = get_field('easy_steps_to_own_your_vehicle', 'option');
+
+  $detail_page = get_field('select_stock_locator_detail_page', 'option');
   
   $call_number = get_field('call_number', 'option');
   foreach ($allListingsData as $listing) {
@@ -55,7 +57,12 @@ if ($stock_number) {
                 
                 <span> > </span>
                 <span class="active">
-                    <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
+                    <?php 
+                    $ttl = trim($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']);
+                    if (empty($ttl)) {
+                        $ttl = $detail_page->post_title;
+                    }
+                    echo esc_html($ttl); ?>
                   </span>
               </nav>
 
@@ -77,7 +84,12 @@ if ($stock_number) {
       <div class="gfam-detail-main-title">
         <div class="container">
           <h1 class="gfam-detail-title">
-            <?php echo esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']); ?>
+            <?php 
+            $ttl = trim($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']);
+              if (empty($ttl)) {
+                    $ttl = $detail_page->post_title;
+                }
+            echo esc_html($ttl); ?>
           </h1>
           <div class="gfam-detail-price-section d-xl-none d-flex">
             <?php if (! empty($listing['price'])) { ?>  
@@ -511,17 +523,19 @@ if ($stock_number) {
                                   </div>
                             </div>
                             <?php
-                              $detail_page = get_field('select_stock_locator_detail_page', 'option');
                               if ($detail_page) {
+                                  
                                   $detail_page_slug = $detail_page->post_name;
-                                  $stock_number = !empty($listingItem['stock_number'])
-                                  ? strtolower(str_replace(['-', ' ', '_'], '', $listingItem['stock_number']))
-                                  : 'N/A';
 
+                                  $stock_numberlike = strtolower($listingItem['stock_number']);
                                   $slug_title_like = strtolower(trim($listingItem['year'] . '-' . $listingItem['make'] . '-' . $listingItem['model']));
                                   $slug_title_like = sanitize_title($slug_title_like);
-
-                                  $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_number}/");
+                                  if($slug_title_like){
+                                    $slug_title_like = $slug_title_like;
+                                  }else{
+                                    $slug_title_like = gfam_generate_slug_preserve_case($detail_page->post_name);
+                                  }
+                                  $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_numberlike}/");
                                  
                               }
                             ?>
@@ -999,7 +1013,7 @@ if ($stock_number) {
       loop: true,
       nav: true,
       dots: false,
-      autoplay: true,
+      autoplay: false,
       autoplayTimeout: 5000,
       margin: 15,
       navText: [
@@ -1035,7 +1049,7 @@ if ($stock_number) {
       margin: 0,
       nav: true,
       dots: false,
-      autoplay: true,
+      autoplay: false,
       autoplayTimeout: 4000,
       autoplayHoverPause: true,
       items: 1,

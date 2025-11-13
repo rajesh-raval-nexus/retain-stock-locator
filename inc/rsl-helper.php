@@ -544,7 +544,13 @@ function gfam_dynamic_stock_detail_title($title) {
     foreach ($allListingsData as $listing) {
         $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
         if ($listing_stock === $stock_number) {
-            return esc_html($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'] . ' - ' . get_bloginfo('name'));
+            $ttl = trim($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']);
+            $detail_page = get_field('select_stock_locator_detail_page', 'option');
+            if (empty($ttl)) {
+                $ttl = $detail_page->post_title;
+            }
+
+            return esc_html($ttl . ' - ' . get_bloginfo('name'));
         }
     }
 
@@ -570,7 +576,11 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     foreach ($allListingsData as $listing) {
         $listing_stock = str_replace(['-', ' ', '_'], '', $listing['stock_number']);
         if ($listing_stock === $stock_number) {
-            $title = $listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model'];
+            $title = trim($listing['year'] . ' ' . $listing['make'] . ' ' . $listing['model']);
+            $detail_page = get_field('select_stock_locator_detail_page', 'option');
+            if (empty($title)) {
+                $title = $detail_page->post_title;
+            }
             $meta_title = esc_html($title);
             $meta_desc  = esc_attr('Explore full specifications, features, and availability of ' . $title . '. Contact us today to book a test drive or get more details.');
 
@@ -645,7 +655,7 @@ function gfam_output_vdp_sitemap() {
 
     // Get the VDP detail page from ACF options
     $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
-
+    
     if (empty($vdp_detail_page) || !is_object($vdp_detail_page)) {
         echo '<?xml version="1.0" encoding="UTF-8"?>';
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
@@ -670,13 +680,15 @@ function gfam_output_vdp_sitemap() {
                    $stock_number = !empty($listing['stock_number'])
                     ? strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']))
                     : 'N/A';
-
-                    $slug_title_like = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']. '-' . $stock_number));
+                    
+                    $slug_title_like = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']));
                     $slug_title_like = sanitize_title($slug_title_like);
+                    if($slug_title_like !=''){
+                        $slug_title_like = $slug_title_like. '-' . $stock_number;
+                    }else{
+                        $slug_title_like = gfam_generate_slug_preserve_case($vdp_detail_page->post_name). '-' . $stock_number;
+                    }
 
-                    $detail_url = site_url("/{$vdp_page_url}/{$slug_title_like}-{$stock_number}/");
-
-                //$url = trailingslashit($vdp_page_url) .' '. $listing['stock_number'] . '/';
                 $url = trailingslashit($vdp_page_url) .''. $slug_title_like . '/';
                 echo "  <url>\n";
                 echo '    <loc>' . esc_url($url) . "</loc>\n";
@@ -690,8 +702,7 @@ function gfam_output_vdp_sitemap() {
 }
 
 function gfam_generate_slug_preserve_case($text) {
-    // Replace only forward slashes with hyphens
-    $text = str_replace('/', '-', $text);
-    $text = trim($text);
+    $text = str_replace(['/', ' '], '-', $text);
+    $text = trim($text, '-');
     return $text;
 }
