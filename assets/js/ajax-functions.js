@@ -43,23 +43,7 @@ jQuery(document).ready(function($) {
     function buildSEOUrl(filters = {}, page) {
         const basePath = getBasePath(); // e.g. '/stock-locator'
         const pathParts = [];
-        const queryParts = [];
-
-        // Helper: arrays -> path if single, query if multiple
-        // function addToUrl(arr, paramName) {
-        //     if (!arr) return;
-        //     if (!Array.isArray(arr)) return;
-        //     if (arr.length === 1) {
-        //         pathParts.push(encodeSegment(String(arr[0])));
-        //     } else if (arr.length > 1) {
-        //         // multiple → "type=type1&type2&type3"
-        //         let paramStr = encodeURIComponent(paramName) + '=' + encodeURIComponent(arr[0]);
-        //         for (let i = 1; i < arr.length; i++) {
-        //             paramStr += '&' + encodeURIComponent(arr[i]);
-        //         }
-        //         queryParts.push(paramStr);
-        //     }
-        // }
+        const queryParts = [];       
 
         function addToUrl(arr, paramName) {
             if (!arr || !Array.isArray(arr)) return;
@@ -134,7 +118,7 @@ jQuery(document).ready(function($) {
 
     // ---------------------------
     // PARSE: reads URL -> filters object
-    // ---------------------------
+    // ---------------------------    
 
     function parseFiltersFromURL() {
         const pathname = window.location.pathname || '';
@@ -146,14 +130,14 @@ jQuery(document).ready(function($) {
         const filterPath = pathname.replace(basePath, '').replace(/^\/+|\/+$/g, '');
         const segments = filterPath.split('/').filter(s => s && s.trim().length);
 
-        // --- New: Build slug lookup maps (from localized data or fallback) ---
+        // Slug maps
         const slugMap = (rsl_ajax_obj.slugMap || {});        
         const makeMap = slugMap.makes || {};
         const modelMap = slugMap.models || {};
         const catMap   = slugMap.categories || {};
         const typeMap  = slugMap.types || {};
 
-        // --- Old valid sets (for fallback if slugMap missing) ---
+        // Fallback valid sets
         const validMakes = new Set((rsl_ajax_obj.validMakes || []).map(m => String(m).toLowerCase()));
         const validModels = new Set((rsl_ajax_obj.validModels || []).map(m => String(m).toLowerCase()));
         const validCategories = new Set((rsl_ajax_obj.validCategories || []).map(m => String(m).toLowerCase()));
@@ -166,7 +150,7 @@ jQuery(document).ready(function($) {
 
         let hasPricePath = false;
 
-        // --- New helper: normalize to slug format (universal) ---
+        // Normalize to slug
         function normalizeForSlug(str) {
             return String(str || '')
                 .trim()
@@ -180,7 +164,7 @@ jQuery(document).ready(function($) {
             const raw = decodeSegment(seg);
             const slug = normalizeForSlug(raw);
 
-            // Handle /under-2500/ or /above-50000/
+            // Handle /under-2500/
             const m = slug.match(/^(under|above)-(\d+)$/i);
             if (m) {
                 const type = m[1].toLowerCase();
@@ -193,51 +177,64 @@ jQuery(document).ready(function($) {
                 continue;
             }
 
-            // --- Step 2: Match via slugMap or fallback sets ---
-            if (typeMap[slug]) {
-                filters.type.push(typeMap[slug]);
-            } else if (makeMap[slug]) {
-                filters.make.push(makeMap[slug]);
-            } else if (modelMap[slug]) {
-                filters.model.push(modelMap[slug]);
-            } else if (catMap[slug]) {
-                filters.categories.push(catMap[slug]);
-            } else if (validTypes.has(slug)) {
-                filters.type.push(raw);
-            } else if (validMakes.has(slug)) {
-                filters.make.push(raw);
-            } else if (validModels.has(slug)) {
-                filters.model.push(raw);
-            } else if (validCategories.has(slug)) {
-                filters.categories.push(raw);
-            } else {
-                console.warn('Unknown segment in URL:', seg);
-            }
+            // Match via slugMap
+            if (typeMap[slug]) filters.type.push(typeMap[slug]);
+            else if (makeMap[slug]) filters.make.push(makeMap[slug]);
+            else if (modelMap[slug]) filters.model.push(modelMap[slug]);
+            else if (catMap[slug]) filters.categories.push(catMap[slug]);
+
+            // Fallback sets
+            else if (validTypes.has(slug)) filters.type.push(raw);
+            else if (validMakes.has(slug)) filters.make.push(raw);
+            else if (validModels.has(slug)) filters.model.push(raw);
+            else if (validCategories.has(slug)) filters.categories.push(raw);
+            else console.warn('Unknown segment in URL:', seg);
         }
 
-        // --- Step 3: Parse query parameters (same as before, just cleaned slightly) ---
+        // --- Step 2: Parse query parameters (UPDATED PART INCLUDED) ---
         const queryString = search.replace(/^\?/, '');
         if (queryString) {
             const parts = queryString.split('&');
             let lastKey = null;
+
             for (const part of parts) {
                 if (!part) continue;
+
+                // key=value
                 if (part.includes('=')) {
                     const [rawKey, rawVal] = part.split('=');
                     const key = decodeURIComponent(rawKey || '').trim();
-                    const value = decodeURIComponent(rawVal || '').trim();
+                    const rawClean = decodeURIComponent(rawVal || '').trim();
+                    const slug = normalizeForSlug(rawClean);
+
                     lastKey = key;
                     if (!filters[key]) filters[key] = [];
-                    if (value !== '') filters[key].push(value);
+
+                    // SlugMap mapping for proper keys
+                    if (key === 'categories' && catMap[slug]) filters[key].push(catMap[slug]);
+                    else if (key === 'make' && makeMap[slug]) filters[key].push(makeMap[slug]);
+                    else if (key === 'model' && modelMap[slug]) filters[key].push(modelMap[slug]);
+                    else if (key === 'type' && typeMap[slug]) filters[key].push(typeMap[slug]);
+                    else filters[key].push(rawClean);
+
                 } else if (lastKey) {
-                    const value = decodeURIComponent(part).trim();
+                    // --- ONLY CHANGE YOU REQUESTED ---
+                    const rawClean = decodeURIComponent(part).trim();
+                    const slug = normalizeForSlug(rawClean);
+
                     if (!filters[lastKey]) filters[lastKey] = [];
-                    if (value !== '') filters[lastKey].push(value);
+
+                    // Support orphan values for category / make / model / type
+                    if (lastKey === 'categories' && catMap[slug]) filters[lastKey].push(catMap[slug]);
+                    else if (lastKey === 'make' && makeMap[slug]) filters[lastKey].push(makeMap[slug]);
+                    else if (lastKey === 'model' && modelMap[slug]) filters[lastKey].push(modelMap[slug]);
+                    else if (lastKey === 'type' && typeMap[slug]) filters[lastKey].push(typeMap[slug]);
+                    else filters[lastKey].push(rawClean);
                 }
             }
         }
 
-        // --- Step 4: Handle range parameters ---
+        // --- Step 3: Range ---
         const rangeKeys = ['price', 'year', 'hours'];
         for (const key of rangeKeys) {
             const range = params.get(`${key}_range`);
@@ -250,7 +247,7 @@ jQuery(document).ready(function($) {
             if (params.has(`${key}_to`) && !filters[`${key}_to`]) filters[`${key}_to`] = params.get(`${key}_to`);
         }
 
-        // --- Step 5: Handle price type from query ---
+        // --- Step 4 ---
         if (!hasPricePath) {
             if (Array.isArray(filters.filter_type) && filters.filter_type.length)
                 filters.filter_type = String(filters.filter_type[0]);
@@ -258,18 +255,20 @@ jQuery(document).ready(function($) {
                 filters.filter_price = String(filters.filter_price[0]);
         }
 
-        // --- Step 6: Cleanup empty arrays ---
+        // --- Step 5: Cleanup ---
         ['type', 'make', 'model', 'categories'].forEach(k => {
             if (Array.isArray(filters[k]) && filters[k].length === 0) delete filters[k];
         });
 
-        // --- Step 7: Pagination + misc scalar params ---
+        // --- Step 6 ---
         const page = params.has('pg') ? (parseInt(params.get('pg'), 10) || 1) : 1;
+
         if (params.has('keyword')) filters.keyword = params.get('keyword');
         if (params.has('sort')) filters.sort = params.get('sort');
 
         return { filters, page };
     }
+
 
     /**
      * Merge server-side parsed filters with URL filters
@@ -427,7 +426,7 @@ jQuery(document).ready(function($) {
 
         // Price
         // if (filters.price_from || filters.price_to) {
-        //     const priceLabel = `₹${filters.price_from || 'Any'} - ₹${filters.price_to || 'Any'}`;
+        //     const priceLabel = `$${filters.price_from || 'Any'} - $${filters.price_to || 'Any'}`;
         //     labelParts.push(priceLabel);
         //     items.push({
         //         label: `Price: ${priceLabel}`,
@@ -519,7 +518,7 @@ jQuery(document).ready(function($) {
 
         // Price filter
         // if (filters.price_to) {
-        //     parts.push('Under ₹' + filters.price_to);
+        //     parts.push('Under $' + filters.price_to);
         // }
 
         // Keyword search
@@ -705,8 +704,7 @@ jQuery(document).ready(function($) {
 
         $('.clear-btn').click();
 
-        let filters = get_selected_filters();
-        show_selected_val_on_sidebar(filters);
+        let filters = get_selected_filters();        
 
         filters.price_from = '';
         filters.price_to = '';
@@ -719,6 +717,7 @@ jQuery(document).ready(function($) {
         filters.filter_type = filter_type;
         filters.filter_price = filter_price;
 
+        show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -915,7 +914,7 @@ jQuery(document).ready(function($) {
     }
 
     function show_selected_val_on_sidebar(filters) {
-        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-options-list, .selected-year-options-list, .selected-hours-options-list').empty();
+        $('.selected-category-options-list, .selected-make-options-list, .selected-type-options-list, .selected-price-range-options-list, .selected-year-range-options-list, .selected-hours-range-options-list').empty();
 
         if (Array.isArray(filters.categories) && filters.categories.length) {
             filters.categories.forEach(val => addTag('.selected-category-options-list', val, 'category', val));
@@ -928,6 +927,51 @@ jQuery(document).ready(function($) {
         }
         if (Array.isArray(filters.type) && filters.type.length) {
             filters.type.forEach(val => addTag('.selected-type-options-list', val, 'type', val));
+        }
+
+        /** -----------------------------
+         *   PRICE RANGE TAG
+         * ----------------------------- */
+        if ((filters.price_from || filters.price_to)) {
+            let label = '';
+            if (filters.price_from && filters.price_to) {
+                label = '$' + filters.price_from + ' - $' + filters.price_to;
+            } else if (filters.price_from) {                
+                label = 'Above $' + filters.price_from;
+            } else if (filters.price_to) {
+                label = 'Under $' + filters.price_to;
+            }
+            addTag('.selected-price-range-options-list', label, 'price_range', label);
+        }
+
+        /** -----------------------------
+         *   YEAR RANGE TAG
+         * ----------------------------- */
+        if (filters.year_from || filters.year_to) {
+            let label = '';
+            if (filters.year_from && filters.year_to) {
+                label = filters.year_from + ' - ' + filters.year_to;
+            } else if (filters.year_from) {
+                label = 'From ' + filters.year_from;
+            } else if (filters.year_to) {
+                label = 'Up to ' + filters.year_to;
+            }
+            addTag('.selected-year-range-options-list', label, 'year_range', label);
+        }
+
+        /** -----------------------------
+         *   HOURS RANGE TAG
+         * ----------------------------- */
+        if (filters.hours_from || filters.hours_to) {
+            let label = '';
+            if (filters.hours_from && filters.hours_to) {
+                label = filters.hours_from + ' - ' + filters.hours_to + ' Hours';
+            } else if (filters.hours_from) {
+                label = 'Above ' + filters.hours_from + ' Hours';
+            } else if (filters.hours_to) {
+                label = 'Under ' + filters.hours_to + ' Hours';
+            }
+            addTag('.selected-hours-range-options-list', label, 'hours_range', label);
         }
 
         reinitSeeMoreLess();
@@ -949,6 +993,37 @@ jQuery(document).ready(function($) {
             $('.model-listing[value="' + value + '"]').prop('checked', false);
         } else if (key === 'type') {
             $('input[name="type[]"][value="' + value + '"]').prop('checked', false);
+        }
+
+        /** -----------------------------
+         *  PRICE RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'price_range') {            
+            $('select[name="price_from"]').val('').trigger('change');
+            $('select[name="price_to"]').val('').trigger('change');
+            $('input[name="priceFromInput"]').val('');
+            $('input[name="priceToInput"]').val('');
+            $('.block-price-filter').removeClass('active');
+        }
+
+        /** -----------------------------
+         *  YEAR RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'year_range') {
+            $('select[name="year-from"]').val('').trigger('change');
+            $('select[name="year-to"]').val('').trigger('change');
+            $('input[name="yearFromInput"]').val('');
+            $('input[name="yearToInput"]').val('');
+        }
+
+        /** -----------------------------
+         *  HOURS RANGE CLEAR
+         * ----------------------------- */
+        if (key === 'hours_range') {
+            $('select[name="hour-from"]').val('').trigger('change');
+            $('select[name="hour-to"]').val('').trigger('change');
+            $('input[name="hourFromInput"]').val('');
+            $('input[name="hourToInput"]').val('');
         }
 
         tag.remove();

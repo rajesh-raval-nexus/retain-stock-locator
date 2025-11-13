@@ -141,45 +141,70 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
             <!-- <<<<- Mobile Price Range Section Start ->>>> -->
             <?php
              if(!$hide_price_range_filter){?>
-            <li data-bs-toggle="modal" data-bs-target="#gfampopupRangeMobile">
-              <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
+              <li class="d-block w-100">
+                <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#gfampopupRangeMobile">              
+                  <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+                </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-price-range-options-list">
+                </div>
+              </div>
+
             </li>
             <?php }?>
             <!-- <<<<- Mobile Price Range Section End ->>>> -->
 
             <!-- <<<<- Mobile Year Section Start ->>>> -->
             <?php if(!$hide_year_filter){?>
-            <li data-bs-toggle="modal" data-bs-target="#gfampopupYearMobile">
-              <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#gfampopupYearMobile">
+                  <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-year-range-options-list">
+                </div>
+              </div>
             </li>
             <?php } ?>
             <!-- <<<<- Mobile Year Section End ->>>> -->
             
             <!-- <<<<- Mobile Hours Section Start ->>>> -->
             <?php if(!$hide_hours_filter){?>
-            <li data-bs-toggle="modal" data-bs-target="#gfampopupHourMobile">
-              <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#gfampopupHourMobile">
+                  <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-hours-range-options-list">
+                </div>
+              </div>
             </li>
             <?php } ?>
             <!-- <<<<- Mobile Hours Section End ->>>> -->
@@ -392,45 +417,69 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
 
         <!-- <<<<- Desktop Price Range Section Start ->>>> -->
         <?php if(!$hide_price_range_filter){?>
-        <li data-bs-toggle="modal" data-bs-target="#popupRangeDesktop">
-          <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
-          <button class="gfam-arrow">
-            <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                fill="black" />
-            </svg>
-          </button>
+        <li class="d-block w-100">
+          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+            data-bs-target="#popupRangeDesktop">
+              <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
+              <button class="gfam-arrow">
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                    fill="black" />
+                </svg>
+              </button>
+          </div>
+          <!-- Selected Filters -->
+          <div class="gfam-filter-wrapper">
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-price-range-options-list">
+            </div>
+          </div>
         </li>
         <?php }?>
         <!-- <<<<- Desktop Price Range Section End ->>>> -->
 
         <!-- <<<<- Desktop Year Section Start ->>>> -->
         <?php if(!$hide_year_filter){?>
-        <li data-bs-toggle="modal" data-bs-target="#popupYearDesktop">
-          <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
-          <button class="gfam-arrow">
-            <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                fill="black" />
-            </svg>
-          </button>
+        <li class="d-block w-100">
+          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+            data-bs-target="#popupYearDesktop">
+              <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
+              <button class="gfam-arrow">
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                    fill="black" />
+                </svg>
+              </button>
+          </div>
+          <!-- Selected Filters -->
+          <div class="gfam-filter-wrapper">
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-year-range-options-list">
+            </div>
+          </div>
         </li>
         <?php } ?>
         <!-- <<<<- Desktop Year Section End ->>>> -->
 
         <!-- <<<<- Desktop Hours Section Start ->>>> -->
         <?php if(!$hide_hours_filter){?>
-        <li data-bs-toggle="modal" data-bs-target="#popupHourDesktop">
-          <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
-          <button class="gfam-arrow">
-            <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                fill="black" />
-            </svg>
-          </button>
+        <li class="d-block w-100">
+          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+            data-bs-target="#popupHourDesktop">
+              <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
+              <button class="gfam-arrow">
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                    fill="black" />
+                </svg>
+              </button>
+          </div>
+          <!-- Selected Filters -->
+          <div class="gfam-filter-wrapper">
+            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-hours-range-options-list">
+            </div>
+          </div>
         </li>
         <?php } ?>
         <!-- <<<<- Desktop Hours Section End ->>>> -->
