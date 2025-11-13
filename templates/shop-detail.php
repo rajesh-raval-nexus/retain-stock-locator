@@ -1013,7 +1013,7 @@ if ($stock_number) {
       loop: true,
       nav: true,
       dots: false,
-      autoplay: true,
+      autoplay: false,
       autoplayTimeout: 5000,
       margin: 15,
       navText: [
@@ -1049,7 +1049,7 @@ if ($stock_number) {
       margin: 0,
       nav: true,
       dots: false,
-      autoplay: true,
+      autoplay: false,
       autoplayTimeout: 4000,
       autoplayHoverPause: true,
       items: 1,

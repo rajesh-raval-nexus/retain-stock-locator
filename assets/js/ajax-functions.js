@@ -486,57 +486,42 @@ jQuery(document).ready(function($) {
         filters = filters || {};
         const siteTitle = rsl_ajax_obj.site_title || '';
 
-        let parts = [];
+        // Collect all filter groups
+        const groups = {
+            type: Array.isArray(filters.type) ? filters.type : [],
+            make: Array.isArray(filters.make) ? filters.make : [],
+            model: Array.isArray(filters.model) ? filters.model : [],
+            categories: Array.isArray(filters.categories) ? filters.categories : [],
+        };
 
-        // Type (e.g., Tractors, Harvesters)
-        // if (Array.isArray(filters.type) && filters.type.length) {
-        //     parts.push(filters.type.join(' '));
-        // }
+        const selectedGroups = Object.keys(groups).filter(
+            key => groups[key].length > 0
+        );
 
-        // Make (e.g., John Deere)
-        // if (Array.isArray(filters.make) && filters.make.length) {
-        //     parts.push(filters.make.join(' '));
-        // }
+        const baseLabel = 'For Sale';
+        let titlePrefix = 'Farm Machinery'; // default
 
-        // Model (e.g., 5050E)
-        // if (Array.isArray(filters.model) && filters.model.length) {
-        //     parts.push(filters.model.join(' '));
-        // }
+        // --- Logic ---
+        if (selectedGroups.length === 1) {
+            const key = selectedGroups[0];
+            const selectedItems = groups[key];
 
-        // Categories (e.g., Used, New)
-        if (Array.isArray(filters.categories) && filters.categories.length) {
-            let catLabel = '';
-            if (filters.categories.length === 1) {
-                catLabel = filters.categories[0];
-            } else if (filters.categories.length === 2) {
-                catLabel = filters.categories.join(', ');
-            } else {
-                catLabel = filters.categories.slice(0, 2).join(', ') + ' & more';
+            // Only one item selected inside the only active group
+            if (selectedItems.length === 1) {
+                titlePrefix = selectedItems[0];
             }
-            parts.push(catLabel);
         }
 
-        // Price filter
-        // if (filters.price_to) {
-        //     parts.push('Under $' + filters.price_to);
-        // }
-
-        // Keyword search
-        // if (filters.keyword) {
-        //     parts.push(filters.keyword);
-        // }
-
-        // --- Base logic ---
-        const baseLabel = 'For Sale';
-        const joined = parts.length ? parts.join(' ') : 'Farm Machinery';
-
-        // Final readable title
-        const fullTitle = `${joined} ${baseLabel} — ${siteTitle}`;
+        // --- Final Title ---
+        const fullTitle = `${titlePrefix} ${baseLabel} — ${siteTitle}`;
 
         // --- Update DOM ---
-        $('h1').text(`${joined} ${baseLabel}`);
+        $('h1').text(`${titlePrefix} ${baseLabel}`);
         document.title = fullTitle;
     }
+
+
+
 
     /**
      * Apply filters to UI elements
