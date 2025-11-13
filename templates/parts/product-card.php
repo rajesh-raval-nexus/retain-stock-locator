@@ -12,7 +12,6 @@ if ( empty($item) || !is_array($item) ) {
 $product_title       = rsl_build_product_name($item);
 $product_images      = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $item['images'] : (array) $item['images'][0];
 $listing_type        = !empty($item['listing_type']) ? $item['listing_type'] : 'N/A';
-//$stock_number        = !empty($item['stock_number']) ? $item['stock_number'] : 'N/A';
 $stock_number = !empty($item['stock_number'])
     ? strtolower(str_replace(['-', ' ', '_'], '', $item['stock_number']))
     : 'N/A';
@@ -28,7 +27,12 @@ $detail_page_slug = isset($detail_page->post_name) ? $detail_page->post_name : '
 
 $slug_title = strtolower(trim($item['year'] . '-' . $item['make'] . '-' . $item['model']));
 $slug_title = sanitize_title($slug_title);
-
+if($slug_title !=''){
+    $slug_title = $slug_title;
+}else{
+    $slug_title = gfam_generate_slug_preserve_case($detail_page->post_name);
+}
+//echo 'slug_title: '.$slug_title;
 $detail_url = site_url("/{$detail_page_slug}/{$slug_title}-{$stock_number}/");
 ?>
 
