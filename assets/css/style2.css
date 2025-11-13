@@ -2739,6 +2739,7 @@ ease;
   background-color: transparent;
   transition: 0.3s;
   width: 100%;
+  font-size: 16px;
 }
 
 .sidebar-modal .nav-tabs .nav-link.active {
