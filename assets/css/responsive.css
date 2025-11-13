@@ -612,6 +612,13 @@ button[data-bs-dismiss="modal"]{
 
 
 @media only screen and (max-width: 767px){
+  .gfam-detail-steps-section {
+    margin-bottom: 30px;
+}
+  .rsl-stock-locator .gfam-detail-close-btn {
+    top: -37px;
+    right: 0;
+}
   .gfam-detail-vehicle-features .gfam-feature-listing {
     flex-wrap: wrap;
 }
@@ -969,4 +976,16 @@ font-size: 15px;
 @media (min-width: 1400px) and (max-width: 1599px) {
 
 
+}
+@media only screen and (max-width: 375px){
+  .rsl-stock-locator .gfam-detail-close-btn {
+    top: 8px;
+    right: 6px;
+    background-color: var(--yellow_btn_bg_color);
+}
+}
+@media only screen and (max-width: 320px){
+  .gfam-detail-nav a {
+    line-height: 15px;
+  }
 }

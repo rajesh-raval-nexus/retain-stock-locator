@@ -1530,7 +1530,7 @@ max-width: 50%
 }
 
 .rsl-stock-locator .gfam-detail-feature-content p {
-  font-size: 1.13rem;
+  font-size: 15px;
   font-weight: 700;
   color: var(--darkgrey_badge_bg_color);
   margin-bottom: 0px;
@@ -2926,7 +2926,7 @@ ease;
 .gfam-detail-vehicle-features .gfam-feature-listing {
   display: flex;
   justify-content: flex-start;
-  gap: 27px;
+  gap: 31px;
 }
 .gfam-detail-vehicle-features .gfam-feature-listing .gfam-detail-feature-item {
   display: flex;
