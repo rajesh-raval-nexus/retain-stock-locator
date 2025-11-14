@@ -10,6 +10,8 @@ function rsl_assets_init() {
 
 function rsl_assets_enqueue_frontend() {
 
+    global $xmlPath;
+
     /*cstm css and js*/
     if ( ! rsl_assets_is_script_loaded_by_src( 'lightgallery.min.js' ) ) {
         wp_enqueue_script(
@@ -260,6 +262,7 @@ function rsl_assets_enqueue_frontend() {
         );
 
         $filter_data = rsl_get_filter_data_for_localization();
+        $listings = rsl_parse_listings($xmlPath);
 
         // Get selected Stock Locator page ID from ACF Options
         $stock_locator_page_id = get_field('select_stock_locator_page', 'option');
@@ -285,6 +288,8 @@ function rsl_assets_enqueue_frontend() {
                 $filter_data
             )
         );
+
+        wp_localize_script('rsl-ajax-functions', 'RSL_ALL_LISTINGS', $listings);
     }
 
     // Custom JS
