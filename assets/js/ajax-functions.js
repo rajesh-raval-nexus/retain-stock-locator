@@ -326,6 +326,11 @@ jQuery(document).ready(function($) {
 
         updateBreadcrumbs(filters);
         updateTitle(filters);
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -746,7 +751,7 @@ jQuery(document).ready(function($) {
 
         $('.clear-btn').click();
 
-        let filters = get_selected_filters();        
+        let filters = get_selected_filters();       
 
         filters.price_from = '';
         filters.price_to = '';
@@ -808,6 +813,11 @@ jQuery(document).ready(function($) {
         if (e.originalEvent && e.originalEvent.isTrusted) {
             setTimeout(() => {
                 let filters = get_selected_filters();
+                const filtered = rslGetFilteredListings(filters);
+                const available = rslComputeAvailable(filters, filtered);
+                rslUpdateDisabledOptions(available);
+                const counts = rslComputeCountsBasic(filtered);
+                rslUpdateCountsBasic(counts);
                 show_selected_val_on_sidebar(filters);
                 applyFiltersAndPushState(filters, 1);
             }, 300); // 300ms delay — adjust as needed
@@ -930,6 +940,11 @@ jQuery(document).ready(function($) {
             e.preventDefault();
             clearTimeout(rslSearchTimeout);
             let filters = get_selected_filters();
+            const filtered = rslGetFilteredListings(filters);
+            const available = rslComputeAvailable(filters, filtered);
+            rslUpdateDisabledOptions(available);
+            const counts = rslComputeCountsBasic(filtered);
+            rslUpdateCountsBasic(counts);
             show_selected_val_on_sidebar(filters);
             applyFiltersAndPushState(filters, 1);
         }
@@ -942,7 +957,12 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $(this).blur();
         $('.block-price-filter').removeClass('active');
-        let filters = get_selected_filters();        
+        let filters = get_selected_filters();
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
@@ -1071,6 +1091,11 @@ jQuery(document).ready(function($) {
         tag.remove();
 
         let filters = get_selected_filters();
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -1095,9 +1120,328 @@ jQuery(document).ready(function($) {
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
             const filters = get_selected_filters();
+            const filtered = rslGetFilteredListings(filters);
+            const available = rslComputeAvailable(filters, filtered);
+            rslUpdateDisabledOptions(available);
+            const counts = rslComputeCountsBasic(filtered);
+            rslUpdateCountsBasic(counts);
             updateBreadcrumbs(filters);
             updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
     })();
+
+
+    function rslComputeCountsBasic(list) {
+        const counts = {
+            categories: {},
+            make: {},
+            model: {},
+            type: {}
+        };
+
+        list.forEach(l => {
+            const add = (obj, key) => {
+                if (!key) return;
+                key = String(key).trim();
+                obj[key] = (obj[key] || 0) + 1;
+            };
+
+            // CATEGORY (type + subtype)
+            add(counts.categories, l.type);
+            add(counts.categories, l.subtype);
+
+            // MAKE
+            add(counts.make, l.make);
+
+            // MODEL
+            add(counts.model, l.model);
+
+            // LISTING TYPE
+            add(counts.type, l.listing_type);
+        });
+
+        return counts;
+    }
+
+    function rslUpdateCountsBasic(counts) {
+        // CATEGORY TYPE & SUBTYPE
+        $('input[name="category[]"]').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.categories[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // MAKE
+        $('.make-listing').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.make[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // MODEL
+        $('.model-listing').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.model[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // LISTING TYPE
+        $('input[name="type[]"]').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.type[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+    }
+
+    /********************************************
+     * 1. FILTER LISTINGS BASED ON CURRENT FILTERS
+     ********************************************/
+    function rslGetFilteredListings(filters) {
+        return RSL_ALL_LISTINGS.filter(item => {
+
+            // CATEGORY
+            if (filters.categories?.length &&
+                !(filters.categories.includes(item.type) ||
+                filters.categories.includes(item.subtype))) {
+                return false;
+            }
+
+            // MAKE
+            if (filters.make?.length && !filters.make.includes(item.make)) {
+                return false;
+            }
+
+            // MODEL
+            if (filters.model?.length && !filters.model.includes(item.model)) {
+                return false;
+            }
+
+            // TYPE (listing_type)
+            if (filters.type?.length && !filters.type.includes(item.listing_type)) {
+                return false;
+            }
+
+            // PRICE
+            const price = Number(item.price || 0);
+            if (filters.price_from && price < Number(filters.price_from)) return false;
+            if (filters.price_to && price > Number(filters.price_to)) return false;
+
+            // YEAR
+            const year = Number(item.year || 0);
+            if (filters.year_from && year < Number(filters.year_from)) return false;
+            if (filters.year_to && year > Number(filters.year_to)) return false;
+
+            // HOURS
+            const hours = Number(item.hours || 0);
+            if (filters.hours_from && hours < Number(filters.hours_from)) return false;
+            if (filters.hours_to && hours > Number(filters.hours_to)) return false;
+
+            return true;
+        });
+    }
+
+    /********************************************
+     * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
+     ********************************************/
+    function rslComputeAvailable(filters) {
+    const available = {
+        categories: new Set(),
+        make: new Set(),
+        model: new Set(),
+        type: new Set(),
+        year: new Set(),
+        price: new Set(),
+        hours: new Set()
+    };
+
+    const groups = ["categories", "make", "model", "type", "year", "price", "hours"];
+
+    // normalize selected filters for robust comparisons
+    const normFilters = {};
+    groups.forEach(g => {
+        const arr = filters[g] || [];
+        normFilters[g] = arr.map(v => {
+            if (v === null || v === undefined) return v;
+            return (typeof v === "string") ? v.trim() : v;
+        });
+    });
+
+    const selectedCounts = {};
+    groups.forEach(g => selectedCounts[g] = normFilters[g].length || 0);
+    const activeGroups = groups.filter(g => selectedCounts[g] > 0);
+    const onlyOneGroupSelected = activeGroups.length === 1;
+    const singleSelectedGroup = onlyOneGroupSelected ? activeGroups[0] : null;
+
+    // helper to get normalized value(s) from a listing for a group
+    function getListingValues(listing, group) {
+        switch (group) {
+            case "categories":
+                return [listing.type, listing.subtype].filter(Boolean).map(v => typeof v === "string" ? v.trim() : v);
+            case "type":
+                return listing.listing_type ? [String(listing.listing_type).trim()] : [];
+            case "make":
+                return listing.make ? [String(listing.make).trim()] : [];
+            case "model":
+                return listing.model ? [String(listing.model).trim()] : [];
+            case "year":
+                return listing.year != null ? [Number(listing.year)] : [];
+            case "price":
+                return listing.price != null ? [Number(listing.price)] : [];
+            case "hours":
+                return listing.hours != null ? [Number(listing.hours)] : [];
+            default:
+                return [];
+        }
+    }
+
+    // check if listing satisfies ALL selected groups except skipGroup
+    function matchesOtherGroups(listing, skipGroup) {
+        return groups.every(g => {
+            if (g === skipGroup) return true; // ignore same group
+            const selected = normFilters[g];
+            if (!selected || selected.length === 0) return true;
+
+            const values = getListingValues(listing, g);
+            if (!values || values.length === 0) return false; // listing has no value for this group => fail
+
+            // for numeric groups selected array may contain numbers or strings; do loose compare after coercion
+            return values.some(val => selected.some(sel => {
+                if (typeof val === "number" || typeof sel === "number") return Number(val) === Number(sel);
+                return String(val) === String(sel);
+            }));
+        });
+    }
+
+    // add listing's values to available[group]
+    function addAvailableFromListing(listing, group) {
+        const vals = getListingValues(listing, group);
+        vals.forEach(v => {
+            if (v === null || v === undefined) return;
+            available[group].add(v);
+        });
+    }
+
+    // MAIN LOOP
+    groups.forEach(group => {
+        RSL_ALL_LISTINGS.forEach(listing => {
+
+            if (onlyOneGroupSelected) {
+                // If this is the single selected group -> add everything (full-list)
+                if (group === singleSelectedGroup) {
+                    addAvailableFromListing(listing, group);
+                    return;
+                }
+                // For other groups -> only add values from listings that match the single selected group's selection(s)
+                // We call matchesOtherGroups(listing, group) which will check the single selected group (since group !== singleSelectedGroup)
+                if (matchesOtherGroups(listing, group)) {
+                    addAvailableFromListing(listing, group);
+                }
+                return;
+            }
+
+            // Multiple groups selected -> check compatibility with ALL other groups (skip same group)
+            if (matchesOtherGroups(listing, group)) {
+                addAvailableFromListing(listing, group);
+            }
+        });
+    });
+
+    return available;
+}
+
+
+    // Universal counter for ANY type of filter value
+    function countValue(val) {
+        if (Array.isArray(val)) {
+            return val.length;                   // arrays → count items
+        }
+        if (typeof val === "string") {
+            return val.trim() !== "" ? 1 : 0;    // string → 1 if not empty
+        }
+        if (val === null || val === undefined) {
+            return 0;                             // null/undefined → 0
+        }
+        return 1;                                 // numbers, booleans → count as 1
+    }    
+
+    /********************************************
+     * 3. DISABLE UI OPTIONS BASED ON AVAILABLE SETS
+     ********************************************/
+    function rslUpdateDisabledOptions(available) {
+
+        // CATEGORY
+        $('input[name="category[]"]').each(function () {
+            const val = $(this).val();
+            const exists = available.categories.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // MAKE
+        $('.make-listing').each(function () {
+            const val = $(this).val();
+            const exists = available.make.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // MODEL
+        $('.model-listing').each(function () {
+            const val = $(this).val();
+            const exists = available.model.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // LISTING TYPE
+        $('input[name="type[]"]').each(function () {
+            const val = $(this).val();
+            const exists = available.type.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // YEAR SELECT OPTIONS
+        $('select.rsl-year-from option, select.rsl-year-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.year.has(val));
+        });
+
+        // PRICE SELECT OPTIONS
+        $('select.rsl-price-from option, select.rsl-price-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.price.has(val));
+        });
+
+        // HOURS SELECT OPTIONS
+        $('select.rsl-hours-from option, select.rsl-hours-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.hours.has(val));
+        });
+    }
+
 });

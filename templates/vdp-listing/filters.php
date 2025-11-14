@@ -319,172 +319,174 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
 
 <div class="gfam-main-wrapper row">
   <!-- Sidebar -->
-  <div class="gfam-sidebar col-xl-4 sticky-section d-none d-xl-block" id="gfamSidebarDesktop">
+  <div class="gfam-sidebar col-xl-4 d-none d-xl-block" id="gfamSidebarDesktop">
     <!-- Filter Header -->
-    <div class="gfam-filter-header">
-      <span>Filter</span>
-      <!-- <span class="gfam-clear-all">Clear All</span> -->
-    </div>
+      <div class="sticky-section">
+        <div class="gfam-filter-header">
+          <span>Filter</span>
+          <!-- <span class="gfam-clear-all">Clear All</span> -->
+        </div>
 
-    <!-- Filter Content Desktop Started -->
-    <div class="gfam-filter-content gfam-filter-section">
-      <!-- <<<<- Desktop Search Section Start ->>>> -->
-      <?php if(!$hide_search_bar){?>
-      <div class="input-group gfam-search-section">
-        <input type="text" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
-        <div class="input-group-append">
-          <span class="input-group-text">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="24" height="24" rx="12" fill="#FDBD3D" />
-              <path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black" />
-            </svg>
-          </span>
+        <!-- Filter Content Desktop Started -->
+        <div class="gfam-filter-content gfam-filter-section">
+          <!-- <<<<- Desktop Search Section Start ->>>> -->
+          <?php if(!$hide_search_bar){?>
+          <div class="input-group gfam-search-section">
+            <input type="text" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="24" height="24" rx="12" fill="#FDBD3D" />
+                  <path d="M11.1374 7.65C10.3624 7.65 9.65615 7.8375 9.01865 8.2125C8.38115 8.5875 7.86865 9.1 7.48115 9.75C7.09365 10.4 6.8999 11.1062 6.8999 11.8687C6.8999 12.6312 7.09365 13.3375 7.48115 13.9875C7.86865 14.6375 8.38115 15.15 9.01865 15.525C9.65615 15.9 10.3624 16.0875 11.1374 16.0875C11.6124 16.0875 12.0749 16.0062 12.5249 15.8438C12.9749 15.6812 13.3874 15.4625 13.7624 15.1875L15.5249 16.9125C15.5999 17.0125 15.7062 17.0625 15.8437 17.0625C15.9812 17.0625 16.0937 17.0187 16.1812 16.9312C16.2687 16.8438 16.3124 16.7312 16.3124 16.5937C16.3124 16.4562 16.2624 16.35 16.1624 16.275L14.4374 14.5125C14.7124 14.1375 14.9312 13.725 15.0937 13.275C15.2562 12.825 15.3374 12.3625 15.3374 11.8875C15.3374 11.1125 15.1499 10.4 14.7749 9.75C14.3999 9.1 13.8874 8.5875 13.2374 8.2125C12.5874 7.8375 11.8874 7.65 11.1374 7.65ZM11.1374 8.5875C11.7374 8.5875 12.2874 8.7375 12.7874 9.0375C13.2874 9.3375 13.6812 9.7375 13.9687 10.2375C14.2562 10.7375 14.3999 11.2812 14.3999 11.8687C14.3999 12.4562 14.2562 13.0062 13.9687 13.5187C13.6812 14.0312 13.2874 14.4312 12.7874 14.7188C12.2874 15.0062 11.7374 15.15 11.1374 15.15C10.5374 15.15 9.9874 15.0062 9.4874 14.7188C8.9874 14.4312 8.5874 14.0312 8.2874 13.5187C7.9874 13.0062 7.8374 12.4562 7.8374 11.8687C7.8374 11.2812 7.9874 10.7375 8.2874 10.2375C8.5874 9.7375 8.9874 9.3375 9.4874 9.0375C9.9874 8.7375 10.5374 8.5875 11.1374 8.5875Z" fill="black" />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <?php } ?>
+          <!-- <<<<- Desktop Search Section End ->>>> -->
+          <ul class="gfam-filter-list">
+            <!-- <<<<- Desktop Category Section Start ->>>> -->
+            <?php if(!$hide_category_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupCategoryDesktop">
+                <span><?php esc_html_e('Category', 'retain-stock-locator'); ?></span>
+                <button class="gfam-arrow">
+                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                      fill="black" />
+                  </svg>
+                </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-category-options-list">
+
+                </div>
+              </div>
+            </li>
+            <?php } ?>
+            <!-- <<<<- Desktop Category Section End ->>>> -->
+            
+            <!-- <<<<- Desktop Make Model Section Start ->>>> -->
+            <?php if(!$hide_make_model_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupMakeDesktop">
+                <span><?php esc_html_e('Make & Model', 'retain-stock-locator'); ?></span>
+                <button class="gfam-arrow">
+                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                      fill="black" />
+                  </svg>
+                </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-make-options-list">
+
+                </div>
+              </div>
+            </li>
+            <?php }?>
+            <!-- <<<<- Desktop Make Model Section End ->>>> -->
+
+            <!-- <<<<- Desktop Type Section Start ->>>> -->
+            <?php if(!$hide_type_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupTypeDesktop">
+                <span><?php esc_html_e('Type', 'retain-stock-locator'); ?></span>
+                <button class="gfam-arrow">
+                  <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                      fill="black" />
+                  </svg>
+                </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-type-options-list">
+                </div>
+              </div>
+            </li>
+            <?php }?>
+            <!-- <<<<- Desktop Type Section End ->>>> -->
+
+            <!-- <<<<- Desktop Price Range Section Start ->>>> -->
+            <?php if(!$hide_price_range_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupRangeDesktop">
+                  <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-price-range-options-list">
+                </div>
+              </div>
+            </li>
+            <?php }?>
+            <!-- <<<<- Desktop Price Range Section End ->>>> -->
+
+            <!-- <<<<- Desktop Year Section Start ->>>> -->
+            <?php if(!$hide_year_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupYearDesktop">
+                  <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-year-range-options-list">
+                </div>
+              </div>
+            </li>
+            <?php } ?>
+            <!-- <<<<- Desktop Year Section End ->>>> -->
+
+            <!-- <<<<- Desktop Hours Section Start ->>>> -->
+            <?php if(!$hide_hours_filter){?>
+            <li class="d-block w-100">
+              <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                data-bs-target="#popupHourDesktop">
+                  <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
+                  <button class="gfam-arrow">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
+                        fill="black" />
+                    </svg>
+                  </button>
+              </div>
+              <!-- Selected Filters -->
+              <div class="gfam-filter-wrapper">
+                <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-hours-range-options-list">
+                </div>
+              </div>
+            </li>
+            <?php } ?>
+            <!-- <<<<- Desktop Hours Section End ->>>> -->
+          </ul>
         </div>
       </div>
-      <?php } ?>
-      <!-- <<<<- Desktop Search Section End ->>>> -->
-      <ul class="gfam-filter-list">
-        <!-- <<<<- Desktop Category Section Start ->>>> -->
-        <?php if(!$hide_category_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupCategoryDesktop">
-            <span><?php esc_html_e('Category', 'retain-stock-locator'); ?></span>
-            <button class="gfam-arrow">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                  fill="black" />
-              </svg>
-            </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-category-options-list">
-
-            </div>
-          </div>
-        </li>
-        <?php } ?>
-        <!-- <<<<- Desktop Category Section End ->>>> -->
-        
-        <!-- <<<<- Desktop Make Model Section Start ->>>> -->
-        <?php if(!$hide_make_model_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupMakeDesktop">
-            <span><?php esc_html_e('Make & Model', 'retain-stock-locator'); ?></span>
-            <button class="gfam-arrow">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                  fill="black" />
-              </svg>
-            </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-make-options-list">
-
-            </div>
-          </div>
-        </li>
-        <?php }?>
-        <!-- <<<<- Desktop Make Model Section End ->>>> -->
-
-        <!-- <<<<- Desktop Type Section Start ->>>> -->
-        <?php if(!$hide_type_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupTypeDesktop">
-            <span><?php esc_html_e('Type', 'retain-stock-locator'); ?></span>
-            <button class="gfam-arrow">
-              <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                  fill="black" />
-              </svg>
-            </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-type-options-list">
-            </div>
-          </div>
-        </li>
-        <?php }?>
-        <!-- <<<<- Desktop Type Section End ->>>> -->
-
-        <!-- <<<<- Desktop Price Range Section Start ->>>> -->
-        <?php if(!$hide_price_range_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupRangeDesktop">
-              <span><?php esc_html_e('Price Range', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-price-range-options-list">
-            </div>
-          </div>
-        </li>
-        <?php }?>
-        <!-- <<<<- Desktop Price Range Section End ->>>> -->
-
-        <!-- <<<<- Desktop Year Section Start ->>>> -->
-        <?php if(!$hide_year_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupYearDesktop">
-              <span><?php esc_html_e('Year', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-year-range-options-list">
-            </div>
-          </div>
-        </li>
-        <?php } ?>
-        <!-- <<<<- Desktop Year Section End ->>>> -->
-
-        <!-- <<<<- Desktop Hours Section Start ->>>> -->
-        <?php if(!$hide_hours_filter){?>
-        <li class="d-block w-100">
-          <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
-            data-bs-target="#popupHourDesktop">
-              <span><?php esc_html_e('Hours', 'retain-stock-locator'); ?></span>
-              <button class="gfam-arrow">
-                <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M9.05989 6.9401C9.34079 7.22135 9.49857 7.6026 9.49857 8.0001C9.49857 8.3976 9.34079 8.77885 9.05989 9.0601L3.40389 14.7181C3.12249 14.9994 2.74089 15.1573 2.34304 15.1572C1.94518 15.1571 1.56365 14.999 1.28239 14.7176C1.00113 14.4362 0.843168 14.0546 0.843262 13.6567C0.843355 13.2589 1.00149 12.8774 1.28289 12.5961L5.87889 8.0001L1.28289 3.4041C1.00951 3.12132 0.858142 2.74249 0.861373 2.34919C0.864604 1.9559 1.02218 1.5796 1.30016 1.30136C1.57814 1.02311 1.95429 0.86518 2.34759 0.861578C2.74088 0.857976 3.11986 1.00899 3.40289 1.2821L9.06089 6.9391L9.05989 6.9401Z"
-                    fill="black" />
-                </svg>
-              </button>
-          </div>
-          <!-- Selected Filters -->
-          <div class="gfam-filter-wrapper">
-            <div class="gfam-filter-tags d-inline-flex flex-wrap gap-2 mt-3 selected-hours-range-options-list">
-            </div>
-          </div>
-        </li>
-        <?php } ?>
-        <!-- <<<<- Desktop Hours Section End ->>>> -->
-      </ul>
-    </div>
 
   </div>
 

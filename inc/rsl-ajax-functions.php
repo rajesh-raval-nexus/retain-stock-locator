@@ -33,12 +33,22 @@ function rsl_get_stock_list_ajax() {
     }
 
     if(empty($allListings)){        
-        $no_result_found = '<div class="mx-1 no-result-found-txt"><i class="fa-solid fa-triangle-exclamation"></i>
+        $no_result_found = '<div class="mx-1 no-result-found-txt">
+        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2935_11871)"><path d="M23.4375 44.5312C11.7877 44.5312 2.34375 35.0873 2.34375 23.4375C2.34375 11.7877 11.7877 2.34375 23.4375 2.34375C35.0873 2.34375 44.5312 11.7877 44.5312 23.4375C44.5312 35.0873 35.0873 44.5312 23.4375 44.5312Z" stroke="#92191C" stroke-width="4.6875" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M31.724 15.151C27.1551 10.5821 19.72 10.5821 15.1512 15.151M39.6923 46.6154L49.6542 56.2833C51.4848 58.1139 54.4528 58.1139 56.2833 56.2833C58.1139 54.4527 58.1139 51.4847 56.2833 49.6541L41.2981 34.6689" stroke="#92191C" stroke-width="4.6875" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_2935_11871"><rect width="60" height="60" fill="white" transform="matrix(-1 0 0 1 60 0)"/></clipPath></defs></svg>
+
                             <h2 class="no-stock-available">'
-                            . __('We don’t have any stock available in this criteria.', 'retain-stock-locator') .
-                            ' </br><a href="/contact" class="contact-link">' . __('Contact us', 'retain-stock-locator') . '</a> ' .
-                            __('for more information.', 'retain-stock-locator') .
-                            '</h2></div>';
+                            . __('Nothing in the paddock for that search (yet).', 'retain-stock-locator') .
+                            '</h2>
+                            
+                             <h3 class="no-stock-subtext">
+                                ' . sprintf(
+                                    __('Try changing a few filters, or <a href="%s" class="get-in-touch-link">get in touch</a> and we’ll help you find a good match.', 'retain-stock-locator'),
+                                    esc_url( home_url('/contact-us/') )
+                                ) . '
+                            </h3>
+                            
+                            </div>';
+
 
 
         wp_send_json_success([
