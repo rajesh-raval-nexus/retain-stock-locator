@@ -483,42 +483,65 @@ jQuery(document).ready(function($) {
      * Update H1 and document.title based on filters
      */
     function updateTitle(filters) {
-        filters = filters || {};
-        const siteTitle = rsl_ajax_obj.site_title || '';
+    filters = filters || {};
+    const siteTitle = rsl_ajax_obj.site_title || '';
 
-        // Collect all filter groups
-        const groups = {
-            type: Array.isArray(filters.type) ? filters.type : [],
-            make: Array.isArray(filters.make) ? filters.make : [],
-            model: Array.isArray(filters.model) ? filters.model : [],
-            categories: Array.isArray(filters.categories) ? filters.categories : [],
-        };
+    const groups = {
+        type: Array.isArray(filters.type) ? filters.type : [],
+        make: Array.isArray(filters.make) ? filters.make : [],
+        model: Array.isArray(filters.model) ? filters.model : [],
+        categories: Array.isArray(filters.categories) ? filters.categories : [],
+    };
 
-        const selectedGroups = Object.keys(groups).filter(
-            key => groups[key].length > 0
-        );
+    const baseLabel = 'For Sale';
+    let titlePrefix = 'Farm Machinery'; // default title
+    let suffixParts = []; // for price and keyword
 
-        const baseLabel = 'For Sale';
-        let titlePrefix = 'Farm Machinery'; // default
+    // --- Check if any group has multiple selections ---
+    const hasMultipleSelections = Object.values(groups).some(arr => arr.length > 1);
 
-        // --- Logic ---
-        if (selectedGroups.length === 1) {
-            const key = selectedGroups[0];
-            const selectedItems = groups[key];
+    // Collect single selections (if not multiple)
+    const parts = [];
 
-            // Only one item selected inside the only active group
-            if (selectedItems.length === 1) {
-                titlePrefix = selectedItems[0];
+    if (!hasMultipleSelections) {
+        const orderedKeys = ['type', 'make', 'model', 'categories'];
+        orderedKeys.forEach(key => {
+            if (groups[key].length === 1) {
+                parts.push(groups[key][0]);
             }
-        }
-
-        // --- Final Title ---
-        const fullTitle = `${titlePrefix} ${baseLabel} — ${siteTitle}`;
-
-        // --- Update DOM ---
-        $('h1').text(`${titlePrefix} ${baseLabel}`);
-        document.title = fullTitle;
+        });
     }
+
+    // --- Build prefix ---
+    if (hasMultipleSelections || parts.length === 0) {
+        titlePrefix = 'Farm Machinery';
+    } else {
+        titlePrefix = parts.join(' ');
+    }
+
+    // --- Add Price filter (after For Sale) ---
+    if (filters.price_to) {
+        suffixParts.push('Under $' + filters.price_to);
+    }
+
+    // --- Add Keyword filter (after For Sale) ---
+    if (filters.keyword) {
+        suffixParts.push(filters.keyword);
+    }
+
+    // --- Build final readable title ---
+    const fullTitle =
+        `${titlePrefix} ${baseLabel}` +
+        (suffixParts.length ? ' ' + suffixParts.join(' ') : '') +
+        ` — ${siteTitle}`;
+
+    // --- Update DOM ---
+    $('h1').text(`${titlePrefix} ${baseLabel}` + (suffixParts.length ? ' ' + suffixParts.join(' ') : ''));
+    document.title = fullTitle;
+}
+
+
+
 
 
 
