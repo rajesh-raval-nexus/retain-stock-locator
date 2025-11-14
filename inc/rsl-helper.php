@@ -704,5 +704,5 @@ function gfam_output_vdp_sitemap() {
 function gfam_generate_slug_preserve_case($text) {
     $text = str_replace(['/', ' '], '-', $text);
     $text = trim($text, '-');
-    return $text;
+    return strtolower($text);
 }
