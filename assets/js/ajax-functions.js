@@ -329,8 +329,8 @@ jQuery(document).ready(function($) {
         const filtered = rslGetFilteredListings(filters);
         const available = rslComputeAvailable(filters, filtered);
         rslUpdateDisabledOptions(available);
-        const counts = rslComputeCountsBasic(filtered);
-        rslUpdateCountsBasic(counts);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -920,8 +920,8 @@ jQuery(document).ready(function($) {
         const filtered = rslGetFilteredListings(filters);
         const available = rslComputeAvailable(filters, filtered);
         rslUpdateDisabledOptions(available);
-        const counts = rslComputeCountsBasic(filtered);
-        rslUpdateCountsBasic(counts);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
@@ -1053,8 +1053,8 @@ jQuery(document).ready(function($) {
         const filtered = rslGetFilteredListings(filters);
         const available = rslComputeAvailable(filters, filtered);
         rslUpdateDisabledOptions(available);
-        const counts = rslComputeCountsBasic(filtered);
-        rslUpdateCountsBasic(counts);
+        // const counts = rslComputeCountsBasic(filtered);
+        // rslUpdateCountsBasic(counts);
         applyFiltersAndPushState(filters, 1);
     });
 
