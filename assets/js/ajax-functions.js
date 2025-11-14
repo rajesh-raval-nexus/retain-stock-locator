@@ -1219,102 +1219,112 @@ jQuery(document).ready(function($) {
     /********************************************
      * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
      ********************************************/
-    function rslComputeAvailable(filters, list) {
-        // Count values of each filter
-        const counts = {};
-        Object.keys(filters).forEach(key => {
-            counts[key] = countValue(filters[key]);
+    function rslComputeAvailable(filters) {
+    const available = {
+        categories: new Set(),
+        make: new Set(),
+        model: new Set(),
+        type: new Set(),
+        year: new Set(),
+        price: new Set(),
+        hours: new Set()
+    };
+
+    const groups = ["categories", "make", "model", "type", "year", "price", "hours"];
+
+    // normalize selected filters for robust comparisons
+    const normFilters = {};
+    groups.forEach(g => {
+        const arr = filters[g] || [];
+        normFilters[g] = arr.map(v => {
+            if (v === null || v === undefined) return v;
+            return (typeof v === "string") ? v.trim() : v;
         });
+    });
 
-        const activeKeys = Object.keys(counts).filter(k => counts[k] > 0);
+    const selectedCounts = {};
+    groups.forEach(g => selectedCounts[g] = normFilters[g].length || 0);
+    const activeGroups = groups.filter(g => selectedCounts[g] > 0);
+    const onlyOneGroupSelected = activeGroups.length === 1;
+    const singleSelectedGroup = onlyOneGroupSelected ? activeGroups[0] : null;
 
-        const available = {
-            categories: new Set(),
-            make: new Set(),
-            model: new Set(),
-            type: new Set(),
-            year: new Set(),
-            price: new Set(),
-            hours: new Set()
-        };
-
-        const trimVal = v => (typeof v === "string" ? v.trim() : v);
-
-        // FULL LIST helper
-        const addFull = {
-            categories: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.type) available.categories.add(trimVal(l.type));
-                    if (l.subtype) available.categories.add(trimVal(l.subtype));
-                });
-            },
-            make: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.make) available.make.add(trimVal(l.make));
-                    if (l.model) available.model.add(trimVal(l.model));
-                });
-            },
-            model: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.make) available.make.add(trimVal(l.make));
-                    if (l.model) available.model.add(trimVal(l.model));
-                });
-            },
-            type: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.listing_type) available.type.add(trimVal(l.listing_type));
-                });
-            },
-            year: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.year) available.year.add(Number(l.year));
-                });
-            },
-            price: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.price) available.price.add(Number(l.price));
-                });
-            },
-            hours: () => {
-                RSL_ALL_LISTINGS.forEach(l => {
-                    if (l.hours) available.hours.add(Number(l.hours));
-                });
-            }
-        };
-
-        // FILTERED LIST helper
-        const addFiltered = () => {
-            list.forEach(l => {
-                if (l.type) available.categories.add(trimVal(l.type));
-                if (l.subtype) available.categories.add(trimVal(l.subtype));
-
-                if (l.make) available.make.add(trimVal(l.make));
-                if (l.model) available.model.add(trimVal(l.model));
-
-                if (l.listing_type) available.type.add(trimVal(l.listing_type));
-                if (l.year) available.year.add(Number(l.year));
-                if (l.price) available.price.add(Number(l.price));
-                if (l.hours) available.hours.add(Number(l.hours));
-            });
-        };
-
-        // CASE 1 — Only 1 active filter
-        if (activeKeys.length === 1) {
-
-            const key = activeKeys[0];
-
-            if (addFull[key]) {
-                addFull[key]();
-            }
-
-            addFiltered();
-            return available;
+    // helper to get normalized value(s) from a listing for a group
+    function getListingValues(listing, group) {
+        switch (group) {
+            case "categories":
+                return [listing.type, listing.subtype].filter(Boolean).map(v => typeof v === "string" ? v.trim() : v);
+            case "type":
+                return listing.listing_type ? [String(listing.listing_type).trim()] : [];
+            case "make":
+                return listing.make ? [String(listing.make).trim()] : [];
+            case "model":
+                return listing.model ? [String(listing.model).trim()] : [];
+            case "year":
+                return listing.year != null ? [Number(listing.year)] : [];
+            case "price":
+                return listing.price != null ? [Number(listing.price)] : [];
+            case "hours":
+                return listing.hours != null ? [Number(listing.hours)] : [];
+            default:
+                return [];
         }
-
-        // CASE 2 — Multiple filters → normal filtering
-        addFiltered();
-        return available;
     }
+
+    // check if listing satisfies ALL selected groups except skipGroup
+    function matchesOtherGroups(listing, skipGroup) {
+        return groups.every(g => {
+            if (g === skipGroup) return true; // ignore same group
+            const selected = normFilters[g];
+            if (!selected || selected.length === 0) return true;
+
+            const values = getListingValues(listing, g);
+            if (!values || values.length === 0) return false; // listing has no value for this group => fail
+
+            // for numeric groups selected array may contain numbers or strings; do loose compare after coercion
+            return values.some(val => selected.some(sel => {
+                if (typeof val === "number" || typeof sel === "number") return Number(val) === Number(sel);
+                return String(val) === String(sel);
+            }));
+        });
+    }
+
+    // add listing's values to available[group]
+    function addAvailableFromListing(listing, group) {
+        const vals = getListingValues(listing, group);
+        vals.forEach(v => {
+            if (v === null || v === undefined) return;
+            available[group].add(v);
+        });
+    }
+
+    // MAIN LOOP
+    groups.forEach(group => {
+        RSL_ALL_LISTINGS.forEach(listing => {
+
+            if (onlyOneGroupSelected) {
+                // If this is the single selected group -> add everything (full-list)
+                if (group === singleSelectedGroup) {
+                    addAvailableFromListing(listing, group);
+                    return;
+                }
+                // For other groups -> only add values from listings that match the single selected group's selection(s)
+                // We call matchesOtherGroups(listing, group) which will check the single selected group (since group !== singleSelectedGroup)
+                if (matchesOtherGroups(listing, group)) {
+                    addAvailableFromListing(listing, group);
+                }
+                return;
+            }
+
+            // Multiple groups selected -> check compatibility with ALL other groups (skip same group)
+            if (matchesOtherGroups(listing, group)) {
+                addAvailableFromListing(listing, group);
+            }
+        });
+    });
+
+    return available;
+}
+
 
     // Universal counter for ANY type of filter value
     function countValue(val) {
