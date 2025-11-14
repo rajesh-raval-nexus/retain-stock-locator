@@ -209,6 +209,12 @@ text-transform: math-auto;
    font-size: 18px;
    line-height: 26px;
  }
+ .gfam-product-grid .no-result-found-txt h3.no-stock-subtext {
+    line-height: 26px;
+  }
+  .gfam-product-grid .no-result-found-txt svg {
+      width: 49px;
+  }
  .rsl-stock-locator  .gfam-detail-price-estimate{
    padding: 6px 12px;
    font-size: 10px;

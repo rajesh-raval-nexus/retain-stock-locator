@@ -2943,11 +2943,7 @@ ease;
 }
 .gfam-product-grid .no-result-found-txt {
   text-align: center;
-  background-color: var(--lightgrey_box_bg_color);
-  border-radius: 6px;
   padding: 20px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 .gfam-product-grid .no-result-found-txt i {
   font-size: 30px;
@@ -2956,17 +2952,35 @@ ease;
   
 }
 .gfam-product-grid .no-result-found-txt h2.no-stock-available {
-  font-size: 23px;
-  line-height: 32px;
-  font-weight: 500;
+  font-family: Poppins;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 120%;
+  margin: 16px 0;
 }
-.gfam-product-grid .no-result-found-txt h2.no-stock-available a {
+.gfam-product-grid .no-result-found-txt h3.no-stock-subtext {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 120%;
+  text-align: center;
+  vertical-align: middle;
+}
+.gfam-features .col-lg-3.col-md-3.col-6.my-2 {
+  align-content: center;
+}
+.gfam-product-grid .no-result-found-txt h3.no-stock-subtext a {
   color: var(--red_badge_bg_color);
-  font-weight: 600;
-  text-decoration: none;
   transition: 0.4s all;
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 18px;
+  line-height: 120%;
+  text-decoration: none;
+
 }
-.gfam-product-grid .no-result-found-txt h2.no-stock-available a:hover {
+.gfam-product-grid .no-result-found-txt h3.no-stock-subtext a:hover {
   color: var(--darkgrey_badge_bg_color);
   text-decoration: underline;
 }
