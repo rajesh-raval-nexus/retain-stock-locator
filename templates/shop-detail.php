@@ -477,15 +477,43 @@ if ($stock_number) {
                           $price = $listingItem['price'];
                           $hours = $listingItem['hours'];
 
-                          $product_title = $listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model'];
+                          //$product_title = $listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model'];
+                          
                         ?>
+                         <?php 
+                          
+                          //echo esc_html($ttl); ?>
+                        <?php
+                            if ($detail_page) {
+                                
+                                $detail_page_slug = $detail_page->post_name;
+
+                                $stock_numberlike = strtolower($listingItem['stock_number']);
+                                $slug_title_like = strtolower(trim($listingItem['year'] . '-' . $listingItem['make'] . '-' . $listingItem['model']));
+                                $slug_title_like = sanitize_title($slug_title_like);
+                                if($slug_title_like){
+                                  $slug_title_like = $slug_title_like;
+                                }else{
+                                  $slug_title_like = gfam_generate_slug_preserve_case($detail_page->post_name);
+                                }
+                                $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_numberlike}/");
+
+                                // $product_title = trim($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']);
+                                if (empty($product_title)) {
+                                    $product_title = $detail_page->post_title;
+                                }
+                                
+                            }
+                          ?>
                          <div class="item col-lg-4 col-md-6 my-3">
 							              <div class="gfam-product-card">
                               <div class="gfam-product-image">
                                     <div class="owl-carousel gfam-carousel">
                                       <?php foreach ($listingItem['images'] as $image) : ?>
                                       <div class="item">
-                                        <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($listingItem['make'] . ' ' . $listingItem['model']); ?>" />
+                                        <a href="<?php echo $detail_url; ?>">
+                                          <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($listingItem['make'] . ' ' . $listingItem['model']); ?>" />
+                                        </a>
                                       </div>
                                       <?php endforeach; ?>
                                       </div>
@@ -495,7 +523,7 @@ if ($stock_number) {
                               <span class="gfam-badge gfam-badge-new">NEW</span>
                               <span class="gfam-badge gfam-badge-code"><?php echo esc_html($listingItem['stock_number']); ?></span>
                             </div>
-                            <h3 class="gfam-product-title"><?php echo esc_html($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']); ?></h3>
+                            <a href="<?php echo $detail_url; ?>"><h3 class="gfam-product-title"><?php echo esc_html($product_title); ?></h3></a>
                             
                             <p class="gfam-product-subtitle"><?php echo esc_html($listingItem['type']); ?></p>
 
@@ -522,23 +550,6 @@ if ($stock_number) {
                                       <?php } ?>
                                   </div>
                             </div>
-                            <?php
-                              if ($detail_page) {
-                                  
-                                  $detail_page_slug = $detail_page->post_name;
-
-                                  $stock_numberlike = strtolower($listingItem['stock_number']);
-                                  $slug_title_like = strtolower(trim($listingItem['year'] . '-' . $listingItem['make'] . '-' . $listingItem['model']));
-                                  $slug_title_like = sanitize_title($slug_title_like);
-                                  if($slug_title_like){
-                                    $slug_title_like = $slug_title_like;
-                                  }else{
-                                    $slug_title_like = gfam_generate_slug_preserve_case($detail_page->post_name);
-                                  }
-                                  $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_numberlike}/");
-                                 
-                              }
-                            ?>
                             <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
                                 <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
                             </a>
