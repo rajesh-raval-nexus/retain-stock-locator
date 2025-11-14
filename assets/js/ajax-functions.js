@@ -326,6 +326,11 @@ jQuery(document).ready(function($) {
 
         updateBreadcrumbs(filters);
         updateTitle(filters);
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        const counts = rslComputeCountsBasic(filtered);
+        rslUpdateCountsBasic(counts);
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -704,7 +709,7 @@ jQuery(document).ready(function($) {
 
         $('.clear-btn').click();
 
-        let filters = get_selected_filters();        
+        let filters = get_selected_filters();       
 
         filters.price_from = '';
         filters.price_to = '';
@@ -766,6 +771,11 @@ jQuery(document).ready(function($) {
         if (e.originalEvent && e.originalEvent.isTrusted) {
             setTimeout(() => {
                 let filters = get_selected_filters();
+                const filtered = rslGetFilteredListings(filters);
+                const available = rslComputeAvailable(filters, filtered);
+                rslUpdateDisabledOptions(available);
+                const counts = rslComputeCountsBasic(filtered);
+                rslUpdateCountsBasic(counts);
                 show_selected_val_on_sidebar(filters);
                 applyFiltersAndPushState(filters, 1);
             }, 300); // 300ms delay — adjust as needed
@@ -888,6 +898,11 @@ jQuery(document).ready(function($) {
             e.preventDefault();
             clearTimeout(rslSearchTimeout);
             let filters = get_selected_filters();
+            const filtered = rslGetFilteredListings(filters);
+            const available = rslComputeAvailable(filters, filtered);
+            rslUpdateDisabledOptions(available);
+            const counts = rslComputeCountsBasic(filtered);
+            rslUpdateCountsBasic(counts);
             show_selected_val_on_sidebar(filters);
             applyFiltersAndPushState(filters, 1);
         }
@@ -900,7 +915,12 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $(this).blur();
         $('.block-price-filter').removeClass('active');
-        let filters = get_selected_filters();        
+        let filters = get_selected_filters();
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        const counts = rslComputeCountsBasic(filtered);
+        rslUpdateCountsBasic(counts);
         show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
@@ -1029,6 +1049,11 @@ jQuery(document).ready(function($) {
         tag.remove();
 
         let filters = get_selected_filters();
+        const filtered = rslGetFilteredListings(filters);
+        const available = rslComputeAvailable(filters, filtered);
+        rslUpdateDisabledOptions(available);
+        const counts = rslComputeCountsBasic(filtered);
+        rslUpdateCountsBasic(counts);
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -1053,9 +1078,318 @@ jQuery(document).ready(function($) {
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
             const filters = get_selected_filters();
+            const filtered = rslGetFilteredListings(filters);
+            const available = rslComputeAvailable(filters, filtered);
+            rslUpdateDisabledOptions(available);
+            const counts = rslComputeCountsBasic(filtered);
+            rslUpdateCountsBasic(counts);
             updateBreadcrumbs(filters);
             updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
     })();
+
+
+    function rslComputeCountsBasic(list) {
+        const counts = {
+            categories: {},
+            make: {},
+            model: {},
+            type: {}
+        };
+
+        list.forEach(l => {
+            const add = (obj, key) => {
+                if (!key) return;
+                key = String(key).trim();
+                obj[key] = (obj[key] || 0) + 1;
+            };
+
+            // CATEGORY (type + subtype)
+            add(counts.categories, l.type);
+            add(counts.categories, l.subtype);
+
+            // MAKE
+            add(counts.make, l.make);
+
+            // MODEL
+            add(counts.model, l.model);
+
+            // LISTING TYPE
+            add(counts.type, l.listing_type);
+        });
+
+        return counts;
+    }
+
+    function rslUpdateCountsBasic(counts) {
+        // CATEGORY TYPE & SUBTYPE
+        $('input[name="category[]"]').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.categories[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // MAKE
+        $('.make-listing').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.make[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // MODEL
+        $('.model-listing').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.model[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+
+        // LISTING TYPE
+        $('input[name="type[]"]').each(function () {
+            const val = $(this).val().trim();
+            const count = counts.type[val] || 0;
+
+            $(this)
+                .closest('.form-check')
+                .find('label .rsl-count')
+                .text(`(${count})`);
+        });
+    }
+
+    /********************************************
+     * 1. FILTER LISTINGS BASED ON CURRENT FILTERS
+     ********************************************/
+    function rslGetFilteredListings(filters) {
+        return RSL_ALL_LISTINGS.filter(item => {
+
+            // CATEGORY
+            if (filters.categories?.length &&
+                !(filters.categories.includes(item.type) ||
+                filters.categories.includes(item.subtype))) {
+                return false;
+            }
+
+            // MAKE
+            if (filters.make?.length && !filters.make.includes(item.make)) {
+                return false;
+            }
+
+            // MODEL
+            if (filters.model?.length && !filters.model.includes(item.model)) {
+                return false;
+            }
+
+            // TYPE (listing_type)
+            if (filters.type?.length && !filters.type.includes(item.listing_type)) {
+                return false;
+            }
+
+            // PRICE
+            const price = Number(item.price || 0);
+            if (filters.price_from && price < Number(filters.price_from)) return false;
+            if (filters.price_to && price > Number(filters.price_to)) return false;
+
+            // YEAR
+            const year = Number(item.year || 0);
+            if (filters.year_from && year < Number(filters.year_from)) return false;
+            if (filters.year_to && year > Number(filters.year_to)) return false;
+
+            // HOURS
+            const hours = Number(item.hours || 0);
+            if (filters.hours_from && hours < Number(filters.hours_from)) return false;
+            if (filters.hours_to && hours > Number(filters.hours_to)) return false;
+
+            return true;
+        });
+    }
+
+    /********************************************
+     * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
+     ********************************************/
+    function rslComputeAvailable(filters, list) {
+        // Count values of each filter
+        const counts = {};
+        Object.keys(filters).forEach(key => {
+            counts[key] = countValue(filters[key]);
+        });
+
+        const activeKeys = Object.keys(counts).filter(k => counts[k] > 0);
+
+        const available = {
+            categories: new Set(),
+            make: new Set(),
+            model: new Set(),
+            type: new Set(),
+            year: new Set(),
+            price: new Set(),
+            hours: new Set()
+        };
+
+        const trimVal = v => (typeof v === "string" ? v.trim() : v);
+
+        // FULL LIST helper
+        const addFull = {
+            categories: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.type) available.categories.add(trimVal(l.type));
+                    if (l.subtype) available.categories.add(trimVal(l.subtype));
+                });
+            },
+            make: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.make) available.make.add(trimVal(l.make));
+                    if (l.model) available.model.add(trimVal(l.model));
+                });
+            },
+            model: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.make) available.make.add(trimVal(l.make));
+                    if (l.model) available.model.add(trimVal(l.model));
+                });
+            },
+            type: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.listing_type) available.type.add(trimVal(l.listing_type));
+                });
+            },
+            year: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.year) available.year.add(Number(l.year));
+                });
+            },
+            price: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.price) available.price.add(Number(l.price));
+                });
+            },
+            hours: () => {
+                RSL_ALL_LISTINGS.forEach(l => {
+                    if (l.hours) available.hours.add(Number(l.hours));
+                });
+            }
+        };
+
+        // FILTERED LIST helper
+        const addFiltered = () => {
+            list.forEach(l => {
+                if (l.type) available.categories.add(trimVal(l.type));
+                if (l.subtype) available.categories.add(trimVal(l.subtype));
+
+                if (l.make) available.make.add(trimVal(l.make));
+                if (l.model) available.model.add(trimVal(l.model));
+
+                if (l.listing_type) available.type.add(trimVal(l.listing_type));
+                if (l.year) available.year.add(Number(l.year));
+                if (l.price) available.price.add(Number(l.price));
+                if (l.hours) available.hours.add(Number(l.hours));
+            });
+        };
+
+        // CASE 1 — Only 1 active filter
+        if (activeKeys.length === 1) {
+
+            const key = activeKeys[0];
+
+            if (addFull[key]) {
+                addFull[key]();
+            }
+
+            addFiltered();
+            return available;
+        }
+
+        // CASE 2 — Multiple filters → normal filtering
+        addFiltered();
+        return available;
+    }
+
+    // Universal counter for ANY type of filter value
+    function countValue(val) {
+        if (Array.isArray(val)) {
+            return val.length;                   // arrays → count items
+        }
+        if (typeof val === "string") {
+            return val.trim() !== "" ? 1 : 0;    // string → 1 if not empty
+        }
+        if (val === null || val === undefined) {
+            return 0;                             // null/undefined → 0
+        }
+        return 1;                                 // numbers, booleans → count as 1
+    }    
+
+    /********************************************
+     * 3. DISABLE UI OPTIONS BASED ON AVAILABLE SETS
+     ********************************************/
+    function rslUpdateDisabledOptions(available) {
+
+        // CATEGORY
+        $('input[name="category[]"]').each(function () {
+            const val = $(this).val();
+            const exists = available.categories.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // MAKE
+        $('.make-listing').each(function () {
+            const val = $(this).val();
+            const exists = available.make.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // MODEL
+        $('.model-listing').each(function () {
+            const val = $(this).val();
+            const exists = available.model.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // LISTING TYPE
+        $('input[name="type[]"]').each(function () {
+            const val = $(this).val();
+            const exists = available.type.has(val);
+            $(this).prop('disabled', !exists)
+                .closest('.accordion-item')
+                .toggleClass('disabled', !exists);
+        });
+
+        // YEAR SELECT OPTIONS
+        $('select.rsl-year-from option, select.rsl-year-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.year.has(val));
+        });
+
+        // PRICE SELECT OPTIONS
+        $('select.rsl-price-from option, select.rsl-price-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.price.has(val));
+        });
+
+        // HOURS SELECT OPTIONS
+        $('select.rsl-hours-from option, select.rsl-hours-to option').each(function () {
+            const val = Number($(this).val());
+            if (!val) return;
+            $(this).prop('disabled', !available.hours.has(val));
+        });
+    }
+
 });

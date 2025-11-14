@@ -307,7 +307,7 @@ function rsl_build_category_modal_html( $filters ) {
                         <div class="form-check form-check-inline gap-3">
                           <input class="form-check-input rsl-filter-parent category-filter" type="checkbox" name="category[]" id="<?php echo esc_attr( $parent_checkbox_id ); ?>" value="<?php echo esc_attr( $parent ); ?>" />
                           <label class="form-check-label" for="<?php echo esc_attr( $parent_checkbox_id ); ?>">
-                            <?php echo esc_html( $parent ); ?> (<?php echo $parent_count; ?>)
+                            <?php echo esc_html( $parent ); ?> <span class="rsl-count">(<?php echo $parent_count; ?>)</span>
                           </label>
                           <div class="category-popup-link">
                           <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -355,7 +355,7 @@ function rsl_build_category_modal_html( $filters ) {
                                 <div class="form-check form-check-inline gap-3">
                                   <input class="form-check-input rsl-filter-sub category-filters" name="category[]" type="checkbox" id="<?php echo esc_attr( $sub_id ); ?>" value="<?php echo esc_attr( $sub ); ?>" data-parent="<?php echo esc_attr( $parent ); ?>" />
                                   <label class="form-check-label" for="<?php echo esc_attr( $sub_id ); ?>">
-                                    <?php echo esc_html( $sub ); ?> (<?php echo intval( $subCount ); ?>)
+                                    <?php echo esc_html( $sub ); ?> <span class="rsl-count">(<?php echo intval( $subCount ); ?>)</span>
                                   </label>
                                 </div>                                
                               </button>
@@ -437,7 +437,7 @@ function rsl_build_make_model_modal_html( $filters ) {
                         <div class="form-check form-check-inline gap-3">
                           <input class="form-check-input rsl-filter-parent make-listing" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $make_checkbox_id ); ?>" value="<?php echo esc_attr( $make ); ?>" />
                           <label class="form-check-label" for="<?php echo esc_attr( $make_checkbox_id ); ?>">
-                            <?php echo esc_html( $make ); ?> (<?php echo $make_count; ?>)
+                            <?php echo esc_html( $make ); ?> <span class="rsl-count">(<?php echo $make_count; ?>)</span>
                           </label>
                           <div class="category-popup-link">
                           <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -499,7 +499,7 @@ function rsl_build_make_model_modal_html( $filters ) {
                                 <div class="form-check form-check-inline gap-3">
                                   <input class="form-check-input rsl-filter-sub model-listing" name="make-model[]" type="checkbox" id="<?php echo esc_attr( $model_id ); ?>" value="<?php echo esc_attr( $model ); ?>" data-parent="<?php echo esc_attr( $make ); ?>" />
                                   <label class="form-check-label" for="<?php echo esc_attr( $model_id ); ?>">
-                                    <?php echo esc_html( $model ); ?> (<?php echo intval( $count ); ?>)
+                                    <?php echo esc_html( $model ); ?> <span class="rsl-count">(<?php echo intval( $count ); ?>)</span>
                                   </label>
                                 </div>
                               </button>
@@ -576,7 +576,7 @@ function rsl_build_type_filter_modal_html( $filters, $modal_id = 'popupTypeDeskt
                                  value="<?php echo esc_attr( $type ); ?>"
                                  data-filter-type="type">
                           <label class="form-check-label" for="<?php echo esc_attr( $checkbox_id ); ?>">
-                            <?php echo esc_html( $type ); ?> (<?php echo intval( $count ); ?>)
+                            <?php echo esc_html( $type ); ?> <span class="rsl-count">(<?php echo intval( $count ); ?>)</span>
                           </label>
                         </div>
                       </button>
