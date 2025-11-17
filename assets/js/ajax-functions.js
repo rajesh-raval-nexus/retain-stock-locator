@@ -380,47 +380,52 @@ jQuery(document).ready(function($) {
         }
 
         // -------------------------------
+        // CASE: NOTHING SELECTED → DEFAULT
+        // -------------------------------
+        const nothingSelected =
+            typeCount === 0 &&
+            makeCount === 0 &&
+            modelCount === 0 &&
+            catCount === 0;
+
+        if (nothingSelected) {
+            items.push({
+                label: "Farm Machinery For Sale",
+                url: "#"
+            });
+
+            renderBreadcrumbs(items);
+            return;
+        }
+
+        // -------------------------------
         // CASE: SINGLE SELECTIONS ONLY → BUILD DETAILED BREADCRUMB
         // -------------------------------
-        // TYPE
         if (typeCount === 1) {
-            const typeLabel = filters.type[0];
             items.push({
-                label: typeLabel,
+                label: filters.type[0],
                 url: buildSEOUrl({ type: filters.type }, 1)
             });
         }
 
-        // MAKE
         if (makeCount === 1) {
-            const makeLabel = filters.make[0];
             items.push({
-                label: makeLabel,
-                url: buildSEOUrl({
-                    make: filters.make
-                }, 1)
+                label: filters.make[0],
+                url: buildSEOUrl({ make: filters.make }, 1)
             });
         }
 
-        // MODEL
         if (modelCount === 1) {
-            const modelLabel = filters.model[0];
             items.push({
-                label: modelLabel,
-                url: buildSEOUrl({
-                    model: filters.model
-                }, 1)
+                label: filters.model[0],
+                url: buildSEOUrl({ model: filters.model }, 1)
             });
         }
 
-        // CATEGORY
         if (catCount === 1) {
-            const catLabel = filters.categories[0];
             items.push({
-                label: catLabel,
-                url: buildSEOUrl({
-                    categories: filters.categories
-                }, 1)
+                label: filters.categories[0],
+                url: buildSEOUrl({ categories: filters.categories }, 1)
             });
         }
 
@@ -484,7 +489,7 @@ jQuery(document).ready(function($) {
             categories: Array.isArray(filters.categories) ? filters.categories : [],
         };
 
-        const baseLabel = 'For Sale';
+        let baseLabel = 'For Sale';
         let titlePrefix = 'Farm Machinery'; // default title
         let suffixParts = []; // for price and keyword
 
@@ -539,9 +544,45 @@ jQuery(document).ready(function($) {
             (suffixParts.length ? ' ' + suffixParts.join(' ') : '') +
             ` — ${siteTitle}`;
 
-        // --- Update DOM ---
-        $('h1').text(`${titlePrefix} ${baseLabel}` + (suffixParts.length ? ' ' + suffixParts.join(' ') : ''));
-        document.title = fullTitle;
+        let finalH1 = '';
+
+        // CASE 1 — Nothing selected → Farm Machinery For Sale
+        const nothingSelected =
+            groups.type.length === 0 &&
+            groups.make.length === 0 &&
+            groups.model.length === 0 &&
+            groups.categories.length === 0;
+
+        if (nothingSelected) {
+            finalH1 = `Farm Machinery ${baseLabel}`;
+        }
+
+        // CASE 2 — Type/make/model selected but NO category
+        else if (groups.categories.length === 0) {
+
+            // If multiple selected → use Farm Machinery only
+            if (hasMultipleSelections) {
+                finalH1 = `Farm Machinery ${baseLabel}`;
+            }
+            else {
+                // Single selection like "Tractor"
+                finalH1 = `${titlePrefix} Farm Machinery ${baseLabel}`;
+            }
+        }
+
+        // CASE 3 — Category selected → your normal logic
+        else {
+            finalH1 = `${titlePrefix} ${baseLabel}`;
+        }
+
+        // Add price suffix if needed
+        if (suffixParts.length) {
+            finalH1 += ' ' + suffixParts.join(' ');
+        }
+
+        // Update DOM
+        $('h1').text(finalH1);
+        document.title = finalH1 + ` — ${siteTitle}`;
     }
 
     /**
