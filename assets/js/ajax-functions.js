@@ -1103,7 +1103,24 @@ jQuery(document).ready(function($) {
             updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
-    })();    
+    })();   
+    
+    function listingMatchesKeyword(listing, keyword) {
+        if (!keyword) return true;
+
+        const k = keyword.toLowerCase().trim();
+
+        // Build searchable title
+        const title = [
+            listing.year,
+            listing.make,
+            listing.model,
+            listing.type,
+            listing.subtype
+        ].join(' ').toLowerCase();
+
+        return title.includes(k);
+    }
 
     /********************************************
      * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
@@ -1220,6 +1237,11 @@ jQuery(document).ready(function($) {
         // MAIN LOOP        
         groups.forEach(group => {
             RSL_ALL_LISTINGS.forEach(listing => {
+
+                // KEYWORD FILTER FIRST
+                if (filters.keyword && !listingMatchesKeyword(listing, filters.keyword)) {
+                    return; // skip this listing completely
+                }
 
                 // CASE 1 → No primary selected → allow everything
                 if (primaryCount === 0) {
