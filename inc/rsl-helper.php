@@ -582,7 +582,7 @@ function gfam_force_dynamic_meta_for_stock_detail() {
                 $title = $detail_page->post_title;
             }
             $meta_title = esc_html($title);
-            $meta_desc  = esc_attr('Explore full specifications, features, and availability of ' . $title . '. Contact us today to book a test drive or get more details.');
+            $meta_desc  = esc_attr($listing['item_specification']);
 
             // Output meta only once — after SEO plugins finish
             echo "\n<!-- Dynamic SEO Meta -->\n";
