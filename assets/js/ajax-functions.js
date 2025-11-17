@@ -325,12 +325,7 @@ jQuery(document).ready(function($) {
         }
 
         updateBreadcrumbs(filters);
-        updateTitle(filters);
-        const filtered = rslGetFilteredListings(filters);
-        const available = rslComputeAvailable(filters, filtered);
-        rslUpdateDisabledOptions(available);
-        // const counts = rslComputeCountsBasic(filtered);
-        // rslUpdateCountsBasic(counts);
+        updateTitle(filters);        
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -674,6 +669,10 @@ jQuery(document).ready(function($) {
                 }
                 $('#loader').fadeOut(500);                
             },
+            complete: function(){
+                const results = rslComputeAvailable(filters);
+                rslUpdateUI(filters, results);
+            },
             error: function(xhr, status, error) {
                 $('#loader').fadeOut(500);
                 console.error('AJAX Error:', error);
@@ -812,12 +811,7 @@ jQuery(document).ready(function($) {
         
         if (e.originalEvent && e.originalEvent.isTrusted) {
             setTimeout(() => {
-                let filters = get_selected_filters();
-                const filtered = rslGetFilteredListings(filters);
-                const available = rslComputeAvailable(filters, filtered);
-                rslUpdateDisabledOptions(available);
-                const counts = rslComputeCountsBasic(filtered);
-                rslUpdateCountsBasic(counts);
+                let filters = get_selected_filters();                
                 show_selected_val_on_sidebar(filters);
                 applyFiltersAndPushState(filters, 1);
             }, 300); // 300ms delay — adjust as needed
@@ -939,12 +933,7 @@ jQuery(document).ready(function($) {
         if (e.which === 13) {
             e.preventDefault();
             clearTimeout(rslSearchTimeout);
-            let filters = get_selected_filters();
-            const filtered = rslGetFilteredListings(filters);
-            const available = rslComputeAvailable(filters, filtered);
-            rslUpdateDisabledOptions(available);
-            const counts = rslComputeCountsBasic(filtered);
-            rslUpdateCountsBasic(counts);
+            let filters = get_selected_filters();            
             show_selected_val_on_sidebar(filters);
             applyFiltersAndPushState(filters, 1);
         }
@@ -957,12 +946,7 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $(this).blur();
         $('.block-price-filter').removeClass('active');
-        let filters = get_selected_filters();
-        const filtered = rslGetFilteredListings(filters);
-        const available = rslComputeAvailable(filters, filtered);
-        rslUpdateDisabledOptions(available);
-        // const counts = rslComputeCountsBasic(filtered);
-        // rslUpdateCountsBasic(counts);
+        let filters = get_selected_filters();        
         show_selected_val_on_sidebar(filters);
         applyFiltersAndPushState(filters, 1);
     });
@@ -1090,12 +1074,7 @@ jQuery(document).ready(function($) {
 
         tag.remove();
 
-        let filters = get_selected_filters();
-        const filtered = rslGetFilteredListings(filters);
-        const available = rslComputeAvailable(filters, filtered);
-        rslUpdateDisabledOptions(available);
-        // const counts = rslComputeCountsBasic(filtered);
-        // rslUpdateCountsBasic(counts);
+        let filters = get_selected_filters();        
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -1119,328 +1098,302 @@ jQuery(document).ready(function($) {
             applyFiltersToUI(initial.filters);
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
-            const filters = get_selected_filters();
-            const filtered = rslGetFilteredListings(filters);
-            const available = rslComputeAvailable(filters, filtered);
-            rslUpdateDisabledOptions(available);
-            const counts = rslComputeCountsBasic(filtered);
-            rslUpdateCountsBasic(counts);
+            const filters = get_selected_filters();            
             updateBreadcrumbs(filters);
             updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
-    })();
-
-
-    function rslComputeCountsBasic(list) {
-        const counts = {
-            categories: {},
-            make: {},
-            model: {},
-            type: {}
-        };
-
-        list.forEach(l => {
-            const add = (obj, key) => {
-                if (!key) return;
-                key = String(key).trim();
-                obj[key] = (obj[key] || 0) + 1;
-            };
-
-            // CATEGORY (type + subtype)
-            add(counts.categories, l.type);
-            add(counts.categories, l.subtype);
-
-            // MAKE
-            add(counts.make, l.make);
-
-            // MODEL
-            add(counts.model, l.model);
-
-            // LISTING TYPE
-            add(counts.type, l.listing_type);
-        });
-
-        return counts;
-    }
-
-    function rslUpdateCountsBasic(counts) {
-        // CATEGORY TYPE & SUBTYPE
-        $('input[name="category[]"]').each(function () {
-            const val = $(this).val().trim();
-            const count = counts.categories[val] || 0;
-
-            $(this)
-                .closest('.form-check')
-                .find('label .rsl-count')
-                .text(`(${count})`);
-        });
-
-        // MAKE
-        $('.make-listing').each(function () {
-            const val = $(this).val().trim();
-            const count = counts.make[val] || 0;
-
-            $(this)
-                .closest('.form-check')
-                .find('label .rsl-count')
-                .text(`(${count})`);
-        });
-
-        // MODEL
-        $('.model-listing').each(function () {
-            const val = $(this).val().trim();
-            const count = counts.model[val] || 0;
-
-            $(this)
-                .closest('.form-check')
-                .find('label .rsl-count')
-                .text(`(${count})`);
-        });
-
-        // LISTING TYPE
-        $('input[name="type[]"]').each(function () {
-            const val = $(this).val().trim();
-            const count = counts.type[val] || 0;
-
-            $(this)
-                .closest('.form-check')
-                .find('label .rsl-count')
-                .text(`(${count})`);
-        });
-    }
-
-    /********************************************
-     * 1. FILTER LISTINGS BASED ON CURRENT FILTERS
-     ********************************************/
-    function rslGetFilteredListings(filters) {
-        return RSL_ALL_LISTINGS.filter(item => {
-
-            // CATEGORY
-            if (filters.categories?.length &&
-                !(filters.categories.includes(item.type) ||
-                filters.categories.includes(item.subtype))) {
-                return false;
-            }
-
-            // MAKE
-            if (filters.make?.length && !filters.make.includes(item.make)) {
-                return false;
-            }
-
-            // MODEL
-            if (filters.model?.length && !filters.model.includes(item.model)) {
-                return false;
-            }
-
-            // TYPE (listing_type)
-            if (filters.type?.length && !filters.type.includes(item.listing_type)) {
-                return false;
-            }
-
-            // PRICE
-            const price = Number(item.price || 0);
-            if (filters.price_from && price < Number(filters.price_from)) return false;
-            if (filters.price_to && price > Number(filters.price_to)) return false;
-
-            // YEAR
-            const year = Number(item.year || 0);
-            if (filters.year_from && year < Number(filters.year_from)) return false;
-            if (filters.year_to && year > Number(filters.year_to)) return false;
-
-            // HOURS
-            const hours = Number(item.hours || 0);
-            if (filters.hours_from && hours < Number(filters.hours_from)) return false;
-            if (filters.hours_to && hours > Number(filters.hours_to)) return false;
-
-            return true;
-        });
-    }
+    })();    
 
     /********************************************
      * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
      ********************************************/
     function rslComputeAvailable(filters) {
-    const available = {
-        categories: new Set(),
-        make: new Set(),
-        model: new Set(),
-        type: new Set(),
-        year: new Set(),
-        price: new Set(),
-        hours: new Set()
-    };
+        const available = {
+            categories: new Set(),
+            make: new Set(),
+            model: new Set(),
+            type: new Set(),
+            year: new Set(),
+            price: new Set(),
+            hours: new Set()
+        };
 
-    const groups = ["categories", "make", "model", "type", "year", "price", "hours"];
+        const counts = {
+            categories: {},
+            make: {},
+            model: {},
+            type: {},
+            year: {},
+            price: {},
+            hours: {}
+        };
 
-    // normalize selected filters for robust comparisons
-    const normFilters = {};
-    groups.forEach(g => {
-        const arr = filters[g] || [];
-        normFilters[g] = arr.map(v => {
-            if (v === null || v === undefined) return v;
-            return (typeof v === "string") ? v.trim() : v;
+        const primaryGroups = ["categories", "make", "model", "type"];
+        const numericGroups = ["year", "price", "hours"];
+        const groups = [...primaryGroups, ...numericGroups];
+
+
+        // normalize selected filters for robust comparisons
+        const normFilters = {};
+        groups.forEach(g => {
+            const arr = filters[g] || [];
+            normFilters[g] = arr.map(v => {
+                if (v === null || v === undefined) return v;
+                return (typeof v === "string") ? v.trim() : v;
+            });
         });
-    });
 
-    const selectedCounts = {};
-    groups.forEach(g => selectedCounts[g] = normFilters[g].length || 0);
-    const activeGroups = groups.filter(g => selectedCounts[g] > 0);
-    const onlyOneGroupSelected = activeGroups.length === 1;
-    const singleSelectedGroup = onlyOneGroupSelected ? activeGroups[0] : null;
+        const primaryCount =
+        (filters.categories?.length ? 1 : 0) +
+        (filters.make?.length ? 1 : 0) +
+        (filters.model?.length ? 1 : 0) +
+        (filters.type?.length ? 1 : 0);
 
-    // helper to get normalized value(s) from a listing for a group
-    function getListingValues(listing, group) {
-        switch (group) {
-            case "categories":
-                return [listing.type, listing.subtype].filter(Boolean).map(v => typeof v === "string" ? v.trim() : v);
-            case "type":
-                return listing.listing_type ? [String(listing.listing_type).trim()] : [];
-            case "make":
-                return listing.make ? [String(listing.make).trim()] : [];
-            case "model":
-                return listing.model ? [String(listing.model).trim()] : [];
-            case "year":
-                return listing.year != null ? [Number(listing.year)] : [];
-            case "price":
-                return listing.price != null ? [Number(listing.price)] : [];
-            case "hours":
-                return listing.hours != null ? [Number(listing.hours)] : [];
-            default:
-                return [];
+        const onlyOnePrimary = primaryCount === 1;
+        const multiPrimary = primaryCount >= 2;
+
+        let singlePrimaryGroup = null;
+        if (onlyOnePrimary) {
+        if (filters.categories?.length) singlePrimaryGroup = "categories";
+        else if (filters.make?.length) singlePrimaryGroup = "make";
+        else if (filters.model?.length) singlePrimaryGroup = "model";
+        else if (filters.type?.length) singlePrimaryGroup = "type";
         }
-    }
 
-    // check if listing satisfies ALL selected groups except skipGroup
-    function matchesOtherGroups(listing, skipGroup) {
-        return groups.every(g => {
-            if (g === skipGroup) return true; // ignore same group
-            const selected = normFilters[g];
-            if (!selected || selected.length === 0) return true;
 
-            const values = getListingValues(listing, g);
-            if (!values || values.length === 0) return false; // listing has no value for this group => fail
+        // helper to get normalized value(s) from a listing for a group
+        function getListingValues(listing, group) {
+            switch (group) {
+                case "categories":
+                    return [listing.type, listing.subtype].filter(Boolean).map(v => typeof v === "string" ? v.trim() : v);
+                case "type":
+                    return listing.listing_type ? [String(listing.listing_type).trim()] : [];
+                case "make":
+                    return listing.make ? [String(listing.make).trim()] : [];
+                case "model":
+                    return listing.model ? [String(listing.model).trim()] : [];
+                case "year":
+                    return listing.year != null ? [Number(listing.year)] : [];
+                case "price":
+                    return listing.price != null ? [Number(listing.price)] : [];
+                case "hours":
+                    return listing.hours != null ? [Number(listing.hours)] : [];
+                default:
+                    return [];
+            }
+        }
 
-            // for numeric groups selected array may contain numbers or strings; do loose compare after coercion
-            return values.some(val => selected.some(sel => {
-                if (typeof val === "number" || typeof sel === "number") return Number(val) === Number(sel);
-                return String(val) === String(sel);
-            }));
-        });
-    }
+        // check if listing satisfies ALL selected groups except skipGroup
+        function matchesOtherGroups(listing, skipGroup) {
+            return groups.every(g => {
+                if (g === skipGroup) return true; // ignore same group
+                const selected = normFilters[g];
+                if (!selected || selected.length === 0) return true;
 
-    // add listing's values to available[group]
-    function addAvailableFromListing(listing, group) {
-        const vals = getListingValues(listing, group);
-        vals.forEach(v => {
-            if (v === null || v === undefined) return;
-            available[group].add(v);
-        });
-    }
+                const values = getListingValues(listing, g);
+                if (!values || values.length === 0) return false; // listing has no value for this group => fail
 
-    // MAIN LOOP
-    groups.forEach(group => {
-        RSL_ALL_LISTINGS.forEach(listing => {
+                // for numeric groups selected array may contain numbers or strings; do loose compare after coercion
+                return values.some(val => selected.some(sel => {
+                    if (typeof val === "number" || typeof sel === "number") return Number(val) === Number(sel);
+                    return String(val) === String(sel);
+                }));
+            });
+        }       
 
-            if (onlyOneGroupSelected) {
-                // If this is the single selected group -> add everything (full-list)
-                if (group === singleSelectedGroup) {
+        function addAvailableFromListing(listing, group) {
+            const vals = getListingValues(listing, group);
+
+            vals.forEach(v => {
+                if (v === null || v === undefined) return;
+
+                // availability
+                available[group].add(v);
+
+                // counts
+                if (!counts[group][v]) counts[group][v] = 0;
+                counts[group][v] += 1;
+            });
+        }
+
+        // MAIN LOOP        
+        groups.forEach(group => {
+            RSL_ALL_LISTINGS.forEach(listing => {
+
+                // CASE 1 → No primary selected → allow everything
+                if (primaryCount === 0) {
                     addAvailableFromListing(listing, group);
                     return;
                 }
-                // For other groups -> only add values from listings that match the single selected group's selection(s)
-                // We call matchesOtherGroups(listing, group) which will check the single selected group (since group !== singleSelectedGroup)
-                if (matchesOtherGroups(listing, group)) {
-                    addAvailableFromListing(listing, group);
+
+                // CASE 2 → Only 1 primary selected
+                if (onlyOnePrimary) {
+
+                    // For the selected group → allow everything
+                    if (group === singlePrimaryGroup) {
+                        addAvailableFromListing(listing, group);
+                        return;
+                    }
+
+                    // For other groups → allow only matches of selected primary
+                    if (matchesOtherGroups(listing, group)) {
+                        addAvailableFromListing(listing, group);
+                    }
+                    return;
                 }
-                return;
-            }
 
-            // Multiple groups selected -> check compatibility with ALL other groups (skip same group)
-            if (matchesOtherGroups(listing, group)) {
-                addAvailableFromListing(listing, group);
-            }
+                // CASE 3 → Multiple primary groups selected (STRICT MODE)
+                if (multiPrimary) {
+
+                    if (matchesOtherGroups(listing, group)) {
+                        addAvailableFromListing(listing, group);
+                    }
+                    return;
+                }
+            });
         });
-    });
-
-    return available;
-}
-
-
-    // Universal counter for ANY type of filter value
-    function countValue(val) {
-        if (Array.isArray(val)) {
-            return val.length;                   // arrays → count items
-        }
-        if (typeof val === "string") {
-            return val.trim() !== "" ? 1 : 0;    // string → 1 if not empty
-        }
-        if (val === null || val === undefined) {
-            return 0;                             // null/undefined → 0
-        }
-        return 1;                                 // numbers, booleans → count as 1
+        
+        return { available, counts };
     }    
 
-    /********************************************
-     * 3. DISABLE UI OPTIONS BASED ON AVAILABLE SETS
-     ********************************************/
-    function rslUpdateDisabledOptions(available) {
+    function rslUpdateUI(filters, result) {
+        const available = result.available;
+        const counts = result.counts || {};
 
-        // CATEGORY
+        // PRIMARY groups count: category, make, model, type
+        const primaryCount =
+            (filters.categories?.length ? 1 : 0) +
+            (filters.make?.length ? 1 : 0) +
+            (filters.model?.length ? 1 : 0) +
+            (filters.type?.length ? 1 : 0);
+
+        // detect which single primary group is selected (if exactly one)
+        let singlePrimaryGroup = null;
+        if (primaryCount === 1) {
+            if (filters.categories?.length) singlePrimaryGroup = 'categories';
+            else if (filters.make?.length) singlePrimaryGroup = 'make';
+            else if (filters.model?.length) singlePrimaryGroup = 'model';
+            else if (filters.type?.length) singlePrimaryGroup = 'type';
+        }
+
+        /* -----------------------
+        CATEGORY
+        ------------------------ */
         $('input[name="category[]"]').each(function () {
-            const val = $(this).val();
-            const exists = available.categories.has(val);
-            $(this).prop('disabled', !exists)
-                .closest('.accordion-item')
-                .toggleClass('disabled', !exists);
+            const val = $(this).val().trim();
+
+            // update count
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.categories?.[val] || 0})`);
+
+            // If exactly one primary is selected: only keep the selected primary group's own inputs enabled.
+            if (primaryCount === 1) {
+                // if categories is the single primary -> never disable this group,
+                // otherwise use availability to decide
+                if (singlePrimaryGroup === 'categories') {
+                    $(this).prop('disabled', false);
+                } else {
+                    $(this).prop('disabled', !available.categories.has(val));
+                }
+            } else {
+                // 0 or multiple primaries -> normal availability-based disabling
+                $(this).prop('disabled', !available.categories.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
         });
 
-        // MAKE
+        /* -----------------------
+        MAKE
+        ------------------------ */
         $('.make-listing').each(function () {
-            const val = $(this).val();
-            const exists = available.make.has(val);
-            $(this).prop('disabled', !exists)
-                .closest('.accordion-item')
-                .toggleClass('disabled', !exists);
+            const val = $(this).val().trim();
+
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.make?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                if (singlePrimaryGroup === 'make') $(this).prop('disabled', false);
+                else $(this).prop('disabled', !available.make.has(val));
+            } else {
+                $(this).prop('disabled', !available.make.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
         });
 
-        // MODEL
+        /* -----------------------
+        MODEL
+        ------------------------ */
         $('.model-listing').each(function () {
-            const val = $(this).val();
-            const exists = available.model.has(val);
-            $(this).prop('disabled', !exists)
-                .closest('.accordion-item')
-                .toggleClass('disabled', !exists);
+            const val = $(this).val().trim();
+
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.model?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                if (singlePrimaryGroup === 'model') $(this).prop('disabled', false);
+                else $(this).prop('disabled', !available.model.has(val));
+            } else {
+                $(this).prop('disabled', !available.model.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
         });
 
-        // LISTING TYPE
+        /* -----------------------
+        TYPE  (follows same rule as other primary groups)
+        ------------------------ */
         $('input[name="type[]"]').each(function () {
-            const val = $(this).val();
-            const exists = available.type.has(val);
-            $(this).prop('disabled', !exists)
-                .closest('.accordion-item')
-                .toggleClass('disabled', !exists);
+            const val = $(this).val().trim();
+
+            // update count
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.type?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                // If TYPE is the single selected primary → keep TYPE enabled
+                if (singlePrimaryGroup === 'type') {
+                    $(this).prop("disabled", false);
+                } 
+                // If CATEGORY or MAKE or MODEL is the selected primary → TYPE must disable based on availability
+                else {
+                    $(this).prop("disabled", !available.type.has(val));
+                }
+            } 
+            else {
+                // When 0 or >1 primary: TYPE behaves like all other groups
+                $(this).prop("disabled", !available.type.has(val));
+            }
+
+            $(this).closest('.accordion-item')
+                .toggleClass('disabled', $(this).prop('disabled'));
         });
 
-        // YEAR SELECT OPTIONS
+
+        /* -----------------------
+        YEAR
+        ------------------------ */
         $('select.rsl-year-from option, select.rsl-year-to option').each(function () {
-            const val = Number($(this).val());
-            if (!val) return;
-            $(this).prop('disabled', !available.year.has(val));
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.year.has(v));
         });
 
-        // PRICE SELECT OPTIONS
+        /* -----------------------
+        PRICE
+        ------------------------ */
         $('select.rsl-price-from option, select.rsl-price-to option').each(function () {
-            const val = Number($(this).val());
-            if (!val) return;
-            $(this).prop('disabled', !available.price.has(val));
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.price.has(v));
         });
 
-        // HOURS SELECT OPTIONS
+        /* -----------------------
+        HOURS
+        ------------------------ */
         $('select.rsl-hours-from option, select.rsl-hours-to option').each(function () {
-            const val = Number($(this).val());
-            if (!val) return;
-            $(this).prop('disabled', !available.hours.has(val));
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.hours.has(v));
         });
     }
 
