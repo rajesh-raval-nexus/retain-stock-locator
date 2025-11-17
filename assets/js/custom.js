@@ -196,68 +196,61 @@ jQuery(document).ready(function ($) {
   // 
 });
 
-function reinitSeeMoreLess(){
+function reinitSeeMoreLess() {
   jQuery(".gfam-filter-wrapper").each(function () {
     const $wrapper = jQuery(this);
     const $tags = $wrapper.find(".gfam-filter-tags");
-    
-    if($tags.find(".gfam-filter-tag").length !== 0){
-      $wrapper.css({
-          transition: "all 0.4s ease",
-          overflow: "hidden",
-          height: 'auto',
-        });
-    }else{
-      $wrapper.css({
-          transition: "all 0.4s ease",
-          overflow: "hidden",
-          height: 0,
-        });
+
+    // Reset styles first
+    $wrapper.css({ transition: "", overflow: "", height: "" });
+    $tags.css("max-height", "");
+
+    // Hide wrapper if no tags
+    if ($tags.find(".gfam-filter-tag").length === 0) {
+      $wrapper.css({ overflow: "hidden", height: 0 });
+      return;
     }
-            
+
+    $wrapper.css({
+      transition: "all 0.4s ease",
+      overflow: "hidden",
+      height: "auto",
+    });
+
     let $toggleBtn = $wrapper.find(".gfam-show-toggle");
     if ($toggleBtn.length === 0) {
       $toggleBtn = jQuery('<button class="gfam-show-toggle">Show More</button>');
       $wrapper.append($toggleBtn);
     }
 
-    // Expand/Collapse functionality
-    $toggleBtn.on("click", function (e) {            
-      if ($tags.hasClass("expanded")) {                
-        $tags.css("max-height", "5.5em").removeClass("expanded");
+    // IMPORTANT: remove duplicate click events
+    $toggleBtn.off("click").on("click", function () {
+      if ($tags.hasClass("expanded")) {
+        $tags.removeClass("expanded").css("max-height", "5.5em");
         $toggleBtn.text("Show More");
-      } else {                
-        $tags.css("max-height", $tags[0].scrollHeight + "px").addClass("expanded");
+      } else {
+        $tags.addClass("expanded").css("max-height", $tags[0].scrollHeight + "px");
         $toggleBtn.text("Show Less");
       }
     });
 
-    const maxHeight = parseFloat($tags.css("max-height"));    
-    if ($tags[0].scrollHeight <= maxHeight + 1) {
+    // Show/Hide toggle button
+    const scrollHeight = $tags[0].scrollHeight;
+    if (scrollHeight <= 90) {
       $toggleBtn.hide();
     } else {
+      $tags.css("max-height", "5.5em");
       $toggleBtn.show();
     }
 
-    // Handle tag remove
-    $tags.on("click", ".gfam-clear-tag", function () {
-      const $tagItem = jQuery(this).closest(".gfam-filter-tag");
-      $tagItem.remove();
-
-      if ($tags[0].scrollHeight <= maxHeight + 1) {
-        $toggleBtn.css({ visibility: "hidden", height: 0 });
-      }
-
-      if ($tags.find(".gfam-filter-tag").length === 0) {
-        $wrapper.css({
-          transition: "all 0.4s ease",
-          overflow: "hidden",
-          height: 0,
-        });
-      }
+    // Remove tag event
+    $tags.off("click", ".gfam-clear-tag").on("click", ".gfam-clear-tag", function () {
+      jQuery(this).closest(".gfam-filter-tag").remove();
+      reinitSeeMoreLess(); // re-check after remove
     });
   });
 }
+
 
 function reinitCarousel(){
     jQuery(".gfam-carousel").owlCarousel({
