@@ -588,7 +588,7 @@ jQuery(document).ready(function($) {
             filters.make.forEach(v => $('.make-listing[value="' + v + '"]').prop('checked', true));
         }
         if (Array.isArray(filters.model)) {
-            filters.model.forEach(v => $('.model-listing[value="' + v + '"]').prop('checked', true));
+            filters.model.forEach(v => $(".model-listing[value='" + v + "']").prop('checked', true));
         }
         if (Array.isArray(filters.type)) {
             filters.type.forEach(v => $('input[name="type[]"][value="' + v + '"]').prop('checked', true));
