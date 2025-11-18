@@ -476,13 +476,7 @@ if ($stock_number) {
                       <?php foreach ($matchingListings as $listingItem) : 
                           $price = $listingItem['price'];
                           $hours = $listingItem['hours'];
-
-                          //$product_title = $listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model'];
-                          
                         ?>
-                         <?php 
-                          
-                          //echo esc_html($ttl); ?>
                         <?php
                             if ($detail_page) {
                                 
@@ -498,7 +492,7 @@ if ($stock_number) {
                                 }
                                 $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_numberlike}/");
 
-                                // $product_title = trim($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']);
+                                 $product_title = trim($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']);
                                 if (empty($product_title)) {
                                     $product_title = $detail_page->post_title;
                                 }
