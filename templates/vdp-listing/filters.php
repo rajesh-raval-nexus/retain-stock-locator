@@ -15,7 +15,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
   <!-- <<<<- Mobile Search Section Start ->>>> -->
   <?php if(!$hide_search_bar){?>
   <div class="gfam-searchbar d-flex align-items-center px-3 py-2 rounded">
-    <input type="text" class="form-control border-0 shadow-none bg-transparent gfam-search-input main-listing-search"
+    <input type="search" class="form-control border-0 shadow-none bg-transparent gfam-search-input main-listing-search"
       placeholder="Search" />
     <button class="gfam-search-btn border-0 rounded-circle d-flex justify-content-center align-items-center">      
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -332,7 +332,7 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
           <!-- <<<<- Desktop Search Section Start ->>>> -->
           <?php if(!$hide_search_bar){?>
           <div class="input-group gfam-search-section">
-            <input type="text" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
+            <input type="search" class="gfam-search-input main-listing-search" placeholder="Quick Search" aria-label="Quick Search" />
             <div class="input-group-append">
               <span class="input-group-text">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

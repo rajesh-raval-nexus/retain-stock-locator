@@ -428,7 +428,11 @@ add_action('wp_head', 'theme_global_color_head');
 
 // Code for the add Stock locator class in body
 function rsl_plugin_body_class($classes){
-    $classes[] = 'rsl-stock-locator';
+    $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
+
+    if(is_stock_locator_page() || get_the_ID() == $vdp_detail_page->ID ){
+        $classes[] = 'rsl-stock-locator';	
+    }    
     return $classes;
 }
 add_filter('body_class', 'rsl_plugin_body_class');

@@ -14,18 +14,6 @@ jQuery(document).ready(function($) {
         }
     }
 
-    function normalizeForSlug(str) {
-        return String(str || '')
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')   // Replace any non-alphanumeric with a hyphen
-            .replace(/^-+|-+$/g, '');      // Trim leading/trailing hyphens
-    }
-
-    function encodeSegment(segment) {
-        return normalizeForSlug(segment);
-    }
-
     function decodeSegment(segment) {
         // Just return the raw slug — we won’t “reverse” it,
         // we’ll *match* it to real values via normalization later.
@@ -48,13 +36,14 @@ jQuery(document).ready(function($) {
         function addToUrl(arr, paramName) {
             if (!arr || !Array.isArray(arr)) return;
 
-            // Normalize values: lowercase, replace /, space, special chars → '-'
+            // Normalize values: lowercase, replace /, space, special chars → '-'            
             function normalizeForSlug(str) {
                 return String(str || '')
                     .trim()
                     .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')  // spaces, slashes, symbols → '-'
-                    .replace(/^-+|-+$/g, '');     // trim starting/ending '-'
+                    .replace(/[+"'"]/g, '')        // REMOVE + ' " characters
+                    .replace(/[^a-z0-9]+/g, '-')   // everything else → -
+                    .replace(/^-+|-+$/g, '');      // trim -
             }
 
             if (arr.length === 1) {
@@ -1121,7 +1110,7 @@ jQuery(document).ready(function($) {
     /********************************************
      * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
      ********************************************/
-    function rslComputeAvailable(filters) {
+    function rslComputeAvailable(filters) {               
         const available = {
             categories: new Set(),
             make: new Set(),

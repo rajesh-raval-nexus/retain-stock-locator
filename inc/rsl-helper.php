@@ -11,28 +11,32 @@ function rsl_parse_listings( $xmlPath ) {
         $images = [];
         if ( isset( $listing->Images->Image ) ) {
             foreach ( $listing->Images->Image as $img ) {
-                $images[] = (string) $img['url']; // attribute url=""
+                $images[] = (string) $img['url'];
             }
-        }        
-        
+        }
+
+        // Helper: trim all fields that may contain trailing spaces
+        $clean = fn($v) => trim((string)$v);
+
         $entry = [
-            'dealer_id'    => (string)$dealer['id'],
-            'dealer_name'  => (string)$dealer->name,
-            'stock_number' => (string)$listing->stock_number,
-            'industry'     => (string)$listing->industry,
-            'item_specification' => (string)$listing->model_specific,
-            'type'         => (string)$listing->type,
-            'subtype'      => (string)$listing->subtype,
-            'make'         => (string)$listing->make,
-            'model'        => (string)$listing->model,
-            'year'         => rsl_get_attribute_value($listing, 'Year'),
-            'description'  => rsl_get_attribute_value($listing, 'Description'),
-            'status'       => rsl_get_attribute_value($listing, 'Status'),
-            'listing_type' => rsl_get_attribute_value($listing, 'Listing Type'),
-            'price'        => rsl_get_attribute_value($listing, 'Retail Price'),
-            'hours'        => rsl_get_attribute_value($listing, 'Hours'),
-            'images'       => $images,
+            'dealer_id'             => (string)$dealer['id'],
+            'dealer_name'           => trim((string)$dealer->name),
+            'stock_number'          => trim((string)$listing->stock_number),
+            'industry'              => trim((string)$listing->industry),
+            'item_specification'    => trim((string)$listing->model_specific),
+            'type'                  => $clean($listing->type),
+            'subtype'               => $clean($listing->subtype),
+            'make'                  => $clean($listing->make),
+            'model'                 => $clean($listing->model),
+            'listing_type'          => trim(rsl_get_attribute_value($listing, 'Listing Type')),
+            'year'                  => trim(rsl_get_attribute_value($listing, 'Year')),
+            'description'           => trim(rsl_get_attribute_value($listing, 'Description')),
+            'status'                => trim(rsl_get_attribute_value($listing, 'Status')),
+            'price'                 => trim(rsl_get_attribute_value($listing, 'Retail Price')),
+            'hours'                 => trim(rsl_get_attribute_value($listing, 'Hours')),
+            'images'                => $images,
         ];
+
         $listings[] = $entry;
     }
 
@@ -110,7 +114,18 @@ function rsl_get_attribute_value( $listing, $attrName ) {
     return null;
 }
 
+if (! function_exists('stripslashes_deep')) {
+    function stripslashes_deep($value) {
+        return is_array($value)
+            ? array_map('stripslashes_deep', $value)
+            : stripslashes($value);
+    }
+}
+
 function rsl_apply_filters( $listings, $filters ) {
+
+    // Clean all incoming filter values ONCE
+    $filters = stripslashes_deep($filters);
 
     return array_filter($listings, function($l) use ($filters) {
 

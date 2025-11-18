@@ -412,7 +412,7 @@ function rsl_build_make_model_modal_html( $filters ) {
 
             <!-- Make Search -->
             <div class="input-group gfam-search-section">
-              <input type="text" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Make', 'retain-stock-locator' ); ?>" aria-label="Search Make" />
+              <input type="search" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Make', 'retain-stock-locator' ); ?>" aria-label="Search Make" />
               <div class="input-group-append">
                 <span class="input-group-text">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -474,7 +474,7 @@ function rsl_build_make_model_modal_html( $filters ) {
 
                 <!-- Model Search -->
                 <div class="input-group gfam-search-section">
-                  <input type="text" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Model', 'retain-stock-locator' ); ?>" aria-label="Search Model" />
+                  <input type="search" class="gfam-search-input" placeholder="<?php esc_attr_e( 'Search Model', 'retain-stock-locator' ); ?>" aria-label="Search Model" />
                   <div class="input-group-append">
                     <span class="input-group-text">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
