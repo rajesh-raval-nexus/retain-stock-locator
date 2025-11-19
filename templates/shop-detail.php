@@ -323,6 +323,8 @@ if ($stock_number) {
                 </div>
               <?php } ?>
 
+              <?php include RSL_PLUGIN_DIR . 'templates/parts/sidebar-mobile.php'; ?>
+
               <!-- Vehicle Details Section -->
               <div id="vehicleDetails" class="row mt-lg-5 mt-4">
                 <div class="col-12">
@@ -405,8 +407,6 @@ if ($stock_number) {
                   </div>
                 </div>
               </div>
-
-              <?php include RSL_PLUGIN_DIR . 'templates/parts/sidebar-mobile.php'; ?>
 
               <!-- Ask question section -->
                <?php
@@ -579,7 +579,7 @@ if ($stock_number) {
             </div>
 
             <!-- Right Side - Price and Info -->
-            <div class="col-xl-4 sticky-section sticky-section-for-desktop">
+            <div class="d-none d-md-block col-xl-4 sticky-section sticky-section-for-desktop">
               <div class="gfam-detail-sidebar">
                 <!-- Price Section -->
                 <div class="gfam-detail-price-section">

@@ -1,5 +1,5 @@
 <!-- Right Side - Price and Info -->
-            <div class="col-xl-4 sticky-section sticky-section-for-mobile">
+            <div class="col-12 d-md-none sticky-section sticky-section-for-mobile">
               <div class="gfam-detail-sidebar">
                 <!-- Price Section -->
                 <div class="gfam-detail-price-section">

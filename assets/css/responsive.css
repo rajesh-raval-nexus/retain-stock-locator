@@ -616,6 +616,13 @@ button[data-bs-dismiss="modal"]{
 
 
 @media only screen and (max-width: 767px){
+  .rsl-stock-locator .sticky-section.sticky-section-for-mobile .gfam-detail-steps-section {
+    margin-bottom: 0;
+    margin-top: 9px;
+}
+.rsl-stock-locator .sticky-section.sticky-section-for-mobile {
+  margin-top: 13px;
+}
   .gfam-detail-steps-section {
     margin-bottom: 30px;
 }
