@@ -34,8 +34,22 @@ jQuery(document).ready(function($) {
   $('.custom-select .options li').click(function(){
     var value = $(this).data('value');
     var text = $(this).text();
+    
+    var make  = $('.gfam-detail-make-val').text().trim();
+    var model = $('.gfam-detail-model-val').text().trim();
+    var question = text.trim();
 
-    $('#askQuestionModalLabel').text(text);
+    var finalText = question; // default value
+
+    // If BOTH make and model exist → append extra text
+    if (make !== "" && model !== "") {
+        finalText += " I'm viewing the " + make + " " + model;
+    }
+
+    //$('#askQuestionModalLabel').text(text);
+    
+    $('#askQuestionModalForm .comments-question').val(finalText.trim());
+
     $('.ask_question_fm_val').val(text);
 
     var $select = $(this).closest('.custom-select');
