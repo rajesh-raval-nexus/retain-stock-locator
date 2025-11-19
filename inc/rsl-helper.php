@@ -696,15 +696,15 @@ function gfam_output_vdp_sitemap() {
                     ? strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']))
                     : 'N/A';
                     
-                    $slug_title_like = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']));
-                    $slug_title_like = sanitize_title($slug_title_like);
-                    if($slug_title_like !=''){
-                        $slug_title_like = $slug_title_like. '-' . $stock_number;
-                    }else{
-                        $slug_title_like = gfam_generate_slug_preserve_case($vdp_detail_page->post_name). '-' . $stock_number;
+                    $slug_title = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']));
+                    $slug_title = sanitize_title($slug_title);
+                    if (!empty($slug_title)) {
+                        $final_slug = "{$slug_title}-{$stock_number}";
+                    } else {
+                        $final_slug = "{$stock_number}";
                     }
 
-                $url = trailingslashit($vdp_page_url) .''. $slug_title_like . '/';
+                $url = trailingslashit($vdp_page_url) .''. $final_slug . '/';
                 echo "  <url>\n";
                 echo '    <loc>' . esc_url($url) . "</loc>\n";
                 echo '    <lastmod>' . esc_html($today) . "</lastmod>\n";
