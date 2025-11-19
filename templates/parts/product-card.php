@@ -24,16 +24,20 @@ $detail_page = get_field('select_stock_locator_detail_page', 'option');
 
 $detail_page_slug = isset($detail_page->post_name) ? $detail_page->post_name : 'stock-detail';
 
-
 $slug_title = strtolower(trim($item['year'] . '-' . $item['make'] . '-' . $item['model']));
 $slug_title = sanitize_title($slug_title);
 if($slug_title !=''){
     $slug_title = $slug_title;
-}else{
-    $slug_title = gfam_generate_slug_preserve_case($detail_page->post_name);
 }
-//echo 'slug_title: '.$slug_title;
-$detail_url = site_url("/{$detail_page_slug}/{$slug_title}-{$stock_number}/");
+
+if (!empty($slug_title)) {
+    $final_slug = "{$slug_title}-{$stock_number}";
+} else {
+    $final_slug = "{$stock_number}";
+}
+
+$detail_url = site_url("/{$detail_page_slug}/{$final_slug}/");
+
 ?>
 
 <div class="col-lg-4 col-md-6 my-3">

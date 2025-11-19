@@ -506,7 +506,7 @@ jQuery(document).ready(function($) {
 
         if (filters.price_from && filters.price_to) {
             // Both exist → Range
-            suffixParts.push(`Range $${filters.price_from} - $${filters.price_to}`);
+            suffixParts.push(`Between $${filters.price_from} - $${filters.price_to}`);
         } 
         else if (filters.price_to && !filters.price_from) {
             // Only price_to exists → Under

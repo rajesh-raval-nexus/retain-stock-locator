@@ -335,14 +335,14 @@ if ($stock_number) {
                       <?php if (! empty($listing['make'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Make', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['make']); ?></div>
+                          <div class="gfam-detail-detail-value gfam-detail-make-val"><?php echo esc_html($listing['make']); ?></div>
                         </div>
                       <?php endif; ?>
 
                       <?php if (! empty($listing['model'])) : ?>
                         <div class="gfam-detail-detail-row">
                           <div class="gfam-detail-detail-label"><?php esc_html_e('Model', 'retain-stock-locator'); ?></div>
-                          <div class="gfam-detail-detail-value"><?php echo esc_html($listing['model']); ?></div>
+                          <div class="gfam-detail-detail-value gfam-detail-model-val"><?php echo esc_html($listing['model']); ?></div>
                         </div>
                       <?php endif; ?>
 
@@ -406,6 +406,8 @@ if ($stock_number) {
                 </div>
               </div>
 
+              <?php include RSL_PLUGIN_DIR . 'templates/parts/sidebar-mobile.php'; ?>
+
               <!-- Ask question section -->
                <?php
                 $ask_question_section = get_field('ask_question_section','option');
@@ -447,23 +449,35 @@ if ($stock_number) {
                       </div>
                   <?php endif; ?>
 
-              <?php
+               <?php
                 $allListings = rsl_parse_listings($xmlPath);
                 $similardata = trim($listing['make']);
+                $stock_number_like = trim($listing['stock_number']);
 
                 $matchingListings = [];
                 $counter = 0;
-                
+
                 foreach ($allListings as $item) {
-                  if (isset($item['make']) && strcasecmp(trim($item['make']), $similardata) === 0) {
-                    $matchingListings[] = $item;
-                    $counter++;
-                  }
-                  if ($counter >= 3) {
-                    break; // Stop after 5 matching records
-                  }
+
+                    $stock_number_loop = trim($item['stock_number']);
+
+                    // Skip if stock number matches
+                    if ($stock_number_like === $stock_number_loop) {
+                        continue;
+                    }
+
+                    // Check by make
+                    if (isset($item['make']) && strcasecmp(trim($item['make']), $similardata) === 0) {
+                        $matchingListings[] = $item;
+                        $counter++;
+                    }
+
+                    // Stop after 3 results
+                    if ($counter >= 3) {
+                        break;
+                    }
                 }
-              ?>
+                ?>
               <!-- similar products Section -->
               <div class="row mt-lg-5 mt-4">
                 <div class="col-12">
@@ -483,26 +497,31 @@ if ($stock_number) {
                                 $detail_page_slug = $detail_page->post_name;
 
                                 $stock_numberlike = strtolower($listingItem['stock_number']);
+
+                                // 
                                 $slug_title_like = strtolower(trim($listingItem['year'] . '-' . $listingItem['make'] . '-' . $listingItem['model']));
                                 $slug_title_like = sanitize_title($slug_title_like);
-                                if($slug_title_like){
-                                  $slug_title_like = $slug_title_like;
-                                }else{
-                                  $slug_title_like = gfam_generate_slug_preserve_case($detail_page->post_name);
+                                
+                                if (!empty($slug_title_like)) {
+                                    $final_slug = "{$slug_title_like}-{$stock_numberlike}";
+                                } else {
+                                    $final_slug = "{$stock_numberlike}";
                                 }
-                                $detail_url = site_url("/{$detail_page_slug}/{$slug_title_like}-{$stock_numberlike}/");
 
-                                 $product_title = trim($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']);
-                                if (empty($product_title)) {
-                                    $product_title = $detail_page->post_title;
-                                }
+                                $detail_url = site_url("/{$detail_page_slug}/{$final_slug}/");
+                                // 
+
+                                $product_title = trim($listingItem['year'] . ' ' . $listingItem['make'] . ' ' . $listingItem['model']);
+                                // if (empty($product_title)) {
+                                //     $product_title = $detail_page->post_title;
+                                // }
                                 
                             }
                           ?>
                          <div class="item col-lg-4 col-md-6 my-3">
 							              <div class="gfam-product-card">
                               <div class="gfam-product-image">
-                                    <div class="owl-carousel gfam-carousel">
+                                  <div class="owl-carousel gfam-carousel">
                                       <?php foreach ($listingItem['images'] as $image) : ?>
                                       <div class="item">
                                         <a href="<?php echo $detail_url; ?>">
@@ -510,44 +529,44 @@ if ($stock_number) {
                                         </a>
                                       </div>
                                       <?php endforeach; ?>
+                                    </div>
+                                </div>
+                              <div class="gfam-product-info">
+                                <div class="gfam-product-badges mb-4">
+                                  <span class="gfam-badge gfam-badge-new"><?php echo esc_html($listingItem['listing_type']); ?></span>
+                                  <span class="gfam-badge gfam-badge-code"><?php echo esc_html($listingItem['stock_number']); ?></span>
+                                </div>
+                                <a href="<?php echo $detail_url; ?>"><h3 class="gfam-product-title"><?php echo esc_html($product_title); ?></h3></a>
+                                
+                                <p class="gfam-product-subtitle"><?php echo esc_html($listingItem['type']); ?></p>
+
+                                <div class="gfam-product-details">
+                                  <div class="gfam-odometer">
+                                      <div class="gfam-odometer-icon">
+                                          <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
                                       </div>
-                              </div>
-                          <div class="gfam-product-info">
-                            <div class="gfam-product-badges mb-4">
-                              <span class="gfam-badge gfam-badge-new">NEW</span>
-                              <span class="gfam-badge gfam-badge-code"><?php echo esc_html($listingItem['stock_number']); ?></span>
-                            </div>
-                            <a href="<?php echo $detail_url; ?>"><h3 class="gfam-product-title"><?php echo esc_html($product_title); ?></h3></a>
-                            
-                            <p class="gfam-product-subtitle"><?php echo esc_html($listingItem['type']); ?></p>
+                                      <div class="gfam-odometer-info">
+                                        <span class="gfam-odometer-label">Odometer</span>
+                                        <?php if (!empty($hours)) { ?>
+                                          <span class="gfam-odometer-value"><?php echo number_format($hours, 0, '.', ','); ?> kms</span>
+                                        <?php }else{ ?>
+                                            <span class="gfam-odometer-value">N/A</span>
+                                        <?php } ?>
+                                      </div>
+                                  </div>
 
-                            <div class="gfam-product-details">
-                              <div class="gfam-odometer">
-                                  <div class="gfam-odometer-icon">
-                                      <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
-                                  </div>
-                                  <div class="gfam-odometer-info">
-                                    <span class="gfam-odometer-label">Odometer</span>
-                                    <?php if (!empty($hours)) { ?>
-                                      <span class="gfam-odometer-value"><?php echo number_format($hours, 0, '.', ','); ?> kms</span>
-                                    <?php }else{ ?>
-                                        <span class="gfam-odometer-value">N/A</span>
-                                    <?php } ?>
-                                  </div>
+                                  <div class="gfam-price-info">
+                                        <?php if (!empty($price)) { ?>
+                                          <div class="gfam-price mb-0"><?php echo "$" . number_format($price, 0, '.', ','); ?></div>
+                                          <?php }else{ ?>
+                                            <div class="gfam-price mb-0">N/A</div>
+                                          <?php } ?>
+                                      </div>
+                                </div>
+                                <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
+                                    <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
+                                </a>
                               </div>
-
-                              <div class="gfam-price-info">
-                                    <?php if (!empty($price)) { ?>
-                                      <div class="gfam-price mb-0"><?php echo "$" . number_format($price, 0, '.', ','); ?></div>
-                                      <?php }else{ ?>
-                                        <div class="gfam-price mb-0">N/A</div>
-                                      <?php } ?>
-                                  </div>
-                            </div>
-                            <a class="gfam-btn" href="<?php echo esc_url($detail_url); ?>">
-                                <?php esc_html_e('See Details', 'retain-stock-locator'); ?>
-                            </a>
-                          </div>
                           </div>
                         </div>
                       <?php endforeach; ?>
@@ -560,7 +579,7 @@ if ($stock_number) {
             </div>
 
             <!-- Right Side - Price and Info -->
-            <div class="col-xl-4 sticky-section">
+            <div class="col-xl-4 sticky-section sticky-section-for-desktop">
               <div class="gfam-detail-sidebar">
                 <!-- Price Section -->
                 <div class="gfam-detail-price-section">
@@ -649,6 +668,7 @@ if ($stock_number) {
                 </div>
               </div>
             </div>
+            <!--Video walkthrogh Modal END -->
           </div>
         </div>
       </div>
@@ -826,7 +846,7 @@ if ($stock_number) {
         <div class="modal-dialog modal-md modal-dialog-centered">
           <div class="modal-content">
             <div class="gfam-detail-modal-header">
-              <h5 class="gfam-detail-modal-title" id="askQuestionModalLabel"><?php esc_html_e('Request a Ask a Question', 'retain-stock-locator'); ?></h5>
+              <h5 class="gfam-detail-modal-title" id="askQuestionModalLabel"><?php esc_html_e('How Can We Help You?', 'retain-stock-locator'); ?></h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fas fa-times"></i>
               </button>
@@ -866,7 +886,7 @@ if ($stock_number) {
                 </div>
 
                 <div class="col-12 my-2">
-                  <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
+                  <textarea class="form-control gfam-detail-input comments-question" name="comments" rows="4" placeholder="Comments"></textarea>
                 </div>
 
                 <input type="hidden" name="ask_question_fm_val" class="ask_question_fm_val" value="">

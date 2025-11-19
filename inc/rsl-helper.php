@@ -602,11 +602,11 @@ function gfam_force_dynamic_meta_for_stock_detail() {
             // Output meta only once — after SEO plugins finish
             echo "\n<!-- Dynamic SEO Meta -->\n";
             echo '<meta name="title" content="' . $meta_title . '">' . "\n";
-            echo '<meta name="description" content="' . $meta_desc . '">' . "\n";
+            echo '<meta name="description" content="">' . "\n";
             echo '<meta property="og:title" content="' . $meta_title . '">' . "\n";
-            echo '<meta property="og:description" content="' . $meta_desc . '">' . "\n";
+            echo '<meta property="og:description" content="">' . "\n";
             echo '<meta name="twitter:title" content="' . $meta_title . '">' . "\n";
-            echo '<meta name="twitter:description" content="' . $meta_desc . '">' . "\n";
+            echo '<meta name="twitter:description" content="">' . "\n";
             echo "<!-- End Dynamic SEO Meta -->\n";
 
             break;
