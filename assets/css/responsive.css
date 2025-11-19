@@ -369,13 +369,11 @@ text-transform: math-auto;
 
  }
 
-.rsl-stock-locator .sticky-section{
-
-   position: relative;
-
-   height: auto;
-
- }
+ .rsl-stock-locator .sticky-section {
+  position: relative;
+  height: auto;
+  top: auto !important;
+}
 
  .rsl-stock-locator .gfam-detail-similiar-product{
 
@@ -622,8 +620,11 @@ button[data-bs-dismiss="modal"]{
     margin-bottom: 30px;
 }
   .rsl-stock-locator .gfam-detail-close-btn {
-    top: -37px;
-    right: 0;
+    /* top: -37px;
+    right: 0; */
+    top: 8px;
+    right: 6px;
+    background-color: var(--yellow_btn_bg_color);
 }
   .gfam-detail-vehicle-features .gfam-feature-listing {
     flex-wrap: wrap;

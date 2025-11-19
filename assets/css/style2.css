@@ -2958,6 +2958,7 @@ ease;
   font-size: 20px;
   line-height: 120%;
   margin: 16px 0;
+  text-transform: math-auto;
 }
 .gfam-product-grid .no-result-found-txt h3.no-stock-subtext {
   font-family: Poppins;
