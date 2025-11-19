@@ -14,18 +14,6 @@ jQuery(document).ready(function($) {
         }
     }
 
-    function normalizeForSlug(str) {
-        return String(str || '')
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')   // Replace any non-alphanumeric with a hyphen
-            .replace(/^-+|-+$/g, '');      // Trim leading/trailing hyphens
-    }
-
-    function encodeSegment(segment) {
-        return normalizeForSlug(segment);
-    }
-
     function decodeSegment(segment) {
         // Just return the raw slug — we won’t “reverse” it,
         // we’ll *match* it to real values via normalization later.
@@ -48,13 +36,14 @@ jQuery(document).ready(function($) {
         function addToUrl(arr, paramName) {
             if (!arr || !Array.isArray(arr)) return;
 
-            // Normalize values: lowercase, replace /, space, special chars → '-'
+            // Normalize values: lowercase, replace /, space, special chars → '-'            
             function normalizeForSlug(str) {
                 return String(str || '')
                     .trim()
                     .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')  // spaces, slashes, symbols → '-'
-                    .replace(/^-+|-+$/g, '');     // trim starting/ending '-'
+                    .replace(/[+"'"]/g, '')        // REMOVE + ' " characters
+                    .replace(/[^a-z0-9]+/g, '-')   // everything else → -
+                    .replace(/^-+|-+$/g, '');      // trim -
             }
 
             if (arr.length === 1) {
@@ -325,7 +314,7 @@ jQuery(document).ready(function($) {
         }
 
         updateBreadcrumbs(filters);
-        updateTitle(filters);
+        updateTitle(filters);        
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
@@ -333,128 +322,120 @@ jQuery(document).ready(function($) {
      * Update breadcrumbs DOM based on filters
      */
     function updateBreadcrumbs(filters) {
-        // return;
         filters = filters || {};
         const $crumb = $('.gfam-breadcrumb nav');
         if (!$crumb.length) return;
 
-        const baseURL = rsl_ajax_obj.home_url; // Define in your theme or localize_script
-        const stockURL = rsl_ajax_obj.stock_page_url; // Pass from PHP using wp_localize_script
+        const baseURL = rsl_ajax_obj.home_url;
+        const stockURL = rsl_ajax_obj.stock_page_url;
         const stockTitle = rsl_ajax_obj.stock_page_title;
 
-        // --- Step 1: Start with static crumbs ---
+        // Count Selected Values
+        const typeCount = (filters.type || []).length;
+        const makeCount = (filters.make || []).length;
+        const modelCount = (filters.model || []).length;
+        const catCount = (filters.categories || []).length;
+
+        const multipleSelected =
+            typeCount > 1 ||
+            makeCount > 1 ||
+            modelCount > 1 ||
+            catCount > 1;
+
+        // -------------------------------
+        // STATIC PART
+        // -------------------------------
         let items = [
-            { label: '<svg class="mb-1" width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.4865 22H13.5926C12.7593 22 12.0815 21.164 12.0815 20.1359V12.9631C12.0815 12.7504 11.9403 12.5761 11.7678 12.5761H7.22977C7.05735 12.5761 6.91606 12.7504 6.91606 12.9631V20.1359C6.91606 21.164 6.23834 22 5.40497 22H1.51109C0.677719 22 0 21.164 0 20.1359V10.4402C0 9.46529 0.344847 8.54357 0.948325 7.91433L7.76141 0.788774C8.7672 -0.262925 10.228 -0.262925 11.2338 0.788774L18.0517 7.91728C18.6552 8.54653 19 9.46824 19 10.4431V20.1359C19 21.164 18.3223 22 17.4889 22H17.4865ZM7.22738 11.099H11.7654C12.5988 11.099 13.2765 11.935 13.2765 12.9631V20.1359C13.2765 20.3486 13.4178 20.5229 13.5902 20.5229H17.4841C17.6565 20.5229 17.7978 20.3486 17.7978 20.1359V10.4431C17.7978 9.90251 17.6063 9.39143 17.271 9.04284L10.4531 1.91433C9.89514 1.33235 9.08571 1.33235 8.52773 1.91433L1.71465 9.03988C1.37938 9.38848 1.19019 9.89956 1.19019 10.4402V20.1359C1.19019 20.3486 1.33148 20.5229 1.50391 20.5229H5.39778C5.57021 20.5229 5.7115 20.3486 5.7115 201359V12.9631C5.7115 11.935 6.38921 11.099 7.22259 11.099H7.22738Z" fill="#313131"></path></svg>', url: baseURL },
-            { label: stockTitle, url: stockURL },            
-            { label: 'Farm Machinery For Sale', url: '#' },            
+            { label: homeIconSVG(), url: baseURL },
+            { label: stockTitle, url: stockURL }
         ];
 
-        // --- Step 2: Build dynamic breadcrumb ---
-        let labelParts = [];
+        // -------------------------------
+        // CASE: MULTIPLE SELECTED → ONLY ONE LABEL
+        // -------------------------------
+        if (multipleSelected) {
+            items.push({
+                label: "Farm Machinery For Sale",
+                url: "#"
+            });
 
-        // Type (like Tractors, Harvesters)
-        // if (Array.isArray(filters.type) && filters.type.length) {
-        //     const typeLabel = filters.type.join(', ');
-        //     labelParts.push(typeLabel);
-        //     items.push({
-        //         label: `${typeLabel} For Sale`,
-        //         url: buildSEOUrl({ type: filters.type }, 1)
-        //     });
-        // }
-
-        // Make (like John Deere, Mahindra)
-        // if (Array.isArray(filters.make) && filters.make.length) {
-        //     const makeLabel = filters.make.join(', ');
-        //     labelParts.push(makeLabel);
-        //     items.push({
-        //         label: makeLabel,
-        //         url: buildSEOUrl({ type: filters.type, make: filters.make }, 1)
-        //     });
-        // }
-
-        // Model (like 5050E, Swaraj 744)
-        // if (Array.isArray(filters.model) && filters.model.length) {
-        //     const modelLabel = filters.model.join(', ');
-        //     labelParts.push(modelLabel);
-        //     items.push({
-        //         label: modelLabel,
-        //         url: buildSEOUrl({ 
-        //             type: filters.type, 
-        //             make: filters.make, 
-        //             model: filters.model 
-        //         }, 1)
-        //     });
-        // }
-
-        // Category (New / Used / Certified)
-        if (Array.isArray(filters.categories) && filters.categories.length) {
-
-            let catLabel = '';
-
-            if (filters.categories.length === 1) {
-                // Only one category
-                catLabel = filters.categories[0];
-            } else if (filters.categories.length === 2) {
-                // Two categories → join with comma
-                catLabel = filters.categories.join(', ');
-            } else {
-                // More than two → show first two and add "& more"
-                const shown = filters.categories.slice(0, 2).join(', ');
-                catLabel = shown + ' & more';
-            }
-
-            items[2] = {
-                label: catLabel+' For Sale',
-                url: buildSEOUrl({
-                    // type: filters.type,
-                    // make: filters.make,
-                    // model: filters.model,
-                    categories: filters.categories
-                }, 1)
-            }
-
-            // items.push({
-            //     label: catLabel,
-            //     url: buildSEOUrl({
-            //         // type: filters.type,
-            //         // make: filters.make,
-            //         // model: filters.model,
-            //         categories: filters.categories
-            //     }, 1)
-            // });
+            renderBreadcrumbs(items);
+            return;
         }
 
-        // Price
-        // if (filters.price_from || filters.price_to) {
-        //     const priceLabel = `$${filters.price_from || 'Any'} - $${filters.price_to || 'Any'}`;
-        //     labelParts.push(priceLabel);
-        //     items.push({
-        //         label: `Price: ${priceLabel}`,
-        //         url: buildSEOUrl(filters, 1)
-        //     });
-        // }
+        // -------------------------------
+        // CASE: NOTHING SELECTED → DEFAULT
+        // -------------------------------
+        const nothingSelected =
+            typeCount === 0 &&
+            makeCount === 0 &&
+            modelCount === 0 &&
+            catCount === 0;
 
-        // // Keyword Search
-        // if (filters.keyword) {
-        //     const keywordLabel = `Search: ${filters.keyword}`;
-        //     labelParts.push(keywordLabel);
-        //     items.push({
-        //         label: keywordLabel,
-        //         url: buildSEOUrl(filters, 1)
-        //     });
-        // }
+        if (nothingSelected) {
+            items.push({
+                label: "Farm Machinery For Sale",
+                url: "#"
+            });
 
-        // --- Step 3: Build HTML ---
-        const html = items.map((it, idx) => {            
+            renderBreadcrumbs(items);
+            return;
+        }
+
+        // -------------------------------
+        // CASE: SINGLE SELECTIONS ONLY → BUILD DETAILED BREADCRUMB
+        // -------------------------------
+        if (typeCount === 1) {
+            items.push({
+                label: filters.type[0],
+                url: buildSEOUrl({ type: filters.type }, 1)
+            });
+        }
+
+        if (makeCount === 1) {
+            items.push({
+                label: filters.make[0],
+                url: buildSEOUrl({ make: filters.make }, 1)
+            });
+        }
+
+        if (modelCount === 1) {
+            items.push({
+                label: filters.model[0],
+                url: buildSEOUrl({ model: filters.model }, 1)
+            });
+        }
+
+        if (catCount === 1) {
+            items.push({
+                label: filters.categories[0],
+                url: buildSEOUrl({ categories: filters.categories }, 1)
+            });
+        }
+
+        renderBreadcrumbs(items);
+    }
+
+    /* RENDER FUNCTION */
+    function renderBreadcrumbs(items) {
+        const $crumb = $('.gfam-breadcrumb nav');
+
+        const html = items.map((it, idx) => {
             if (idx === items.length - 1) {
                 return `<span class="active">${it.label}</span>`;
             }
-            return `<a href="${it.url}" class="rsl-crumb-link" data-crumb-index="${idx}">${it.label}</a>`;
+            return `<a href="${it.url}" class="rsl-crumb-link">${it.label}</a>`;
         }).join('<span> > </span>');
 
-        // --- Step 4: Render ---
         $crumb.html(html);
     }
+
+    /* HOME ICON */
+    function homeIconSVG() {
+        return `<svg class="mb-1" width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.4865 22H13.5926C12.7593 22 12.0815 21.164 12.0815 20.1359V12.9631C12.0815 12.7504 11.9403 12.5761 11.7678 12.5761H7.22977C7.05735 12.5761 6.91606 12.7504 6.91606 12.9631V20.1359C6.91606 21.164 6.23834 22 5.40497 22H1.51109C0.677719 22 0 21.164 0 20.1359V10.4402C0 9.46529 0.344847 8.54357 0.948325 7.91433L7.76141 0.788774C8.7672 -0.262925 10.228 -0.262925 11.2338 0.788774L18.0517 7.91728C18.6552 8.54653 19 9.46824 19 10.4431V20.1359C19 21.164 18.3223 22 17.4889 22H17.4865ZM7.22738 11.099H11.7654C12.5988 11.099 13.2765 11.935 13.2765 12.9631V20.1359C13.2765 20.3486 13.4178 20.5229 13.5902 20.5229H17.4841C17.6565 20.5229 17.7978 20.3486 17.7978 20.1359V10.4431C17.7978 9.90251 17.6063 9.39143 17.271 9.04284L10.4531 1.91433C9.89514 1.33235 9.08571 1.33235 8.52773 1.91433L1.71465 9.03988C1.37938 9.38848 1.19019 9.89956 1.19019 10.4402V20.1359C1.19019 20.3486 1.33148 20.5229 1.50391 20.5229H5.39778C5.57021 20.5229 5.7115 20.3486 5.7115 201359V12.9631C5.7115 11.935 6.38921 11.099 7.22259 11.099H7.22738Z" fill="#313131"></path></svg>`;
+    }
+
+
 
     /**
      * Breadcrumb click handling
@@ -483,68 +464,110 @@ jQuery(document).ready(function($) {
      * Update H1 and document.title based on filters
      */
     function updateTitle(filters) {
-    filters = filters || {};
-    const siteTitle = rsl_ajax_obj.site_title || '';
+        filters = filters || {};
+        const siteTitle = rsl_ajax_obj.site_title || '';
+        const groups = {
+            type: Array.isArray(filters.type) ? filters.type : [],
+            make: Array.isArray(filters.make) ? filters.make : [],
+            model: Array.isArray(filters.model) ? filters.model : [],
+            categories: Array.isArray(filters.categories) ? filters.categories : [],
+        };
 
-    const groups = {
-        type: Array.isArray(filters.type) ? filters.type : [],
-        make: Array.isArray(filters.make) ? filters.make : [],
-        model: Array.isArray(filters.model) ? filters.model : [],
-        categories: Array.isArray(filters.categories) ? filters.categories : [],
-    };
+        let baseLabel = 'For Sale';
+        let titlePrefix = 'Farm Machinery'; // default title
+        let suffixParts = []; // for price and keyword
 
-    const baseLabel = 'For Sale';
-    let titlePrefix = 'Farm Machinery'; // default title
-    let suffixParts = []; // for price and keyword
+        // --- Check if any group has multiple selections ---
+        const hasMultipleSelections = Object.values(groups).some(arr => arr.length > 1);
 
-    // --- Check if any group has multiple selections ---
-    const hasMultipleSelections = Object.values(groups).some(arr => arr.length > 1);
+        // Collect single selections (if not multiple)
+        const parts = [];
 
-    // Collect single selections (if not multiple)
-    const parts = [];
+        if (!hasMultipleSelections) {
+            const orderedKeys = ['type', 'make', 'model', 'categories'];
+            orderedKeys.forEach(key => {
+                if (groups[key].length === 1) {
+                    parts.push(groups[key][0]);
+                }
+            });
+        }
 
-    if (!hasMultipleSelections) {
-        const orderedKeys = ['type', 'make', 'model', 'categories'];
-        orderedKeys.forEach(key => {
-            if (groups[key].length === 1) {
-                parts.push(groups[key][0]);
+        // --- Build prefix ---
+        if (hasMultipleSelections || parts.length === 0) {
+            titlePrefix = 'Farm Machinery';
+        } else {
+            titlePrefix = parts.join(' ');
+        }
+
+        // --- Add Price filter (after For Sale) ---
+        // if (filters.price_to) {
+        //     suffixParts.push('Range $' + filters.price_from +' - $' + filters.price_to);
+        // }
+
+        if (filters.price_from && filters.price_to) {
+            // Both exist → Range
+            suffixParts.push(`Range $${filters.price_from} - $${filters.price_to}`);
+        } 
+        else if (filters.price_to && !filters.price_from) {
+            // Only price_to exists → Under
+            suffixParts.push(`Under $${filters.price_to}`);
+        } 
+        else if (filters.price_from && !filters.price_to) {
+            // Only price_from exists → Above
+            suffixParts.push(`Above $${filters.price_from}`);
+        }
+
+        // --- Add Keyword filter (after For Sale) ---
+        // if (filters.keyword) {
+        //     suffixParts.push(filters.keyword);
+        // }
+
+        // --- Build final readable title ---
+        const fullTitle =
+            `${titlePrefix} ${baseLabel}` +
+            (suffixParts.length ? ' ' + suffixParts.join(' ') : '') +
+            ` — ${siteTitle}`;
+
+        let finalH1 = '';
+
+        // CASE 1 — Nothing selected → Farm Machinery For Sale
+        const nothingSelected =
+            groups.type.length === 0 &&
+            groups.make.length === 0 &&
+            groups.model.length === 0 &&
+            groups.categories.length === 0;
+
+        if (nothingSelected) {
+            finalH1 = `Farm Machinery ${baseLabel}`;
+        }
+
+        // CASE 2 — Type/make/model selected but NO category
+        else if (groups.categories.length === 0) {
+
+            // If multiple selected → use Farm Machinery only
+            if (hasMultipleSelections) {
+                finalH1 = `Farm Machinery ${baseLabel}`;
             }
-        });
+            else {
+                // Single selection like "Tractor"
+                finalH1 = `${titlePrefix} Farm Machinery ${baseLabel}`;
+            }
+        }
+
+        // CASE 3 — Category selected → your normal logic
+        else {
+            finalH1 = `${titlePrefix} ${baseLabel}`;
+        }
+
+        // Add price suffix if needed
+        if (suffixParts.length) {
+            finalH1 += ' ' + suffixParts.join(' ');
+        }
+
+        // Update DOM
+        $('h1').text(finalH1);
+        document.title = finalH1 + ` — ${siteTitle}`;
     }
-
-    // --- Build prefix ---
-    if (hasMultipleSelections || parts.length === 0) {
-        titlePrefix = 'Farm Machinery';
-    } else {
-        titlePrefix = parts.join(' ');
-    }
-
-    // --- Add Price filter (after For Sale) ---
-    if (filters.price_to) {
-        suffixParts.push('Under $' + filters.price_to);
-    }
-
-    // --- Add Keyword filter (after For Sale) ---
-    if (filters.keyword) {
-        suffixParts.push(filters.keyword);
-    }
-
-    // --- Build final readable title ---
-    const fullTitle =
-        `${titlePrefix} ${baseLabel}` +
-        (suffixParts.length ? ' ' + suffixParts.join(' ') : '') +
-        ` — ${siteTitle}`;
-
-    // --- Update DOM ---
-    $('h1').text(`${titlePrefix} ${baseLabel}` + (suffixParts.length ? ' ' + suffixParts.join(' ') : ''));
-    document.title = fullTitle;
-}
-
-
-
-
-
-
 
     /**
      * Apply filters to UI elements
@@ -565,7 +588,7 @@ jQuery(document).ready(function($) {
             filters.make.forEach(v => $('.make-listing[value="' + v + '"]').prop('checked', true));
         }
         if (Array.isArray(filters.model)) {
-            filters.model.forEach(v => $('.model-listing[value="' + v + '"]').prop('checked', true));
+            filters.model.forEach(v => $(".model-listing[value='" + v + "']").prop('checked', true));
         }
         if (Array.isArray(filters.type)) {
             filters.type.forEach(v => $('input[name="type[]"][value="' + v + '"]').prop('checked', true));
@@ -628,12 +651,12 @@ jQuery(document).ready(function($) {
                     $('.ajax-pagination').remove();
                     $('.load-more-btn').html(response.data.pagination);
                     reinitCarousel();
-                    reinitSeeMoreLess();
-                    setTimeout(function() {
-                        reinitSeeMoreLess();
-                    }, 2000);
                 }
                 $('#loader').fadeOut(500);                
+            },
+            complete: function(){
+                const results = rslComputeAvailable(filters);
+                rslUpdateUI(filters, results);
             },
             error: function(xhr, status, error) {
                 $('#loader').fadeOut(500);
@@ -712,7 +735,7 @@ jQuery(document).ready(function($) {
 
         $('.clear-btn').click();
 
-        let filters = get_selected_filters();        
+        let filters = get_selected_filters();       
 
         filters.price_from = '';
         filters.price_to = '';
@@ -773,7 +796,7 @@ jQuery(document).ready(function($) {
         
         if (e.originalEvent && e.originalEvent.isTrusted) {
             setTimeout(() => {
-                let filters = get_selected_filters();
+                let filters = get_selected_filters();                
                 show_selected_val_on_sidebar(filters);
                 applyFiltersAndPushState(filters, 1);
             }, 300); // 300ms delay — adjust as needed
@@ -895,7 +918,7 @@ jQuery(document).ready(function($) {
         if (e.which === 13) {
             e.preventDefault();
             clearTimeout(rslSearchTimeout);
-            let filters = get_selected_filters();
+            let filters = get_selected_filters();            
             show_selected_val_on_sidebar(filters);
             applyFiltersAndPushState(filters, 1);
         }
@@ -1036,7 +1059,7 @@ jQuery(document).ready(function($) {
 
         tag.remove();
 
-        let filters = get_selected_filters();
+        let filters = get_selected_filters();        
         applyFiltersAndPushState(filters, 1);
     });
 
@@ -1060,10 +1083,325 @@ jQuery(document).ready(function($) {
             applyFiltersToUI(initial.filters);
             applyFiltersAndPushState(initial.filters, initial.page, true);
         } else {
-            const filters = get_selected_filters();
+            const filters = get_selected_filters();            
             updateBreadcrumbs(filters);
             updateTitle(filters);
             rsl_fetch_listings({ page: 1, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
         }
-    })();
+    })();   
+    
+    function listingMatchesKeyword(listing, keyword) {
+        if (!keyword) return true;
+
+        const k = keyword.toLowerCase().trim();
+
+        // Build searchable title
+        const title = [
+            listing.year,
+            listing.make,
+            listing.model,
+            listing.type,
+            listing.subtype
+        ].join(' ').toLowerCase();
+
+        return title.includes(k);
+    }
+
+    /********************************************
+     * 2. FIND AVAILABLE OPTIONS FROM FILTERED LIST
+     ********************************************/
+    function rslComputeAvailable(filters) {               
+        const available = {
+            categories: new Set(),
+            make: new Set(),
+            model: new Set(),
+            type: new Set(),
+            year: new Set(),
+            price: new Set(),
+            hours: new Set()
+        };
+
+        const counts = {
+            categories: {},
+            make: {},
+            model: {},
+            type: {},
+            year: {},
+            price: {},
+            hours: {}
+        };
+
+        const primaryGroups = ["categories", "make", "model", "type"];
+        const numericGroups = ["year", "price", "hours"];
+        const groups = [...primaryGroups, ...numericGroups];
+
+
+        // normalize selected filters for robust comparisons
+        const normFilters = {};
+        groups.forEach(g => {
+            const arr = filters[g] || [];
+            normFilters[g] = arr.map(v => {
+                if (v === null || v === undefined) return v;
+                return (typeof v === "string") ? v.trim() : v;
+            });
+        });
+
+        const primaryCount =
+        (filters.categories?.length ? 1 : 0) +
+        (filters.make?.length ? 1 : 0) +
+        (filters.model?.length ? 1 : 0) +
+        (filters.type?.length ? 1 : 0);
+
+        const onlyOnePrimary = primaryCount === 1;
+        const multiPrimary = primaryCount >= 2;
+
+        let singlePrimaryGroup = null;
+        if (onlyOnePrimary) {
+        if (filters.categories?.length) singlePrimaryGroup = "categories";
+        else if (filters.make?.length) singlePrimaryGroup = "make";
+        else if (filters.model?.length) singlePrimaryGroup = "model";
+        else if (filters.type?.length) singlePrimaryGroup = "type";
+        }
+
+
+        // helper to get normalized value(s) from a listing for a group
+        function getListingValues(listing, group) {
+            switch (group) {
+                case "categories":
+                    return [listing.type, listing.subtype].filter(Boolean).map(v => typeof v === "string" ? v.trim() : v);
+                case "type":
+                    return listing.listing_type ? [String(listing.listing_type).trim()] : [];
+                case "make":
+                    return listing.make ? [String(listing.make).trim()] : [];
+                case "model":
+                    return listing.model ? [String(listing.model).trim()] : [];
+                case "year":
+                    return listing.year != null ? [Number(listing.year)] : [];
+                case "price":
+                    return listing.price != null ? [Number(listing.price)] : [];
+                case "hours":
+                    return listing.hours != null ? [Number(listing.hours)] : [];
+                default:
+                    return [];
+            }
+        }
+
+        // check if listing satisfies ALL selected groups except skipGroup
+        function matchesOtherGroups(listing, skipGroup) {
+            return groups.every(g => {
+                if (g === skipGroup) return true; // ignore same group
+                const selected = normFilters[g];
+                if (!selected || selected.length === 0) return true;
+
+                const values = getListingValues(listing, g);
+                if (!values || values.length === 0) return false; // listing has no value for this group => fail
+
+                // for numeric groups selected array may contain numbers or strings; do loose compare after coercion
+                return values.some(val => selected.some(sel => {
+                    if (typeof val === "number" || typeof sel === "number") return Number(val) === Number(sel);
+                    return String(val) === String(sel);
+                }));
+            });
+        }       
+
+        function addAvailableFromListing(listing, group) {
+            const vals = getListingValues(listing, group);
+
+            vals.forEach(v => {
+                if (v === null || v === undefined) return;
+
+                // availability
+                available[group].add(v);
+
+                // counts
+                if (!counts[group][v]) counts[group][v] = 0;
+                counts[group][v] += 1;
+            });
+        }
+
+        // MAIN LOOP        
+        groups.forEach(group => {
+            RSL_ALL_LISTINGS.forEach(listing => {
+
+                // KEYWORD FILTER FIRST
+                if (filters.keyword && !listingMatchesKeyword(listing, filters.keyword)) {
+                    return; // skip this listing completely
+                }
+
+                // CASE 1 → No primary selected → allow everything
+                if (primaryCount === 0) {
+                    addAvailableFromListing(listing, group);
+                    return;
+                }
+
+                // CASE 2 → Only 1 primary selected
+                if (onlyOnePrimary) {
+
+                    // For the selected group → allow everything
+                    if (group === singlePrimaryGroup) {
+                        addAvailableFromListing(listing, group);
+                        return;
+                    }
+
+                    // For other groups → allow only matches of selected primary
+                    if (matchesOtherGroups(listing, group)) {
+                        addAvailableFromListing(listing, group);
+                    }
+                    return;
+                }
+
+                // CASE 3 → Multiple primary groups selected (STRICT MODE)
+                if (multiPrimary) {
+
+                    if (matchesOtherGroups(listing, group)) {
+                        addAvailableFromListing(listing, group);
+                    }
+                    return;
+                }
+            });
+        });
+        
+        return { available, counts };
+    }    
+
+    function rslUpdateUI(filters, result) {
+        const available = result.available;
+        const counts = result.counts || {};
+
+        // PRIMARY groups count: category, make, model, type
+        const primaryCount =
+            (filters.categories?.length ? 1 : 0) +
+            (filters.make?.length ? 1 : 0) +
+            (filters.model?.length ? 1 : 0) +
+            (filters.type?.length ? 1 : 0);
+
+        // detect which single primary group is selected (if exactly one)
+        let singlePrimaryGroup = null;
+        if (primaryCount === 1) {
+            if (filters.categories?.length) singlePrimaryGroup = 'categories';
+            else if (filters.make?.length) singlePrimaryGroup = 'make';
+            else if (filters.model?.length) singlePrimaryGroup = 'model';
+            else if (filters.type?.length) singlePrimaryGroup = 'type';
+        }
+
+        /* -----------------------
+        CATEGORY
+        ------------------------ */
+        $('input[name="category[]"]').each(function () {
+            const val = $(this).val().trim();
+
+            // update count
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.categories?.[val] || 0})`);
+
+            // If exactly one primary is selected: only keep the selected primary group's own inputs enabled.
+            if (primaryCount === 1) {
+                // if categories is the single primary -> never disable this group,
+                // otherwise use availability to decide
+                if (singlePrimaryGroup === 'categories') {
+                    $(this).prop('disabled', false);
+                } else {
+                    $(this).prop('disabled', !available.categories.has(val));
+                }
+            } else {
+                // 0 or multiple primaries -> normal availability-based disabling
+                $(this).prop('disabled', !available.categories.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
+        });
+
+        /* -----------------------
+        MAKE
+        ------------------------ */
+        $('.make-listing').each(function () {
+            const val = $(this).val().trim();
+
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.make?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                if (singlePrimaryGroup === 'make') $(this).prop('disabled', false);
+                else $(this).prop('disabled', !available.make.has(val));
+            } else {
+                $(this).prop('disabled', !available.make.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
+        });
+
+        /* -----------------------
+        MODEL
+        ------------------------ */
+        $('.model-listing').each(function () {
+            const val = $(this).val().trim();
+
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.model?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                if (singlePrimaryGroup === 'model') $(this).prop('disabled', false);
+                else $(this).prop('disabled', !available.model.has(val));
+            } else {
+                $(this).prop('disabled', !available.model.has(val));
+            }
+            $(this).closest('.accordion-item').toggleClass('disabled', $(this).prop('disabled'));
+        });
+
+        /* -----------------------
+        TYPE  (follows same rule as other primary groups)
+        ------------------------ */
+        $('input[name="type[]"]').each(function () {
+            const val = $(this).val().trim();
+
+            // update count
+            $(this).closest('.form-check').find('.rsl-count')
+                .text(`(${counts.type?.[val] || 0})`);
+
+            if (primaryCount === 1) {
+                // If TYPE is the single selected primary → keep TYPE enabled
+                if (singlePrimaryGroup === 'type') {
+                    $(this).prop("disabled", false);
+                } 
+                // If CATEGORY or MAKE or MODEL is the selected primary → TYPE must disable based on availability
+                else {
+                    $(this).prop("disabled", !available.type.has(val));
+                }
+            } 
+            else {
+                // When 0 or >1 primary: TYPE behaves like all other groups
+                $(this).prop("disabled", !available.type.has(val));
+            }
+
+            $(this).closest('.accordion-item')
+                .toggleClass('disabled', $(this).prop('disabled'));
+        });
+
+
+        /* -----------------------
+        YEAR
+        ------------------------ */
+        $('select.rsl-year-from option, select.rsl-year-to option').each(function () {
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.year.has(v));
+        });
+
+        /* -----------------------
+        PRICE
+        ------------------------ */
+        $('select.rsl-price-from option, select.rsl-price-to option').each(function () {
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.price.has(v));
+        });
+
+        /* -----------------------
+        HOURS
+        ------------------------ */
+        $('select.rsl-hours-from option, select.rsl-hours-to option').each(function () {
+            const v = Number($(this).val());
+            if (!v) return;
+            $(this).prop('disabled', !available.hours.has(v));
+        });
+    }
+
 });

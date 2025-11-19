@@ -47,6 +47,13 @@ body {
   color: var(--darkgrey_badge_bg_color);
 }
 
+body.rsl-stock-locator {
+    overflow: visible !important;
+}
+body.rsl-stock-locator .sticky-section {   
+    top: 180px;
+}
+
 /* Breadcrumb */
 .gfam-breadcrumb {
   background-color: var(--grey_box_bg_color );
@@ -471,6 +478,10 @@ textarea:focus {
   flex-direction: column;
   flex-grow: 1;
     min-height: 298px;
+}
+
+.gfam-product-info a {
+  text-decoration: none;
 }
 
 .gfam-product-year {
@@ -2286,6 +2297,11 @@ input.timepicki-input{
 
 .gfam-search-input:focus {
   border-color: var(--yellow_btn_bg_color);
+}
+
+.gfam-search-input::-webkit-search-cancel-button {
+    cursor: pointer;
+    filter: brightness(0);
 }
 
 .gfam-search-btn {
