@@ -45,16 +45,16 @@ $detail_url = site_url("/{$detail_page_slug}/{$final_slug}/");
         <div class="gfam-product-image">
             <div class="owl-carousel gfam-carousel">
                 <?php if (!empty($product_images)) :
-                    foreach ($product_images as $image) : 
+                    // foreach ($product_images as $image) : 
                         $static_placeholder_url = RSL_PLUGIN_URL . 'assets/images/sample.png';
-                        $img_url = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $image : $static_placeholder_url;
+                        $img_url = (isset($_POST) && $_POST['action'] == 'rsl_get_stock_list') ? $product_images[0] : $static_placeholder_url;
                     ?>
                         <div class="item">
                             <a href="<?php echo $detail_url; ?>">
                                 <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($product_title); ?>" />
                             </a>
                         </div>
-                    <?php endforeach;
+                    <?php //endforeach;
                 endif; ?>
             </div>
         </div>

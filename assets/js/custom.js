@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
-  reinitCarousel();    
+  // reinitCarousel();    
 
   const $original = $("#sortDropdownContainer");
   const $modalTarget = $("#sortDropdownModalContainer");

@@ -478,6 +478,27 @@ function is_stock_locator_page() {
     return str_starts_with( $current_url_clean, $stock_locator_url );
 }
 
+/**
+ * Check if the current page is the VDP
+ *
+ * @return bool
+ */
+function is_vdp_page() {
+    // Get selected VDP ID from ACF Options
+    $vdp_page = get_field('select_stock_locator_detail_page', 'option');
+
+    // Bail early if not set
+    if ( ! $vdp_page ) {
+        return false;
+    }
+
+    if(get_the_ID() == $vdp_page->ID){
+        return true;
+    }else{
+        return false;
+    }    
+}
+
 function gfam_add_listing_detail_rewrite_rule() {
     $detail_page = get_field('select_stock_locator_detail_page', 'option');
 

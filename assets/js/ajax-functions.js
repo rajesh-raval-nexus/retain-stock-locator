@@ -650,7 +650,7 @@ jQuery(document).ready(function($) {
                     $('.rsl-stock-locator .gfam-product-grid').html(response.data.html);
                     $('.ajax-pagination').remove();
                     $('.load-more-btn').html(response.data.pagination);
-                    reinitCarousel();
+                    // reinitCarousel();
                 }
                 $('#loader').fadeOut(500);                
             },

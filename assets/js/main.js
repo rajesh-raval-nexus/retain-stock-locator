@@ -99,36 +99,7 @@ jQuery(document).ready(function ($) {
   });
 
   // car list images slider
-  $(".car-image").owlCarousel({
-    loop: true,
-    margin: 10,
-    dots: false,
-    navText: [
-      "<i class='bi bi-chevron-left'></i>",
-      "<i class='bi bi-chevron-right'></i>",
-    ],
-    infinite: true,
-    responsiveClass: true,
-    autoplay: true,
-    autoplayTimeout: 3000,
-    autoplayHoverPause: true,
 
-    responsive: {
-      0: {
-        items: 1,
-        nav: true,
-      },
-      600: {
-        items: 3,
-        nav: false,
-      },
-      1000: {
-        items: 1,
-        nav: true,
-        loop: false,
-      },
-    },
-  });
   var changeSlide = 2; // mobile -1, desktop + 1
   // Resize and refresh page. slider-two slideBy bug remove
   var slide = changeSlide;
@@ -142,63 +113,8 @@ jQuery(document).ready(function ($) {
     var slide = changeSlide;
   }
 
-    $(".one").owlCarousel({
-      nav: true,
-      items: 1,
-      dots: true,
-      autoplay: true,
-        autoplayTimeout: 3000,
-        autoplayHoverPause: true,
-      navText: [
-        "<i class='bi bi-arrow-left-short'></i>",
-        "<i class='bi bi-arrow-right-short'></i>",
-      ],
-    });
-    $(".two").owlCarousel({
-      nav: true,
-      margin: 15,
-      autoplay: true,
-    autoplayTimeout: 3000,
-    autoplayHoverPause: true,
-    dots: false,
-      navText: [
-        "<i class='bi bi-arrow-left-short'></i>",
-        "<i class='bi bi-arrow-right-short'></i>",
-      ],
-      mouseDrag: false,
-      touchDrag: false,
-      responsive: {
-        0: {
-          items: changeSlide + 1,
-          slideBy: changeSlide + 1,
-        },
-        600: {
-          items: changeSlide,
-          slideBy: changeSlide,
-        },
-        1000: {
-          items: changeSlide + 1,
-          slideBy: changeSlide + 1,
-        },
-      },
-    });
-    var owl = $(".one");
-    owl.owlCarousel();
-    owl.on("translated.owl.carousel", function (event) {
-      $(".right").removeClass("nonr");
-      $(".left").removeClass("nonl");
-      if ($(".one .owl-next").is(".disabled")) {
-        $(".slider-main .right").addClass("nonr");
-      }
-      if ($(".one .owl-prev").is(".disabled")) {
-        $(".slider-main .left").addClass("nonl");
-      }
-      $(".slider-two .item").removeClass("active");
-      var c = $(".slider-main .owl-item.active").index();
-      $(".slider-two .item").eq(c).addClass("active");
-      var d = Math.ceil((c + 1) / slide) - 1;
-      $(".slider-two .owl-dots .owl-dot").eq(d).trigger("click");
-    });
+
+    
     $(".right").click(function () {
       $(".slider-main .owl-next").trigger("click");
     });
@@ -211,18 +127,7 @@ jQuery(document).ready(function ($) {
       $(".slider-two .item").removeClass("active");
       $(this).addClass("active");
     });
-    var owl2 = $(".two");
-    owl2.owlCarousel();
-    owl2.on("translated.owl.carousel", function (event) {
-      $(".right-t").removeClass("nonr-t");
-      $(".left-t").removeClass("nonl-t");
-      if ($(".two .owl-next").is(".disabled")) {
-        $(".slider-two .right-t").addClass("nonr-t");
-      }
-      if ($(".two .owl-prev").is(".disabled")) {
-        $(".slider-two .left-t").addClass("nonl-t");
-      }
-    });
+    
     $(".right-t").click(function () {
       $(".slider-two .owl-next").trigger("click");
     });

@@ -89,7 +89,7 @@ function rsl_assets_enqueue_frontend() {
     }
 
     // Owl Carousel CSS
-    if ( ! rsl_assets_is_style_loaded_by_src( 'owl.carousel.min.css' ) ) {
+    if ( ! rsl_assets_is_style_loaded_by_src( 'owl.carousel.min.css' ) && is_vdp_page() ) {
         wp_enqueue_style(
             'rsl-owl-carousel',
             RSL_PLUGIN_URL . 'assets/vendor/owlcarousel/owl.carousel.min.css',
@@ -165,7 +165,7 @@ function rsl_assets_enqueue_frontend() {
     }
 
     // Owl Carousel
-    if ( ! rsl_assets_is_script_loaded_by_src( 'owl.carousel' ) ) {
+    if ( ! rsl_assets_is_script_loaded_by_src( 'owl.carousel' ) && is_vdp_page()) {
         wp_enqueue_script(
             'rsl-owl-carousel',
             RSL_PLUGIN_URL . 'assets/vendor/owlcarousel/owl.carousel.js',
@@ -296,7 +296,7 @@ function rsl_assets_enqueue_frontend() {
     wp_enqueue_script(
         'rsl-custom',
         RSL_PLUGIN_URL . 'assets/js/custom.js',
-        [ 'jquery', 'rsl-main', 'rsl-owl-carousel' ],
+        [ 'jquery', 'rsl-main' ],
         filemtime( RSL_PLUGIN_DIR . 'assets/js/custom.js' ),
         true
     );    
