@@ -64,7 +64,7 @@
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
-                      <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
+                      <img src="<?php echo esc_url( $video_walkthrough_icon ); ?>" alt="Vehicle Icon" style="max-width: unset;">
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4><?php echo $easy_steps_to_own_your_vehicle['video_walkaround_title'] ?? ''; ?></h4>
@@ -76,7 +76,7 @@
 
                   <div class="gfam-detail-step-item">
                     <div class="gfam-detail-step-icon me-4">
-                      <img src="<?php echo esc_url( $vehicle_seach ); ?>" alt="Vehicle Icon" style="max-width: unset;">
+                      <img src="<?php echo esc_url( $test_drive_icon ); ?>" alt="Vehicle Icon" style="max-width: unset;">
                     </div>
                     <div class="gfam-detail-step-content">
                       <h4><?php echo $easy_steps_to_own_your_vehicle['test_drive_title'] ?? ''; ?></h4>

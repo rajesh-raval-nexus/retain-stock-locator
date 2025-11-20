@@ -594,6 +594,15 @@ textarea:focus {
   overflow: hidden;
 }
 
+.gfam-product-image .item {
+    height: 100%;
+}
+.gfam-product-image .item img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
 .gfam-carousel {
   height: 100%;
 }
@@ -2237,7 +2246,17 @@ color: #636363;
   background: url(../images/down-arrow.png) no-repeat center;
 }
 
-
+.gfam-filter-content-item .accordion-item.category-link.disabled h2.accordion-header .form-check label.form-check-label {
+    opacity: 0.3 !important;
+}
+.litepicker .container__months .month-item-header > div {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.litepicker .container__months .month-item-header > div select.month-item-year {
+    width: 120px;
+}
 
 input.timepicki-input{
   border: 0;

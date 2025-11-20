@@ -635,110 +635,196 @@ function gfam_force_dynamic_meta_for_stock_detail() {
     }
 }
 
+function gfam_generate_slug_preserve_case($text) {
+    $text = str_replace(['/', ' '], '-', $text);
+    $text = trim($text, '-');
+    return strtolower($text);
+}
 
+// ------------------------------------------------------
+//  REGISTER REWRITE RULES (NO FLUSH INSIDE INIT!)
+// ------------------------------------------------------
+add_action('wp_loaded', function() {
 
-/* site map link generate in the Yoast SEO */
+    // -------- VDP DETAIL SITEMAP --------
+    $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
+    if ($vdp_detail_page && !empty($vdp_detail_page->ID)) {
 
-// Register a custom VDP sitemap with Yoast
-add_action('init', function() {
+        $slug = get_post_field('post_name', $vdp_detail_page->ID);
+
+        add_rewrite_rule(
+            "{$slug}\.xml$",
+            "index.php?vdp_sitemap=1",
+            "top"
+        );
+    }
+
+    // -------- PRICE FILTER SITEMAP --------
     $vdp_page_id = get_field('select_stock_locator_page', 'option');
-
     if ($vdp_page_id) {
+
         $vdp_page = get_post($vdp_page_id);
         if ($vdp_page && !empty($vdp_page->post_name)) {
+
             $slug = $vdp_page->post_name;
 
-            // Create dynamic rewrite rule like "stock-locator.xml"
-            add_rewrite_rule($slug . '\.xml$', 'index.php?vdp_sitemap=1', 'top');
+            add_rewrite_rule(
+                "{$slug}-prices\.xml$",
+                "index.php?machinery_price_sitemap=1",
+                "top"
+            );
         }
     }
 });
 
+
+// ------------------------------------------------------
+//  REGISTER QUERY VARS
+// ------------------------------------------------------
 add_filter('query_vars', function($vars) {
     $vars[] = 'vdp_sitemap';
+    $vars[] = 'machinery_price_sitemap';
     return $vars;
 });
 
+
+// ------------------------------------------------------
+//  TEMPLATE REDIRECT → OUTPUT SITEMAPS
+// ------------------------------------------------------
 add_action('template_redirect', function() {
+
     if (get_query_var('vdp_sitemap')) {
         gfam_output_vdp_sitemap();
         exit;
     }
+
+    if (get_query_var('machinery_price_sitemap')) {
+        gfam_output_machinery_price_sitemap();
+        exit;
+    }
 });
 
-// Add dynamic sitemap link into Yoast main sitemap index
-add_filter('wpseo_sitemap_index', function($sitemap_index) {
+
+// ------------------------------------------------------
+//  ADD BOTH SITEMAPS TO YOAST INDEX
+// ------------------------------------------------------
+add_filter('wpseo_sitemap_index', function($index) {
+
+    // ---------- VDP Sitemap ----------
+    $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
+    if ($vdp_detail_page) {
+
+        $slug = get_post_field('post_name', $vdp_detail_page->ID);
+        $loc  = home_url("/{$slug}.xml");
+
+        $index .= "<sitemap>
+            <loc>{$loc}</loc>
+            <lastmod>" . date('c') . "</lastmod>
+        </sitemap>";
+    }
+
+    // ---------- Price Sitemap ----------
     $vdp_page_id = get_field('select_stock_locator_page', 'option');
     if ($vdp_page_id) {
+
         $vdp_page = get_post($vdp_page_id);
-        if ($vdp_page && !empty($vdp_page->post_name)) {
+        if ($vdp_page) {
+
             $slug = $vdp_page->post_name;
-            $home_url = home_url();
-            $sitemap_index .= '<sitemap>';
-            $sitemap_index .= '<loc>' . esc_url($home_url . '/' . $slug . '.xml') . '</loc>';
-            $sitemap_index .= '<lastmod>' . esc_html(date('c')) . '</lastmod>';
-            $sitemap_index .= '</sitemap>';
+            $loc  = home_url("/{$slug}-prices.xml");
+
+            $index .= "<sitemap>
+                <loc>{$loc}</loc>
+                <lastmod>" . date('c') . "</lastmod>
+            </sitemap>";
         }
     }
-    return $sitemap_index;
+
+    return $index;
 });
 
 
+// ===================================================================
+//  VDP LISTING SITEMAP OUTPUT
+// ===================================================================
 function gfam_output_vdp_sitemap() {
     global $xmlPath;
 
-    header('Content-Type: application/xml; charset=UTF-8');
+    header("Content-Type: application/xml; charset=UTF-8");
 
-    // Get the VDP detail page from ACF options
     $vdp_detail_page = get_field('select_stock_locator_detail_page', 'option');
-    
-    if (empty($vdp_detail_page) || !is_object($vdp_detail_page)) {
+
+    if (!$vdp_detail_page) {
         echo '<?xml version="1.0" encoding="UTF-8"?>';
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
-        exit;
+        return;
     }
 
     $vdp_page_url = get_permalink($vdp_detail_page->ID);
-    $allListingsData = rsl_parse_listings($xmlPath);
-    $today = date('c');
+    $listings     = rsl_parse_listings($xmlPath);
+    $today        = date('c');
 
- 
-
-    // Output XML header with Yoast XSL
     echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     echo '<?xml-stylesheet type="text/xsl" href="' . esc_url(home_url('/main-sitemap.xsl')) . '"?>' . "\n";
     echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
-    if (!empty($allListingsData)) {
-        foreach ($allListingsData as $listing) {
-            if (!empty($listing['stock_number'])) {
+    foreach ($listings as $listing) {
 
-                   $stock_number = !empty($listing['stock_number'])
-                    ? strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']))
-                    : 'N/A';
-                    
-                    $slug_title = strtolower(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']));
-                    $slug_title = sanitize_title($slug_title);
-                    if (!empty($slug_title)) {
-                        $final_slug = "{$slug_title}-{$stock_number}";
-                    } else {
-                        $final_slug = "{$stock_number}";
-                    }
+        if (empty($listing['stock_number'])) continue;
 
-                $url = trailingslashit($vdp_page_url) .''. $final_slug . '/';
-                echo "  <url>\n";
-                echo '    <loc>' . esc_url($url) . "</loc>\n";
-                echo '    <lastmod>' . esc_html($today) . "</lastmod>\n";
-                echo "  </url>\n";
-            }
-        }
+        $stock_number = strtolower(str_replace(['-', ' ', '_'], '', $listing['stock_number']));
+        $slug_title   = sanitize_title(trim($listing['year'] . '-' . $listing['make'] . '-' . $listing['model']));
+
+        $final_slug = $slug_title ? "{$slug_title}-{$stock_number}" : $stock_number;
+
+        $url = trailingslashit($vdp_page_url) . $final_slug . "/";
+
+        echo "<url>
+            <loc>{$url}</loc>
+            <lastmod>{$today}</lastmod>
+        </url>";
     }
 
     echo '</urlset>';
 }
 
-function gfam_generate_slug_preserve_case($text) {
-    $text = str_replace(['/', ' '], '-', $text);
-    $text = trim($text, '-');
-    return strtolower($text);
+
+// ===================================================================
+//  MACHINERY PRICE FILTER SITEMAP OUTPUT
+// ===================================================================
+function gfam_output_machinery_price_sitemap() {
+
+    header("Content-Type: application/xml; charset=UTF-8");
+
+    echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    echo '<?xml-stylesheet type="text/xsl" href="' . esc_url(home_url('/main-sitemap.xsl')) . '"?>' . "\n";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+    $page_id = get_field('select_stock_locator_page', 'option');
+    if (!$page_id) { echo '</urlset>'; return; }
+
+    $base_url = trailingslashit(get_permalink($page_id));
+
+    $group = get_field('machinery_price_section', 'option');
+    $rows  = $group['machinery_prices'] ?? [];
+
+    $today = date('c');
+
+    foreach ($rows as $row) {
+
+        if (empty($row['above_under_select']) || empty($row['price'])) continue;
+
+        $type       = $row['above_under_select'];
+        $price      = $row['price'];
+        $final_slug = sanitize_title("{$type}-{$price}");
+
+        $url = "{$base_url}{$final_slug}/";
+
+        echo "<url>
+            <loc>{$url}</loc>
+            <lastmod>{$today}</lastmod>
+        </url>";
+    }
+
+    echo '</urlset>';
 }

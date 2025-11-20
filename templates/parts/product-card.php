@@ -43,7 +43,7 @@ $detail_url = site_url("/{$detail_page_slug}/{$final_slug}/");
 <div class="col-lg-4 col-md-6 my-3">
     <div class="gfam-product-card">
         <div class="gfam-product-image">
-            <div class="owl-carousel gfam-carousel">
+            <div class="gfam-carousel">
                 <?php if (!empty($product_images)) :
                     // foreach ($product_images as $image) : 
                         $static_placeholder_url = RSL_PLUGIN_URL . 'assets/images/sample.png';
@@ -75,7 +75,10 @@ $detail_url = site_url("/{$detail_page_slug}/{$final_slug}/");
             <div class="gfam-product-details">
                 <div class="gfam-odometer">
                     <div class="gfam-odometer-icon">
-                        <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
+                        <?php 
+                            $odometer_icon = get_field('odometer_icon', 'option') ?: RSL_PLUGIN_URL . 'assets/images/odomter-icon.svg';
+                        ?>
+                        <img src="<?php echo $odometer_icon; ?>" alt="Odometer">
                     </div>                    
                     <div class="gfam-odometer-info">
                         <span class="gfam-odometer-label">Odometer</span>
