@@ -400,10 +400,27 @@ jQuery(document).ready(function($) {
         }
 
         if (modelCount === 1) {
+
+            // Fetch selected model value
+            const model = filters.model[0];
+
+            // Look for HTML checkbox having this model value
+            const modelInput = document.querySelector(`input.rsl-filter-sub[value="${model.replace(/"/g, '\\"')}"]`);
+
+            // Get parent make name via data-parent
+            const makeOfModel = modelInput ? modelInput.dataset.parent : null;
+
+            // Build final label
+            const label = makeOfModel ? `${makeOfModel} ${model}` : model;
+
             items.push({
-                label: filters.model[0],
+                label: label,
                 url: buildSEOUrl({ model: filters.model }, 1)
             });
+            // items.push({
+            //     label: filters.model[0],
+            //     url: buildSEOUrl({ model: filters.model }, 1)
+            // });
         }
 
         if (catCount === 1) {
@@ -474,13 +491,10 @@ jQuery(document).ready(function($) {
         };
 
         let baseLabel = 'For Sale';
-        let titlePrefix = 'Farm Machinery'; // default title
-        let suffixParts = []; // for price and keyword
+        let titlePrefix = 'Farm Machinery';
+        let suffixParts = [];
 
-        // --- Check if any group has multiple selections ---
         const hasMultipleSelections = Object.values(groups).some(arr => arr.length > 1);
-
-        // Collect single selections (if not multiple)
         const parts = [];
 
         if (!hasMultipleSelections) {
@@ -492,37 +506,39 @@ jQuery(document).ready(function($) {
             });
         }
 
-        // --- Build prefix ---
-        if (hasMultipleSelections || parts.length === 0) {
-            titlePrefix = 'Farm Machinery';
-        } else {
+        // NEW LOGIC: If only model is selected → get make name via data-parent
+        if (groups.model.length === 1 && groups.make.length === 0) {
+
+            const model = groups.model[0];
+
+            const modelInput = document.querySelector(
+                `input.rsl-filter-sub[value="${model.replace(/"/g, '\\"')}"]`
+            );
+
+            const makeOfModel = modelInput ? modelInput.dataset.parent : null;
+
+            // Build "Bad Boy MAVERICK 54" style output
+            if (makeOfModel) {
+                parts.length = 0;                     // clear previous auto-order
+                parts.push(`${makeOfModel} ${model}`); // add combined make+model
+            }
+        }
+        // END OF INSERT
+
+        // Build main title prefix
+        if (!hasMultipleSelections && parts.length > 0) {
             titlePrefix = parts.join(' ');
         }
 
-        // --- Add Price filter (after For Sale) ---
-        // if (filters.price_to) {
-        //     suffixParts.push('Range $' + filters.price_from +' - $' + filters.price_to);
-        // }
-
+        // PRICE Range Handling
         if (filters.price_from && filters.price_to) {
-            // Both exist → Range
             suffixParts.push(`Between $${filters.price_from} - $${filters.price_to}`);
-        } 
-        else if (filters.price_to && !filters.price_from) {
-            // Only price_to exists → Under
+        } else if (filters.price_to) {
             suffixParts.push(`Under $${filters.price_to}`);
-        } 
-        else if (filters.price_from && !filters.price_to) {
-            // Only price_from exists → Above
+        } else if (filters.price_from) {
             suffixParts.push(`Above $${filters.price_from}`);
         }
 
-        // --- Add Keyword filter (after For Sale) ---
-        // if (filters.keyword) {
-        //     suffixParts.push(filters.keyword);
-        // }
-
-        // --- Build final readable title ---
         const fullTitle =
             `${titlePrefix} ${baseLabel}` +
             (suffixParts.length ? ' ' + suffixParts.join(' ') : '') +
@@ -530,7 +546,6 @@ jQuery(document).ready(function($) {
 
         let finalH1 = '';
 
-        // CASE 1 — Nothing selected → Farm Machinery For Sale
         const nothingSelected =
             groups.type.length === 0 &&
             groups.make.length === 0 &&
@@ -539,32 +554,18 @@ jQuery(document).ready(function($) {
 
         if (nothingSelected) {
             finalH1 = `Farm Machinery ${baseLabel}`;
-        }
-
-        // CASE 2 — Type/make/model selected but NO category
-        else if (groups.categories.length === 0) {
-
-            // If multiple selected → use Farm Machinery only
+        } else if (groups.categories.length === 0) {
             if (hasMultipleSelections) {
                 finalH1 = `Farm Machinery ${baseLabel}`;
-            }
-            else {
-                // Single selection like "Tractor"
+            } else {
                 finalH1 = `${titlePrefix} Farm Machinery ${baseLabel}`;
             }
-        }
-
-        // CASE 3 — Category selected → your normal logic
-        else {
+        } else {
             finalH1 = `${titlePrefix} ${baseLabel}`;
         }
 
-        // Add price suffix if needed
-        if (suffixParts.length) {
-            finalH1 += ' ' + suffixParts.join(' ');
-        }
+        if (suffixParts.length) finalH1 += ' ' + suffixParts.join(' ');
 
-        // Update DOM
         $('h1').text(finalH1);
         document.title = finalH1 + ` — ${siteTitle}`;
     }
