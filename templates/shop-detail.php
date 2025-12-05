@@ -297,7 +297,11 @@ if ($stock_number) {
                 </div>
               <?php } ?>
 
-              <?php include RSL_PLUGIN_DIR . 'templates/parts/sidebar-mobile.php'; ?>
+              <?php
+              if ( wp_is_mobile() ) {  
+                include RSL_PLUGIN_DIR . 'templates/parts/sidebar-mobile.php';
+              }
+              ?>
 
               <!-- Vehicle Details Section -->
               <div id="vehicleDetails" class="row mt-lg-5 mt-4">
@@ -551,7 +555,8 @@ if ($stock_number) {
                 </div>
               </div>
             </div>
-
+          
+          <?php  if ( ! wp_is_mobile() ) { ?>
             <!-- Right Side - Price and Info -->
             <div class="d-none d-md-block col-xl-4 sticky-section sticky-section-for-desktop">
               <div class="gfam-detail-sidebar">
@@ -643,6 +648,7 @@ if ($stock_number) {
               </div>
             </div>
             <!--Video walkthrogh Modal END -->
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -1353,28 +1359,4 @@ if ($stock_number) {
 
   AddReadMore();
 });
-
 </script>
-
-<style>
-/* .gfam-loader {
-  color: #333;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.gfam-loader .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #ccc;
-  border-top-color: #92191C;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-} */
-</style>
