@@ -270,6 +270,65 @@ function rsl_assets_enqueue_frontend() {
         // Fallback URL in case page isn't selected
         $current_page_url = $stock_locator_page_id ? get_the_permalink($stock_locator_page_id) : '';
 
+
+       $rowsCat_bread = get_field('category_breadcrumbs_and_title_labels', 'option');
+       $rowsMake_bread = get_field('brand_breadcrumbs_and_title_labels', 'option');
+       $rowsModel_bread = get_field('model_breadcrumbs_and_title_labels', 'option');
+       $rowsType_bread = get_field('type_breadcrumbs_and_title_labels', 'option');
+        
+       //category
+        $breadcrumbs_title_data_cat = [];
+        if (!empty($rowsCat_bread['category_breadcrumbs_and_title_labels'])) {
+
+            foreach ($rowsCat_bread['category_breadcrumbs_and_title_labels'] as $item) {
+                $breadcrumbs_title_data_cat[] = [
+                    'default' => $item['default_label_filter'] ?? '',
+                    'update'  => $item['update_the_label_filter'] ?? '',
+                ];
+            }
+
+        }
+
+        //make
+        $breadcrumbs_title_data_make = [];
+        if (!empty($rowsMake_bread['brand_breadcrumbs_and_title_labels'])) {
+
+            foreach ($rowsMake_bread['brand_breadcrumbs_and_title_labels'] as $item) {
+                $breadcrumbs_title_data_make[] = [
+                    'default' => $item['default_label_filter'] ?? '',
+                    'update'  => $item['update_the_label_filter'] ?? '',
+                ];
+            }
+
+        }
+
+        //model
+        $breadcrumbs_title_data_model = [];
+        if (!empty($rowsModel_bread['model_breadcrumbs_and_title_labels'])) {
+
+            foreach ($rowsModel_bread['model_breadcrumbs_and_title_labels'] as $item) {
+                $breadcrumbs_title_data_model[] = [
+                    'default' => $item['default_label_filter'] ?? '',
+                    'update'  => $item['update_the_label_filter'] ?? '',
+                ];
+            }
+
+        }
+
+        //type
+        $breadcrumbs_title_data_type = [];
+        if (!empty($rowsType_bread['type_breadcrumbs_and_title_labels'])) {
+
+            foreach ($rowsType_bread['type_breadcrumbs_and_title_labels'] as $item) {
+                $breadcrumbs_title_data_type[] = [
+                    'default' => $item['default_label_filter'] ?? '',
+                    'update'  => $item['update_the_label_filter'] ?? '',
+                ];
+            }
+
+        }
+
+
         // Pass admin-ajax URL + other variables to JS
         wp_localize_script(
             'rsl-ajax-functions',
@@ -284,6 +343,10 @@ function rsl_assets_enqueue_frontend() {
                     'stock_page_url' => get_permalink($stock_locator_page_id),
                     'stock_page_title' => get_post_field('post_title', $stock_locator_page_id),
                     'site_title' => get_bloginfo('name'),
+                    'breadcrumbs_title_data_cat' => $breadcrumbs_title_data_cat,
+                    'breadcrumbs_title_data_make' => $breadcrumbs_title_data_make,
+                    'breadcrumbs_title_data_model' => $breadcrumbs_title_data_model,
+                    'breadcrumbs_title_data_type' => $breadcrumbs_title_data_type,
                 ],
                 $filter_data
             )

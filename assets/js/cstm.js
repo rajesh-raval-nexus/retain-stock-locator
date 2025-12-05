@@ -128,10 +128,13 @@ jQuery(document).ready(function($) {
         data: formData + '&action=request_call_back_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
-            $('#gfam-response').html('<p style="color:green;">' + response.data + '</p>');
+            $('#gfam-response').html('<p style="color:green;">' + response.data.message + '</p>');
             form.reset();
+            setTimeout(function() {
+                window.location.href = response.data.redirect_url;
+            }, 500);
           } else {
-            $('#gfam-response').html('<p style="color:red;">' + response.data + '</p>');
+            $('#gfam-response').html('<p style="color:red;">' + response.data.message + '</p>');
           }
         },
         error: function() {
@@ -195,11 +198,14 @@ jQuery(document).ready(function($) {
         data: formData + '&action=request_video_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
-            $('#reqVideoFrmResponse').html('<p style="color:green;">' + response.data + '</p>');
+            $('#reqVideoFrmResponse').html('<p style="color:green;">' + response.data.message + '</p>');
             form.reset();
             $('#reqVideoDropdown .gfam-detail-dropdown-text').text('Make'); // reset dropdown
+            setTimeout(function() {
+                window.location.href = response.data.redirect_url;
+            }, 500);
           } else {
-            $('#reqVideoFrmResponse').html('<p style="color:red;">' + response.data + '</p>');
+            $('#reqVideoFrmResponse').html('<p style="color:red;">' + response.data.message + '</p>');
           }
         },
         error: function() {
@@ -254,11 +260,14 @@ jQuery(document).ready(function($) {
         data: formData + '&action=ask_question_form_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
-            $('#askQuestionResponse').html('<p style="color:green;">' + response.data + '</p>');
+            $('#askQuestionResponse').html('<p style="color:green;">' + response.data.message + '</p>');
             form.reset();
             $('#reqVideoDropdown .gfam-detail-dropdown-text').text('Make'); // reset dropdown
+            setTimeout(function() {
+                window.location.href = response.data.redirect_url;
+            }, 500);
           } else {
-            $('#askQuestionResponse').html('<p style="color:red;">' + response.data + '</p>');
+            $('#askQuestionResponse').html('<p style="color:red;">' + response.data.message + '</p>');
           }
         },
         error: function() {
@@ -311,11 +320,14 @@ jQuery(document).ready(function($) {
         data: formData + '&action=contact_us_request_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
         success: function(response) {
           if (response.success) {
-            $('#contactUsModalResponse').html('<p style="color:green;">' + response.data + '</p>');
+            $('#contactUsModalResponse').html('<p style="color:green;">' + response.data.message + '</p>');
             form.reset();
             $('#reqVideoDropdown .gfam-detail-dropdown-text').text('Make'); // reset dropdown
+            setTimeout(function() {
+                window.location.href = response.data.redirect_url;
+            }, 500);
           } else {
-            $('#contactUsModalResponse').html('<p style="color:red;">' + response.data + '</p>');
+            $('#contactUsModalResponse').html('<p style="color:red;">' + response.data.message + '</p>');
           }
         },
         error: function() {
@@ -391,11 +403,14 @@ jQuery(document).ready(function($) {
           data: formData + '&action=test_drive_request_submit&security=' + gfam_ajax_obj.nonce + '&page_url=' + encodeURIComponent(currentPage),
           success: function(response) {
             if (response.success) {
-              $('#gfamDetailResponse').html('<p style="color:green;">' + response.data + '</p>');
+              $('#gfamDetailResponse').html('<p style="color:green;">' + response.data.message + '</p>');
               form.reset();
               $('#testDriveDropdown .gfam-detail-dropdown-text').text('Make'); // reset dropdown
+              setTimeout(function() {
+                  window.location.href = response.data.redirect_url;
+              }, 500);
             } else {
-              $('#gfamDetailResponse').html('<p style="color:red;">' + response.data + '</p>');
+              $('#gfamDetailResponse').html('<p style="color:red;">' + response.data.message + '</p>');
             }
           },
           error: function() {

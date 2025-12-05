@@ -99,10 +99,14 @@ function handle_request_call_back_submit() {
     // Final Response
     // -----------------------------
     if ($admin_sent) {
-        wp_send_json_success('Thank you! Your request has been sent successfully.');
+        wp_send_json_success([
+            'message' => 'Thank you! Your request has been sent successfully.',
+            'redirect_url' => site_url('/thank-you/')   // dynamic thank-you page URL
+        ]);
     } else {
         wp_send_json_error('Failed to send email. Please try again.');
     }
+
 
     wp_die();
 }
@@ -217,7 +221,10 @@ function handle_request_video_submit() {
     // Final Response
     // -----------------------------
     if ($admin_sent) {
-        wp_send_json_success('Thank you! Your request has been sent successfully.');
+        wp_send_json_success([
+            'message' => 'Thank you! Your request has been sent successfully.',
+            'redirect_url' => site_url('/thank-you/')   // dynamic thank-you page URL
+        ]);
     } else {
         wp_send_json_error('Failed to send email. Please try again.');
     }
@@ -321,7 +328,10 @@ function handle_ask_question_form_submit() {
     // Final response
     // -----------------------------
     if ($admin_sent) {
-        wp_send_json_success('Thank you! Your question has been sent successfully.');
+        wp_send_json_success([
+            'message' => 'Thank you! Your question has been sent successfully.',
+            'redirect_url' => site_url('/thank-you/')   // dynamic thank-you page URL
+        ]);
     } else {
         wp_send_json_error('Failed to send email. Please try again.');
     }
@@ -427,7 +437,10 @@ function handle_test_drive_request_submit() {
     // Final response
     // -----------------------------
     if ($admin_sent) {
-        wp_send_json_success('Thank you! Your question has been sent successfully.');
+        wp_send_json_success([
+            'message' => 'Thank you! Your question has been sent successfully.',
+            'redirect_url' => site_url('/thank-you/')   // dynamic thank-you page URL
+        ]);
     } else {
         wp_send_json_error('Failed to send email. Please try again.');
     }
@@ -493,6 +506,7 @@ function handle_contact_us_request_submit() {
         '{comments}'   => nl2br(esc_html($comments)),
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
+        '{year}'           => date('Y'),
         '{page_url}'   => esc_url($page_url),
         
     ];
@@ -528,10 +542,14 @@ function handle_contact_us_request_submit() {
     // Final response
     // -----------------------------
     if ($admin_sent) {
-        wp_send_json_success('Thank you! Your Contact has been sent successfully.');
+        wp_send_json_success([
+                'message' => 'Thank you! Your Contact has been sent successfully.',
+                'redirect_url' => site_url('/thank-you/')   // dynamic thank-you page URL
+            ]);
     } else {
         wp_send_json_error('Failed to send email. Please try again.');
     }
+
 
     wp_die();
 }

@@ -318,6 +318,19 @@ jQuery(document).ready(function($) {
         rsl_fetch_listings({ page: page, per_page: rsl_ajax_obj.vdp_per_page, filters: filters });
     }
 
+    function getUpdatedLabel(originalLabel, titleData) {
+        if (!titleData || !Array.isArray(titleData)) return originalLabel;
+
+        for (let row of titleData) {
+            if (row.default && row.default.toLowerCase() === originalLabel.toLowerCase()) {
+                return row.update || originalLabel;
+            }
+        }
+
+        return originalLabel;
+    }
+
+
     /**
      * Update breadcrumbs DOM based on filters
      */
@@ -329,6 +342,13 @@ jQuery(document).ready(function($) {
         const baseURL = rsl_ajax_obj.home_url;
         const stockURL = rsl_ajax_obj.stock_page_url;
         const stockTitle = rsl_ajax_obj.stock_page_title;
+        
+       // const breadcrumbs_title_data = rsl_ajax_obj.breadcrumbs_title_data_cat;
+
+        const catMapBreadcrumb   = rsl_ajax_obj.breadcrumbs_title_data_cat;
+        const makeMapBreadcrumb  = rsl_ajax_obj.breadcrumbs_title_data_make;
+        const modelMapBreadcrumb = rsl_ajax_obj.breadcrumbs_title_data_model;
+        const typeMapBreadcrumb  = rsl_ajax_obj.breadcrumbs_title_data_type;
 
         // Count Selected Values
         const typeCount = (filters.type || []).length;
@@ -385,51 +405,61 @@ jQuery(document).ready(function($) {
         // -------------------------------
         // CASE: SINGLE SELECTIONS ONLY → BUILD DETAILED BREADCRUMB
         // -------------------------------
-        if (typeCount === 1) {
-            items.push({
-                label: filters.type[0],
-                url: buildSEOUrl({ type: filters.type }, 1)
-            });
-        }
 
-        if (makeCount === 1) {
-            items.push({
-                label: filters.make[0],
-                url: buildSEOUrl({ make: filters.make }, 1)
-            });
-        }
+        // Remove old category (if pushed by URL or previous logic)
+        items = items.filter(it => it.label !== filters.categories?.[0]);
 
-        if (modelCount === 1) {
-
-            // Fetch selected model value
-            const model = filters.model[0];
-
-            // Look for HTML checkbox having this model value
-            const modelInput = document.querySelector(`input.rsl-filter-sub[value="${model.replace(/"/g, '\\"')}"]`);
-
-            // Get parent make name via data-parent
-            const makeOfModel = modelInput ? modelInput.dataset.parent : null;
-
-            // Build final label
-            const label = makeOfModel ? `${makeOfModel} ${model}` : model;
-
-            items.push({
-                label: label,
-                url: buildSEOUrl({ model: filters.model }, 1)
-            });
-            // items.push({
-            //     label: filters.model[0],
-            //     url: buildSEOUrl({ model: filters.model }, 1)
-            // });
-        }
-
+        
+        // CATEGORY FIRST
         if (catCount === 1) {
+            const catLabel = getUpdatedLabel(filters.categories[0], catMapBreadcrumb);
+
             items.push({
-                label: filters.categories[0],
+                label: catLabel,
                 url: buildSEOUrl({ categories: filters.categories }, 1)
             });
         }
 
+        // TYPE
+        if (typeCount === 1) {
+            const typeLabel = getUpdatedLabel(filters.type[0], typeMapBreadcrumb);
+
+            items.push({
+                label: typeLabel,
+                url: buildSEOUrl({ type: filters.type }, 1)
+            });
+        }
+
+        // MAKE
+        if (makeCount === 1) {
+            const makeLabel = getUpdatedLabel(filters.make[0], makeMapBreadcrumb);
+
+            items.push({
+                label: makeLabel,
+                url: buildSEOUrl({ make: filters.make }, 1)
+            });
+        }
+
+        // MODEL
+        if (modelCount === 1) {
+            const model = filters.model[0];
+            const modelInput = document.querySelector(
+                `input.rsl-filter-sub[value="${model.replace(/"/g, '\\"')}"]`
+            );
+            const makeOfModel = modelInput ? modelInput.dataset.parent : null;
+
+            //const label = makeOfModel ? `${makeOfModel} ${model}` : model;
+            //const updatedLabel = getUpdatedLabel(label, modelMapBreadcrumb);
+            
+            const updatedLabel = getUpdatedLabel(filters.model[0], modelMapBreadcrumb);
+            console.log(updatedLabel);
+            items.push({
+                label: updatedLabel,
+                url: buildSEOUrl({ model: filters.model }, 1)
+            });
+            
+        }
+        
         renderBreadcrumbs(items);
     }
 
@@ -438,14 +468,20 @@ jQuery(document).ready(function($) {
         const $crumb = $('.gfam-breadcrumb nav');
 
         const html = items.map((it, idx) => {
+
+            // LAST ITEM → clickable + active class
             if (idx === items.length - 1) {
-                return `<span class="active">${it.label}</span>`;
+                return `<a href="${it.url}" class="rsl-crumb-link active">${it.label}</a>`;
             }
+
+            // OTHER ITEMS → normal clickable links
             return `<a href="${it.url}" class="rsl-crumb-link">${it.label}</a>`;
+
         }).join('<span> > </span>');
 
         $crumb.html(html);
     }
+
 
     /* HOME ICON */
     function homeIconSVG() {
@@ -480,9 +516,17 @@ jQuery(document).ready(function($) {
     /**
      * Update H1 and document.title based on filters
      */
+    /*
     function updateTitle(filters) {
         filters = filters || {};
         const siteTitle = rsl_ajax_obj.site_title || '';
+
+         // Mapping arrays from localized PHP
+        const catMapTitle   = rsl_ajax_obj.breadcrumbs_title_data_cat;
+        const makeMapTitle  = rsl_ajax_obj.breadcrumbs_title_data_make;
+        const modelMapTitle = rsl_ajax_obj.breadcrumbs_title_data_model;
+        const typeMapTitle  = rsl_ajax_obj.breadcrumbs_title_data_type;
+        
         const groups = {
             type: Array.isArray(filters.type) ? filters.type : [],
             make: Array.isArray(filters.make) ? filters.make : [],
@@ -551,6 +595,123 @@ jQuery(document).ready(function($) {
             groups.make.length === 0 &&
             groups.model.length === 0 &&
             groups.categories.length === 0;
+
+        if (nothingSelected) {
+            finalH1 = `Farm Machinery ${baseLabel}`;
+        } else if (groups.categories.length === 0) {
+            if (hasMultipleSelections) {
+                finalH1 = `Farm Machinery ${baseLabel}`;
+            } else {
+                finalH1 = `${titlePrefix} Farm Machinery ${baseLabel}`;
+            }
+        } else {
+            finalH1 = `${titlePrefix} ${baseLabel}`;
+        }
+
+        if (suffixParts.length) finalH1 += ' ' + suffixParts.join(' ');
+
+        $('h1').text(finalH1);
+        document.title = finalH1 + ` — ${siteTitle}`;
+    }
+    */
+
+    function updateTitle(filters) {
+        filters = filters || {};
+        const siteTitle = rsl_ajax_obj.site_title || '';
+
+        // Mapping arrays from localized PHP
+        const catMapTitle   = rsl_ajax_obj.breadcrumbs_title_data_cat;
+        const makeMapTitle  = rsl_ajax_obj.breadcrumbs_title_data_make;
+        const modelMapTitle = rsl_ajax_obj.breadcrumbs_title_data_model;
+        const typeMapTitle  = rsl_ajax_obj.breadcrumbs_title_data_type;
+
+        const groups = {
+            type: Array.isArray(filters.type) ? filters.type : [],
+            make: Array.isArray(filters.make) ? filters.make : [],
+            model: Array.isArray(filters.model) ? filters.model : [],
+            categories: Array.isArray(filters.categories) ? filters.categories : [],
+        };
+
+        let baseLabel = 'For Sale';
+        let titlePrefix = 'Farm Machinery';
+        let suffixParts = [];
+
+        const hasMultipleSelections = Object.values(groups).some(arr => arr.length > 1);
+        const parts = [];
+
+        // ------------------------------------------------------------------
+        // APPLY UPDATED LABELS (same as breadcrumbs)
+        // ------------------------------------------------------------------
+
+        const updated = {
+            type: groups.type.length === 1 ? getUpdatedLabel(groups.type[0], typeMapTitle) : null,
+            make: groups.make.length === 1 ? getUpdatedLabel(groups.make[0], makeMapTitle) : null,
+            model: groups.model.length === 1 ? getUpdatedLabel(groups.model[0], modelMapTitle) : null,
+            categories: groups.categories.length === 1 ? getUpdatedLabel(groups.categories[0], catMapTitle) : null,
+        };
+
+        // ------------------------------------------------------------------
+        // ORDERED SINGLE-SELECTION TITLE GENERATION
+        // ------------------------------------------------------------------
+        if (!hasMultipleSelections) {
+            const orderedKeys = ['type', 'make', 'model', 'categories'];
+
+            orderedKeys.forEach(key => {
+                if (groups[key].length === 1) {
+                    parts.push(updated[key]); // use updated label
+                }
+            });
+        }
+
+        // ------------------------------------------------------------------
+        // SPECIAL CASE: Only model selected → prepend make via data-parent
+        // ------------------------------------------------------------------
+        if (groups.model.length === 1 && groups.make.length === 0) {
+
+            const model = groups.model[0];
+            const modelInput = document.querySelector(
+                `input.rsl-filter-sub[value="${model.replace(/"/g, '\\"')}"]`
+            );
+
+            const parentMake = modelInput ? modelInput.dataset.parent : null;
+
+            if (parentMake) {
+                const updatedParentMake = getUpdatedLabel(parentMake, makeMapTitle);
+                const updatedModel = getUpdatedLabel(model, modelMapTitle);
+
+                parts.length = 0;
+                parts.push(`${updatedParentMake} ${updatedModel}`);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // SET TITLE PREFIX
+        // ------------------------------------------------------------------
+        if (!hasMultipleSelections && parts.length > 0) {
+            titlePrefix = parts.join(' ');
+        }
+
+        // ------------------------------------------------------------------
+        // PRICE RANGE TITLE LOGIC
+        // ------------------------------------------------------------------
+        if (filters.price_from && filters.price_to) {
+            suffixParts.push(`Between $${filters.price_from} - $${filters.price_to}`);
+        } else if (filters.price_to) {
+            suffixParts.push(`Under $${filters.price_to}`);
+        } else if (filters.price_from) {
+            suffixParts.push(`Above $${filters.price_from}`);
+        }
+
+        // ------------------------------------------------------------------
+        // FINAL PAGE & H1 TITLE LOGIC
+        // ------------------------------------------------------------------
+        const nothingSelected =
+            groups.type.length === 0 &&
+            groups.make.length === 0 &&
+            groups.model.length === 0 &&
+            groups.categories.length === 0;
+
+        let finalH1 = '';
 
         if (nothingSelected) {
             finalH1 = `Farm Machinery ${baseLabel}`;
