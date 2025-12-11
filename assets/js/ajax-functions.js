@@ -61,7 +61,57 @@ jQuery(document).ready(function($) {
         // 1) add single-value path segments (type / make / model / categories)
         addToUrl(filters.type, 'type');
         addToUrl(filters.make, 'make');
-        addToUrl(filters.model, 'model');
+        //addToUrl(filters.model, 'model');
+
+        // --- MODEL + AUTO MAKE (PARENT) MERGE ---
+        if (filters.model && Array.isArray(filters.model) && filters.model.length === 1) {
+
+            const normalizeForSlug = (str) => {
+                return String(str || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[+"'"]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+            };
+
+            const modelValue = filters.model[0];
+            const modelSlug = normalizeForSlug(modelValue);
+
+            let makeSlug = null;
+
+            // CASE 1: user selected make normally
+            if (filters.make && Array.isArray(filters.make) && filters.make.length === 1) {
+                makeSlug = normalizeForSlug(filters.make[0]);
+            }
+
+            // CASE 2: user did NOT select make → auto detect via input[data-parent]
+            if (!makeSlug) {
+                const modelInput = document.querySelector(
+                    `input.rsl-filter-sub[value="${modelValue.replace(/"/g, '\\"')}"]`
+                );
+                const parentMake = modelInput ? modelInput.dataset.parent : null;
+
+                if (parentMake) {
+                    makeSlug = normalizeForSlug(parentMake);
+                }
+            }
+
+            // BUILD FINAL PATH
+            if (makeSlug) {
+                // prepend make automatically
+                pathParts.push(`${makeSlug}-${modelSlug}`);
+            } else {
+                // fallback
+                pathParts.push(modelSlug);
+            }
+
+        } else {
+            // if multiple model values → old logic
+            addToUrl(filters.model, 'model');
+        }
+   
+
         addToUrl(filters.categories, 'categories');
         
         // 2) if filter_type present -> add /under-2500/ or /above-50000/
@@ -149,9 +199,73 @@ jQuery(document).ready(function($) {
         }
 
         // --- Step 1: Parse path segments ---
-        for (const seg of segments) {
-            const raw = decodeSegment(seg);
-            const slug = normalizeForSlug(raw);
+        // for (const seg of segments) {
+        //     const raw = decodeSegment(seg);
+        //     const slug = normalizeForSlug(raw);
+
+        //     // Handle /under-2500/
+        //     const m = slug.match(/^(under|above)-(\d+)$/i);
+        //     if (m) {
+        //         const type = m[1].toLowerCase();
+        //         const val = m[2];
+        //         hasPricePath = true;
+        //         filters.filter_type = type;
+        //         filters.filter_price = val;
+        //         if (type === 'under') filters.price_to = val;
+        //         else filters.price_from = val;
+        //         continue;
+        //     }
+
+        //     // Match via slugMap
+        //     if (typeMap[slug]) filters.type.push(typeMap[slug]);
+        //     else if (makeMap[slug]) filters.make.push(makeMap[slug]);
+        //     else if (modelMap[slug]) filters.model.push(modelMap[slug]);
+        //     else if (catMap[slug]) filters.categories.push(catMap[slug]);
+
+        //     // Fallback sets
+        //     else if (validTypes.has(slug)) filters.type.push(raw);
+        //     else if (validMakes.has(slug)) filters.make.push(raw);
+        //     else if (validModels.has(slug)) filters.model.push(raw);
+        //     else if (validCategories.has(slug)) filters.categories.push(raw);
+        //     else console.warn('Unknown segment in URL:', seg);
+        // }
+
+        for (let i = 0; i < segments.length; i++) {
+            let raw = decodeSegment(segments[i]);
+            let slug = normalizeForSlug(raw);
+
+            // -------------------------------
+            // NEW: Detect combined make-model slug (e.g., ba-ls-1300)
+            // -------------------------------
+
+            //bellow code are working but added make on url when relaod url
+            // if (!filters.model || filters.model.length === 0) {
+            //     const dashIndex = slug.indexOf('-');
+            //     if (dashIndex > 0) {
+            //         const makePart = slug.substring(0, dashIndex);
+            //         const modelPart = slug.substring(dashIndex + 1);
+
+            //         if (makeMap[makePart] && modelMap[modelPart]) {
+            //             filters.make = [makeMap[makePart]];
+            //             filters.model = [modelMap[modelPart]];
+            //             continue; // skip normal checks for this segment
+            //         }
+            //     }
+            // }
+
+            if (!filters.model || filters.model.length === 0) {
+                const dashIndex = slug.indexOf('-');
+                if (dashIndex > 0) {
+                    const makePart = slug.substring(0, dashIndex);
+                    const modelPart = slug.substring(dashIndex + 1);
+
+                    if (modelMap[modelPart]) {
+                        // NOTE: Skip assigning make on page load / refresh
+                        filters.model = [modelMap[modelPart]];
+                        continue; // skip normal checks for this segment
+                    }
+                }
+            }
 
             // Handle /under-2500/
             const m = slug.match(/^(under|above)-(\d+)$/i);

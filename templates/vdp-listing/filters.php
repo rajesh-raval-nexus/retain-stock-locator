@@ -560,16 +560,6 @@ $hide_hours_filter = get_field('hide_hour_filter','option');
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item stock-sorting-cls" data-val="newest" href="javascript:void(0);">
-                    <?php esc_html_e('Newest', 'retain-stock-locator'); ?>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item stock-sorting-cls" data-val="oldest" href="javascript:void(0);">
-                    <?php esc_html_e('Oldest', 'retain-stock-locator'); ?>
-                  </a>
-                </li>
-                <li>
                   <a class="dropdown-item stock-sorting-cls" data-val="latest_update" href="javascript:void(0);">
                     <?php esc_html_e('Latest Update', 'retain-stock-locator'); ?>
                   </a>
