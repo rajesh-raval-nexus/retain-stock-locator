@@ -18,7 +18,7 @@ $stock_number = !empty($item['stock_number'])
 
 $item_specification  = !empty($item['item_specification']) ? $item['item_specification'] : 'N/A';
 $hours               = !empty($item['hours']) ? (int) $item['hours'] : 'N/A';
-$price               = !empty($item['price']) ? (int) $item['price'] : 'N/A';
+$price               = !empty($item['price']) ? (int) $item['price'] : 'POA';
 
 $detail_page = get_field('select_stock_locator_detail_page', 'option');
 

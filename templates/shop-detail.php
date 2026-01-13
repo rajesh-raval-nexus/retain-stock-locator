@@ -521,7 +521,7 @@ if ($stock_number) {
                                 <div class="gfam-product-details">
                                   <div class="gfam-odometer">
                                       <div class="gfam-odometer-icon">
-                                          <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter.svg'); ?>" alt="Odometer">
+                                          <img src="<?php echo esc_url(RSL_PLUGIN_URL . 'assets/images/odomter-icon.svg'); ?>" alt="Odometer">
                                       </div>
                                       <div class="gfam-odometer-info">
                                         <span class="gfam-odometer-label">Odometer</span>
@@ -537,7 +537,7 @@ if ($stock_number) {
                                         <?php if (!empty($price)) { ?>
                                           <div class="gfam-price mb-0"><?php echo "$" . number_format($price, 0, '.', ','); ?></div>
                                           <?php }else{ ?>
-                                            <div class="gfam-price mb-0">N/A</div>
+                                            <div class="gfam-price mb-0">POA</div>
                                           <?php } ?>
                                       </div>
                                 </div>
