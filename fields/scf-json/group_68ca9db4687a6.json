@@ -2270,6 +2270,32 @@
                     "append": ""
                 },
                 {
+                    "key": "field_698c50dcf23e7",
+                    "label": "Video Walkaround Icon",
+                    "name": "video_walkthrough_icon",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
+                },
+                {
                     "key": "field_690b3eb6d2ace",
                     "label": "Video Walkaround Title",
                     "name": "video_walkaround_title",
@@ -2310,6 +2336,32 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
+                },
+                {
+                    "key": "field_698c5101a5328",
+                    "label": "Test Drive Icon",
+                    "name": "test_drive_icon",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
                 },
                 {
                     "key": "field_690b3ed7d2ad0",
@@ -2374,5 +2426,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1764914044
+    "modified": 1770805429
 }

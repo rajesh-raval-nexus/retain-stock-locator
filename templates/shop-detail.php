@@ -9,9 +9,21 @@ $stock_number = strtoupper(end($stock_number_parts));
 if ($stock_number) {
 
   $allListingsData = rsl_parse_listings($xmlPath);
+
   
-  $video_walkthrough_icon = get_field('video_walkthrough_icon', 'option') ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
-  $test_drive_icon = get_field('test_drive_icon', 'option') ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+  //$video_walkthrough_icon = $easy_steps_to_own_your_vehicle['video_walkthrough_icon']['url'] ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+  //$test_drive_icon = get_field('test_drive_icon', 'option') ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+  
+  $easy_steps_to_own_your_vehicle = get_field('easy_steps_to_own_your_vehicle', 'option');
+   
+  $video_icon = $easy_steps_to_own_your_vehicle['video_walkthrough_icon'] ?? '';
+  $video_walkthrough_icon = is_array($video_icon)? ($video_icon['url'] ?? ''): wp_get_attachment_image_url($video_icon, 'thumbnail');
+  $video_walkthrough_icon = $video_walkthrough_icon ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+  
+  $drive_icon = $easy_steps_to_own_your_vehicle['test_drive_icon'] ?? '';
+  $test_drive_icon = is_array($drive_icon)? ($drive_icon['url'] ?? ''): wp_get_attachment_image_url($drive_icon, 'full');
+  $test_drive_icon = $test_drive_icon ?: RSL_PLUGIN_URL . 'assets/images/vehicle-seach.svg';
+
 
   $detail_data_sections = get_field('detail_data_sections', 'option');
   $easy_steps_to_own_your_vehicle = get_field('easy_steps_to_own_your_vehicle', 'option');
@@ -597,6 +609,9 @@ if ($stock_number) {
                               <div class="col-12 my-2">
                                 <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
                               </div>
+                              <div class="col-12 my-2">
+                                <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                              </div>
                             </div>
 
                             <div class="col-12 my-2 form-check d-flex align-items-center gap-2 bg-white p-2 rounded">
@@ -659,7 +674,7 @@ if ($stock_number) {
         <div class="modal-dialog modal-md modal-dialog-centered">
           <div class="modal-content">
             <div class="gfam-detail-modal-header">
-              <h5 class="gfam-detail-modal-title" id="gfamDetailModalLabel"><?php esc_html_e('Request a Video Walkthrough', 'retain-stock-locator'); ?></h5>
+              <h5 class="gfam-detail-modal-title" id="gfamDetailModalLabel"><?php esc_html_e('Request a ', 'retain-stock-locator'); ?> <?php echo $easy_steps_to_own_your_vehicle['video_walkaround_title'] ?? ''; ?></h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
@@ -668,8 +683,6 @@ if ($stock_number) {
               </button>
             </div>
             <div class="modal-body gfam-detail-modal-body">
-
-
               <form id="requestVideoForm">
                 <div class="row">
                   <div class="col-md-6">
@@ -718,6 +731,10 @@ if ($stock_number) {
                 </div>
 
                 <div class="gfam-detail-form-group">
+                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                </div>
+
+                <div class="gfam-detail-form-group">
                   <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Submit', 'retain-stock-locator'); ?></button>
                 </div>
               </form>
@@ -734,7 +751,7 @@ if ($stock_number) {
         <div class="modal-dialog modal-md modal-dialog-centered">
           <div class="modal-content">
             <div class="gfam-detail-modal-header">
-              <h5 class="gfam-detail-modal-title" id="gfamtestdriverModalLabel">Request a Test Drive Time</h5>
+              <h5 class="gfam-detail-modal-title" id="gfamtestdriverModalLabel"><?php esc_html_e('Request a ', 'retain-stock-locator'); ?> <?php echo $easy_steps_to_own_your_vehicle['test_drive_title'] ?? ''; ?> </h5>
               <button type="button" class="gfam-detail-close-btn" data-bs-dismiss="modal" aria-label="Close">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.929001 17.916C0.701378 17.916 0.47377 17.8334 0.299496 17.6648C-0.0490509 17.3276 -0.0490509 16.7839 0.299496 16.4467L16.2758 0.98973C16.6243 0.652512 17.1862 0.652512 17.5348 0.98973C17.8833 1.32695 17.8833 1.87064 17.5348 2.20786L1.55853 17.6648C1.38425 17.8334 1.15662 17.916 0.929001 17.916Z" fill="white"/>
@@ -806,6 +823,9 @@ if ($stock_number) {
                       <input type="text" id="gfam-detail-timepicker" name="preferred_time" class="form-control gfam-detail-form-control" placeholder="Select Time" readonly required>
                     </div>
                   </div>
+                  <div class="col-12">
+                    <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                  </div>
                 </div>
 
                 <div class="gfam-detail-form-group">
@@ -871,6 +891,10 @@ if ($stock_number) {
 
                 <input type="hidden" name="ask_question_fm_val" class="ask_question_fm_val" value="">
 
+                <div class="col-12 my-2">
+                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                </div>
+
                 <div class="gfam-detail-form-group">
                   <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Send a Request', 'retain-stock-locator'); ?></button>
                 </div>
@@ -927,6 +951,10 @@ if ($stock_number) {
 
                 <div class="col-12 my-2">
                   <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
+                </div>
+
+                <div class="col-12 my-2">
+                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
                 </div>
 
                 <div class="gfam-detail-form-group">

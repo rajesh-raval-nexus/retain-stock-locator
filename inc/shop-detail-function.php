@@ -15,6 +15,7 @@ function handle_request_call_back_submit() {
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
     $trade_in   = isset($_POST['trade_in']) ? 'Yes' : 'No';
+    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
 
@@ -59,6 +60,7 @@ function handle_request_call_back_submit() {
         '{phone}'      => esc_html($phone),
         '{trade_in}'   => esc_html($trade_in),
         '{comments}'   => nl2br(esc_html($comments)),
+        '{comments_make_model}'   => $comments_make_model,
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
@@ -130,6 +132,7 @@ function handle_request_video_submit() {
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
     $make       = sanitize_text_field($_POST['make'] ?? '');
+    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
 
@@ -176,6 +179,7 @@ function handle_request_video_submit() {
         '{make}'       => esc_html($make),
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
+        '{comments_make_model}'   => $comments_make_model,
         '{year}'       => date('Y'),
         '{page_url}'   => esc_url($page_url),
     ];
@@ -249,6 +253,7 @@ function handle_ask_question_form_submit() {
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
     $question   = sanitize_textarea_field($_POST['ask_question_fm_val'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
 
@@ -292,6 +297,7 @@ function handle_ask_question_form_submit() {
         '{question}'   => nl2br(esc_html($question)),
         '{comments}'   => nl2br(esc_html($comments)),
         '{logo_url}'   => esc_url($logo_url),
+        '{comments_make_model}'   => $comments_make_model,
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
         '{page_url}'   => esc_url($page_url),
@@ -357,6 +363,7 @@ function handle_test_drive_request_submit() {
     $make           = sanitize_text_field($_POST['make'] ?? '');
     $preferred_date = sanitize_text_field($_POST['preferred_date'] ?? '');
     $preferred_time = sanitize_text_field($_POST['preferred_time'] ?? '');
+    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
 
@@ -399,6 +406,7 @@ function handle_test_drive_request_submit() {
         '{make}'           => $make,
         '{preferred_date}' => $preferred_date,
         '{preferred_time}' => $preferred_time,
+        '{comments_make_model}'   => $comments_make_model,
         '{site_name}'      => get_bloginfo('name'),
         '{site_url}'       => home_url(),
         '{logo_url}'       => esc_url($logo_url),
@@ -464,6 +472,7 @@ function handle_contact_us_request_submit() {
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
     
@@ -504,6 +513,7 @@ function handle_contact_us_request_submit() {
         '{email}'      => esc_html($email),
         '{phone}'      => esc_html($phone),
         '{comments}'   => nl2br(esc_html($comments)),
+        '{comments_make_model}'   => $comments_make_model,
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'           => date('Y'),
