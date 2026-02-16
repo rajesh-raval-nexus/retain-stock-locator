@@ -607,10 +607,7 @@ if ($stock_number) {
                                 <input type="tel" class="form-control gfam-detail-input" name="phone" placeholder="Phone">
                               </div>
                               <div class="col-12 my-2">
-                                <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
-                              </div>
-                              <div class="col-12 my-2">
-                                <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                                <textarea class="form-control gfam-detail-input" name="comments_make_model" rows="4" required>I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?></textarea>
                               </div>
                             </div>
 
@@ -715,23 +712,7 @@ if ($stock_number) {
                 </div>
 
                 <div class="gfam-detail-form-group">
-                  <div class="gfam-detail-dropdown-modal">
-                    <button type="button" class="gfam-detail-dropdown-toggle" id="reqVideoDropdown">
-                          <span class="gfam-detail-dropdown-text"><?php esc_html_e('Make', 'retain-stock-locator'); ?></span>
-                          <svg class=" gfam-detail-dropdown-arrow" width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878"></path>
-                          </svg>
-                      
-                    </button>
-                    <div class="gfam-detail-dropdown-menu" id="reqVideoDropdownMenu">
-                      <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
-                    </div>
-                    <input type="text" name="make" id="gfamMakeInput" required style="visibility: hidden; position: absolute;">
-                  </div>
-                </div>
-
-                <div class="gfam-detail-form-group">
-                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                  <textarea class="form-control gfam-detail-input" name="comments_make_model" required>I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?></textarea>
                 </div>
 
                 <div class="gfam-detail-form-group">
@@ -793,38 +774,9 @@ if ($stock_number) {
                   <input type="email" class="form-control gfam-detail-form-control" name="email" placeholder="Email Address" required>
                 </div>
 
-                <div class="gfam-detail-form-group">
-                  <div class="gfam-detail-dropdown-modal">
-                    <button type="button" class="gfam-detail-dropdown-toggle" id="testDriveDropdown">
-                      <span class="gfam-detail-dropdown-text">Make</span>
-                      <!-- <i class="fas fa-chevron-down gfam-detail-dropdown-arrow"></i> -->
-                      <svg class="gfam-detail-dropdown-arrow" width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.4435 1.39511C15.4435 1.53322 15.3901 1.67135 15.281 1.77709L9.2607 7.61035C8.41434 8.43042 7.04012 8.43042 6.19376 7.61035L0.173469 1.77709C-0.0448025 1.5656 -0.0448025 1.22461 0.173469 1.01312C0.39174 0.80163 0.743656 0.80163 0.961928 1.01312L6.98219 6.84648C7.18042 7.03855 7.44548 7.14638 7.72834 7.14638C8.01121 7.14638 8.27625 7.04071 8.47447 6.84648L14.4948 1.01312C14.713 0.801629 15.0649 0.801629 15.2832 1.01312C15.3923 1.11887 15.4458 1.25699 15.4458 1.39511L15.4435 1.39511Z" fill="#847878"></path>
-                              </svg>
-                    </button>
-                    <div class="gfam-detail-dropdown-menu" id="testDriveDropdownMenu">
-                      <div class="gfam-detail-dropdown-item" data-value="<?php echo esc_html($listing['make']); ?>"><?php echo esc_html($listing['make']); ?></div>
-                    </div>
-                    <input type="text" name="make" id="testDriveMakeInput" required style="visibility: hidden; position: absolute;">
-                  </div>
-                </div>
-
                 <div class="row">
                   <div class="col-12">
-                    <label class="gfam-detail-label"><?php esc_html_e('Preferred Date', 'retain-stock-locator'); ?></label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="gfam-detail-form-group">
-                      <input type="text" id="gfam-detail-datepicker" name="preferred_date" class="form-control gfam-detail-form-control" placeholder="Select Date" readonly required>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="gfam-detail-form-group">
-                      <input type="text" id="gfam-detail-timepicker" name="preferred_time" class="form-control gfam-detail-form-control" placeholder="Select Time" readonly required>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                    <textarea class="form-control gfam-detail-input" name="comments_make_model" required>I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?></textarea>
                   </div>
                 </div>
 
@@ -891,10 +843,6 @@ if ($stock_number) {
 
                 <input type="hidden" name="ask_question_fm_val" class="ask_question_fm_val" value="">
 
-                <div class="col-12 my-2">
-                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
-                </div>
-
                 <div class="gfam-detail-form-group">
                   <button type="submit" class="gfam-detail-request-btn"><?php esc_html_e('Send a Request', 'retain-stock-locator'); ?></button>
                 </div>
@@ -950,11 +898,7 @@ if ($stock_number) {
                 </div>
 
                 <div class="col-12 my-2">
-                  <textarea class="form-control gfam-detail-input" name="comments" rows="4" placeholder="Comments"></textarea>
-                </div>
-
-                <div class="col-12 my-2">
-                  <input type="text" class="form-control gfam-detail-input" name="comments_make_model" value="I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?>" readonly required>
+                   <textarea class="form-control gfam-detail-input" name="comments_make_model" rows="4" required>I'm looking at the <?php echo esc_html($listing['make']); ?> <?php echo esc_html($listing['model']); ?></textarea>
                 </div>
 
                 <div class="gfam-detail-form-group">
@@ -1209,24 +1153,24 @@ if ($stock_number) {
     });
 
     // Datepicker
-    const picker = new Litepicker({
-      element: document.getElementById('gfam-detail-datepicker'),
-      singleMode: false,
-      numberOfMonths: 1,
-      numberOfColumns: 1,
-      format: 'DD/MM/YYYY',
-      dropdowns: {
-        minYear: 2020,
-        maxYear: 2034,
-        months: true,
-        years: true
-      },
-      setup: (picker) => {
-        picker.on('render', () => {
-          // Custom styling already handled via CSS
-        });
-      }
-    });
+    // const picker = new Litepicker({
+    //   element: document.getElementById('gfam-detail-datepicker'),
+    //   singleMode: false,
+    //   numberOfMonths: 1,
+    //   numberOfColumns: 1,
+    //   format: 'DD/MM/YYYY',
+    //   dropdowns: {
+    //     minYear: 2020,
+    //     maxYear: 2034,
+    //     months: true,
+    //     years: true
+    //   },
+    //   setup: (picker) => {
+    //     picker.on('render', () => {
+    //       // Custom styling already handled via CSS
+    //     });
+    //   }
+    // });
     // Timepicker
     $('#gfam-detail-timepicker').timepicki({
       show_meridian: true, // 12-hour format

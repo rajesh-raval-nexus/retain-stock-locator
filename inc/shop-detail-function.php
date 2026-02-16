@@ -13,7 +13,7 @@ function handle_request_call_back_submit() {
     $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
-    $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+    //$comments   = sanitize_textarea_field($_POST['comments'] ?? '');
     $trade_in   = isset($_POST['trade_in']) ? 'Yes' : 'No';
     $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
@@ -59,7 +59,6 @@ function handle_request_call_back_submit() {
         '{email}'      => esc_html($email),
         '{phone}'      => esc_html($phone),
         '{trade_in}'   => esc_html($trade_in),
-        '{comments}'   => nl2br(esc_html($comments)),
         '{comments_make_model}'   => $comments_make_model,
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
@@ -131,7 +130,7 @@ function handle_request_video_submit() {
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
-    $make       = sanitize_text_field($_POST['make'] ?? '');
+    //$make       = sanitize_text_field($_POST['make'] ?? '');
     $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
@@ -176,7 +175,6 @@ function handle_request_video_submit() {
         '{email}'      => esc_html($email),
         '{phone}'      => esc_html($phone),
         '{post_code}'  => esc_html($post_code),
-        '{make}'       => esc_html($make),
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{comments_make_model}'   => $comments_make_model,
@@ -253,7 +251,7 @@ function handle_ask_question_form_submit() {
     $post_code  = sanitize_text_field($_POST['post_code'] ?? '');
     $question   = sanitize_textarea_field($_POST['ask_question_fm_val'] ?? '');
     $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
-    $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
+    //$comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
 
@@ -297,7 +295,6 @@ function handle_ask_question_form_submit() {
         '{question}'   => nl2br(esc_html($question)),
         '{comments}'   => nl2br(esc_html($comments)),
         '{logo_url}'   => esc_url($logo_url),
-        '{comments_make_model}'   => $comments_make_model,
         '{site_name}'  => esc_html(get_bloginfo('name')),
         '{year}'       => date('Y'),
         '{page_url}'   => esc_url($page_url),
@@ -361,8 +358,8 @@ function handle_test_drive_request_submit() {
     $phone          = sanitize_text_field($_POST['phone'] ?? '');
     $post_code      = sanitize_text_field($_POST['post_code'] ?? '');
     $make           = sanitize_text_field($_POST['make'] ?? '');
-    $preferred_date = sanitize_text_field($_POST['preferred_date'] ?? '');
-    $preferred_time = sanitize_text_field($_POST['preferred_time'] ?? '');
+   // $preferred_date = sanitize_text_field($_POST['preferred_date'] ?? '');
+   // $preferred_time = sanitize_text_field($_POST['preferred_time'] ?? '');
     $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
@@ -370,8 +367,8 @@ function handle_test_drive_request_submit() {
     // Validate required fields
     if (
         empty($first_name) || empty($last_name) || empty($email) ||
-        empty($phone) || empty($post_code) || empty($make) ||
-        empty($preferred_date) || empty($preferred_time)
+        empty($phone) || empty($post_code) 
+        //|| empty($make) || empty($preferred_date) || empty($preferred_time)
     ) {
         wp_send_json_error('Please fill all required fields.');
     }
@@ -403,9 +400,6 @@ function handle_test_drive_request_submit() {
         '{email}'          => $email,
         '{phone}'          => $phone,
         '{post_code}'      => $post_code,
-        '{make}'           => $make,
-        '{preferred_date}' => $preferred_date,
-        '{preferred_time}' => $preferred_time,
         '{comments_make_model}'   => $comments_make_model,
         '{site_name}'      => get_bloginfo('name'),
         '{site_url}'       => home_url(),
@@ -471,7 +465,7 @@ function handle_contact_us_request_submit() {
     $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
     $email      = sanitize_email($_POST['email'] ?? '');
     $phone      = sanitize_text_field($_POST['phone'] ?? '');
-    $comments   = sanitize_textarea_field($_POST['comments'] ?? '');
+    //$comments   = sanitize_textarea_field($_POST['comments'] ?? '');
     $comments_make_model   = sanitize_textarea_field($_POST['comments_make_model'] ?? '');
 
     $page_url = esc_url_raw($_POST['page_url'] ?? '');
@@ -512,7 +506,6 @@ function handle_contact_us_request_submit() {
         '{last_name}'  => esc_html($last_name),
         '{email}'      => esc_html($email),
         '{phone}'      => esc_html($phone),
-        '{comments}'   => nl2br(esc_html($comments)),
         '{comments_make_model}'   => $comments_make_model,
         '{logo_url}'   => esc_url($logo_url),
         '{site_name}'  => esc_html(get_bloginfo('name')),
